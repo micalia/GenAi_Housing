@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
 #include "MenuInterface.h"
+#include <../Plugins/Online/OnlineSubsystem/Source/Public/Interfaces/OnlineSessionInterface.h>
 #include "GenAiGameInstance.generated.h"
 
 /**
@@ -20,6 +21,7 @@ public:
 
 	virtual void Init();
 
+
 	UFUNCTION(BlueprintCallable)
 	void LoadMenuWidget();
 
@@ -29,7 +31,10 @@ private:
 	TSubclassOf<class UMainMenu> MenuClass;
 	
 	class UMainMenu* Menu;
-	//IOnlineSessionPtr SessionInterface;
+	IOnlineSessionPtr SessionInterface;
 
 	void OnCreateSessionComplete(FName SessionName, bool Success);
+	void OnDestorySessionComplete(FName SessionName, bool Success);
+
+	void CreateSession();
 };
