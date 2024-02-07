@@ -8,7 +8,7 @@ public class GenAi_Housing : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "OnlineSubsystem", "MySqlConnect", "HTTP", "Json", "UMG"});
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "OnlineSubsystem", "MySqlConnect", "HTTP", "Json", "UMG", "EnhancedInput"});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

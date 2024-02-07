@@ -31,8 +31,6 @@ public:
 	UPROPERTY(EditAnywhere)
 	FString DB_IP = "192.168.219.103";
 	UPROPERTY(EditAnywhere)
-	FString DB_PORT = "3306";
-	UPROPERTY(EditAnywhere)
 	FString DB_USER = "root";
 	UPROPERTY(EditAnywhere)
 	FString DB_PWD = "1234";
@@ -57,4 +55,15 @@ public:
 	UFUNCTION()
 	void SignUp();
 	
+	void Login();
+
+	UPROPERTY()
+	class UGenAiGameInstance* gi;
+
+	UFUNCTION()
+	void OnSlotCreated(FString roomName, int32 currentPlayers, int32 maxPlayers, int32 sessionIdx);
+public:
+	TSubclassOf<class URoomSlot> RoomSlotFactory;
+
+	void DBLoadUserRooms(); //사용안함
 };

@@ -23,17 +23,31 @@ public:
 	UPROPERTY(meta = (BindWidget), BlueprintReadWrite)
 		class UWidgetSwitcher* WidgetSwitcher;
 
+	UPROPERTY(meta = (BindWidget))
+		class UEditableTextBox* LoginNickTxt;
+	UPROPERTY(meta = (BindWidget))
+		class UEditableTextBox* LoginPwdTxt;
 protected:
 	virtual bool Initialize();
 
-private:
+public:
 	UPROPERTY(meta = (BindWidget))
 		class UButton* LoginBtn;
 	UPROPERTY(meta = (BindWidget))
 		class UButton* JoinActBtn;
+	UPROPERTY(meta = (BindWidget))
+		class UButton* MyRoomBtn;
 
 	UFUNCTION()
 		void MenuLogin();
 	UFUNCTION()
 		void MenuSignUp();
+	UFUNCTION()
+		void EnterMyRoom();
+
+	UPROPERTY(meta = (BindWidget))
+		class UScrollBox* RoomList;
+
+	UPROPERTY()
+	class UGenAiGameInstance* gi;
 };

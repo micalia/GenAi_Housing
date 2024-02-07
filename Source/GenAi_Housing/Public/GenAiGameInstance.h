@@ -11,6 +11,8 @@
 /**
  * 
  */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FSearchSessionDele, FString, roomName, int32, currentPlayers, int32, maxPlayers, int32, sessionIdx);
+
 UCLASS()
 class GENAI_HOUSING_API UGenAiGameInstance : public UGameInstance, public IMenuInterface
 {
@@ -21,20 +23,32 @@ public:
 
 	virtual void Init();
 
-
 	UFUNCTION(BlueprintCallable)
 	void LoadMenuWidget();
 
-	void AccessWorld();
+	void AccessWorld(FString SessionName);
 
+	IOnlineSessionPtr SessionInterface;
+
+	UPROPERTY(EditAnywhere)
+	int32 PlayerMaxCount = 5;
+
+	UPROPERTY(EditAnywhere, BlueprintAssignable, Category = "MySettings")
+	FSearchSessionDele onCreateSlot;
+	
+	void FindSession();
+	void CreateSession(FString SessionName);
+
+	void MyJoinSession(int32 roomNum, FString roomName);
+	void OnJoinedSession(FName sessionName, EOnJoinSessionCompleteResult::Type result);
 private:
 	TSubclassOf<class UMainMenu> MenuClass;
 	
 	class UMainMenu* Menu;
-	IOnlineSessionPtr SessionInterface;
 
 	void OnCreateSessionComplete(FName SessionName, bool Success);
 	void OnDestorySessionComplete(FName SessionName, bool Success);
 
-	void CreateSession();
+	TSharedPtr<FOnlineSessionSearch> sessionSearch;
+	void OnFoundExistSession(bool bWasSuccessful);
 };
