@@ -41,7 +41,13 @@ public:
 
 	void MyJoinSession(int32 roomNum, FString roomName);
 	void OnJoinedSession(FName sessionName, EOnJoinSessionCompleteResult::Type result);
+	
+	void DeleteSessionSlots();
+
+	void SetSessionName(FString name);
+	FORCEINLINE FString GetSessionName() { return CurrSessionName.ToString(); }
 private:
+	FName CurrSessionName;
 	TSubclassOf<class UMainMenu> MenuClass;
 	
 	class UMainMenu* Menu;

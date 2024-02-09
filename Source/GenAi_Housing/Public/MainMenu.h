@@ -37,6 +37,8 @@ public:
 		class UButton* JoinActBtn;
 	UPROPERTY(meta = (BindWidget))
 		class UButton* MyRoomBtn;
+	UPROPERTY(meta = (BindWidget))
+		class UButton* FindSessionBtn;
 
 	UFUNCTION()
 		void MenuLogin();
@@ -44,6 +46,8 @@ public:
 		void MenuSignUp();
 	UFUNCTION()
 		void EnterMyRoom();
+	UFUNCTION()
+		void OnFindSession();
 
 	UPROPERTY(meta = (BindWidget))
 		class UScrollBox* RoomList;

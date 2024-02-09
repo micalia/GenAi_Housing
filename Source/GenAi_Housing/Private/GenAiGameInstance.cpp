@@ -9,6 +9,8 @@
 #include "UMG/Public/Blueprint/UserWidget.h"
 #include <GameFramework/PlayerController.h>
 #include <GameFramework/PlayerState.h>
+#include <UMG/Public/Blueprint/WidgetBlueprintLibrary.h>
+#include "../Public/RoomSlot.h"
 
 
 UGenAiGameInstance::UGenAiGameInstance(const FObjectInitializer& ObjectInitializer)
@@ -98,21 +100,28 @@ void UGenAiGameInstance::OnDestorySessionComplete(FName SessionName, bool Succes
 
 void UGenAiGameInstance::CreateSession(FString SessionName)
 {
-	if (SessionInterface.IsValid()) {
-		FOnlineSessionSettings SessionSettings;
-		SessionSettings.bIsDedicated = false;
-		SessionSettings.bAllowInvites = true;
-		SessionSettings.bAllowJoinInProgress = true;
-		SessionSettings.bAllowJoinViaPresence = true;
-		SessionSettings.bIsLANMatch = IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" ? true : false;
-		SessionSettings.bShouldAdvertise = true;
-		SessionSettings.bUseLobbiesIfAvailable = true;
-		SessionSettings.NumPublicConnections = PlayerMaxCount;
+	FNamedOnlineSession* ExistingSession = SessionInterface->GetNamedSession(FName(SessionName));
+	if (ExistingSession != nullptr) {
+		SessionInterface->DestroySession(FName(SessionName));
+	}
+	else {
+		if (SessionInterface.IsValid()) {
+			FOnlineSessionSettings SessionSettings;
+			SessionSettings.bIsDedicated = false;
+			SessionSettings.bAllowInvites = true;
+			SessionSettings.bAllowJoinInProgress = true;
+			SessionSettings.bAllowJoinViaPresence = true;
+			SessionSettings.bIsLANMatch = IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" ? true : false;
+			SessionSettings.bShouldAdvertise = true;
+			SessionSettings.bUseLobbiesIfAvailable = true;
+			SessionSettings.NumPublicConnections = PlayerMaxCount;
 
-		SessionSettings.Set(FName("RoomName"), SessionName, EOnlineDataAdvertisementType::Type::ViaOnlineServiceAndPing);
+			SessionSettings.Set(FName("RoomName"), SessionName, EOnlineDataAdvertisementType::Type::ViaOnlineServiceAndPing);
 
-		SessionInterface->CreateSession(0, FName(*SessionName), SessionSettings);
-		GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Purple, FString::Printf(TEXT("Create Session")), true, FVector2D(2, 2));
+			SessionInterface->CreateSession(0, FName(*SessionName), SessionSettings);
+			SetSessionName(SessionName);
+			GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Purple, FString::Printf(TEXT("Create Session")), true, FVector2D(2, 2));
+		}
 	}
 }
 
@@ -120,6 +129,7 @@ void UGenAiGameInstance::MyJoinSession(int32 roomNum, FString roomName)
 {
 	UE_LOG(LogTemp, Warning, TEXT("JoinSession RoomNum : %d / RoomName : %s"), roomNum, *roomName)
 	SessionInterface->JoinSession(0, FName(*roomName), sessionSearch->SearchResults[roomNum]);
+	SetSessionName(roomName);
 }
 
 void UGenAiGameInstance::OnJoinedSession(FName sessionName, EOnJoinSessionCompleteResult::Type result)
@@ -161,6 +171,27 @@ void UGenAiGameInstance::OnJoinedSession(FName sessionName, EOnJoinSessionComple
 	}
 }
 
+void UGenAiGameInstance::DeleteSessionSlots()
+{
+	TArray<UUserWidget*> ActiveWidgets;
+	UWidgetBlueprintLibrary::GetAllWidgetsOfClass(GetWorld(), ActiveWidgets, UUserWidget::StaticClass(), false);
+
+	// 각 위젯을 제거합니다.
+	for (UUserWidget* Widget : ActiveWidgets)
+	{
+		URoomSlot* slot = Cast<URoomSlot>(Widget);
+		if (slot)
+		{
+			slot->RemoveFromParent();
+		}
+	}
+}
+
+void UGenAiGameInstance::SetSessionName(FString name)
+{
+	CurrSessionName = FName(*name);
+}
+
 void UGenAiGameInstance::OnFoundExistSession(bool bWasSuccessful)
 {
 	if (sessionSearch == nullptr) return;
@@ -171,6 +202,7 @@ void UGenAiGameInstance::OnFoundExistSession(bool bWasSuccessful)
 	if (bWasSuccessful)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Session Count: %d"), results.Num());
+		DeleteSessionSlots();
 
 		for (int32 i = 0; i < results.Num(); i++)
 		{
@@ -185,8 +217,9 @@ void UGenAiGameInstance::OnFoundExistSession(bool bWasSuccessful)
 			UE_LOG(LogTemp, Warning, TEXT("Room Name: %s\nPlayer Count: (%d/%d)\n"), *foundRoomName, currentPlayerCount, maxPlayerCount);
 
 		}
-
+	
 	}
+
 }
 
 void UGenAiGameInstance::FindSession()

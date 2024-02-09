@@ -17,6 +17,7 @@ bool UMainMenu::Initialize()
 	LoginBtn->OnClicked.AddDynamic(this, &UMainMenu::MenuLogin);
 	JoinActBtn->OnClicked.AddDynamic(this, &UMainMenu::MenuSignUp);
 	MyRoomBtn->OnClicked.AddDynamic(this, &UMainMenu::EnterMyRoom);
+	FindSessionBtn->OnClicked.AddDynamic(this, &UMainMenu::OnFindSession);
 
 	gi = Cast<UGenAiGameInstance>(GetGameInstance());
 
@@ -32,10 +33,6 @@ void UMainMenu::MenuLogin()
 	}
 }
 
-/* 인게임 레벨로 이동
-if (MenuInterface != nullptr) {
-	MenuInterface->AccessWorld();
-}*/
 void UMainMenu::MenuSignUp()
 {
 	for (TActorIterator<AHttpRequestActor> it(GetWorld()); it; ++it) {
@@ -51,4 +48,10 @@ void UMainMenu::EnterMyRoom()
 	APlayerState* ps = pc->PlayerState;
 	FString PlayerName = ps->GetPlayerName();
 	gi->CreateSession(PlayerName);
+}
+
+void UMainMenu::OnFindSession()
+{
+	UE_LOG(LogTemp, Warning, TEXT("FindSession Btn"))
+	gi->FindSession();
 }
