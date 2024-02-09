@@ -22,7 +22,7 @@ void AGenAiPlayerController::BeginPlay()
 		InGameWidgetPtr = CreateWidget<UInGameWidget>(GetWorld(), InGameWidgetFactory);
 		InGameWidgetPtr->AddToViewport(); 
 		UGenAiGameInstance* gi = GetGameInstance<UGenAiGameInstance>();
-		InGameWidgetPtr->RoomOwnerTxt->SetText(FText::FromString(gi->GetSessionName()));
+		InGameWidgetPtr->RoomOwnerTxt->SetText(FText::FromString(gi->GetSessionName() + " Room"));
 
 	}
 }

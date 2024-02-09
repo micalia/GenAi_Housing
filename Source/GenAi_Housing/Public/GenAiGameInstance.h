@@ -46,8 +46,12 @@ public:
 
 	void SetSessionName(FString name);
 	FORCEINLINE FString GetSessionName() { return CurrSessionName.ToString(); }
+	void SetPlayerName(FString name);
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE FString GetPlayerName() { return PlayerName; }
 private:
 	FName CurrSessionName;
+	FString PlayerName = "None";
 	TSubclassOf<class UMainMenu> MenuClass;
 	
 	class UMainMenu* Menu;

@@ -12,6 +12,12 @@
 #include "Components/ScrollBox.h"
 #include "..\Public\GenAiGameInstance.h"
 #include <OnlineSessionSettings.h>
+#include <Interfaces\IHttpRequest.h>
+#include "..\Public\GenAiPlayerController.h"
+#include "..\Public\JsonParseLibrary.h"
+#include "..\Public\InGameWidget.h"
+#include <Interfaces\IHttpResponse.h>
+#include "..\Public\HousingWidget.h"
 
 // Sets default values
 AHttpRequestActor::AHttpRequestActor()
@@ -43,6 +49,9 @@ void AHttpRequestActor::BeginPlay()
 
 	gi = Cast<UGenAiGameInstance>(GetGameInstance());
 	gi->onCreateSlot.AddDynamic(this, &AHttpRequestActor::OnSlotCreated);
+
+	httpModule = FHttpModule::Get();
+	PostURL = AI_IP + ":" + AI_PORT + TEXT("/text2obj");
 }
 
 // Called every frame
@@ -95,10 +104,8 @@ void AHttpRequestActor::Login()
 		else {
 			GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Purple, FString::Printf(TEXT("Login Complete")), true, FVector2D(2, 2));
 		}
-		APlayerController* pc = GetWorld()->GetFirstPlayerController();
-		APlayerState* ps = pc->PlayerState;
-		ps->SetPlayerName(inputName);
 		//DBLoadUserRooms();
+		gi->SetPlayerName(inputName);
 		gi->FindSession(); 
 		MainMenuPtr->WidgetSwitcher->SetActiveWidgetIndex(2);
 	}
@@ -143,6 +150,74 @@ void AHttpRequestActor::DBLoadUserRooms()
 			}
 		}
 
+	}
+}
+
+void AHttpRequestActor::PostRequest()
+{
+	if (AGenAiPlayerController* pc = Cast<AGenAiPlayerController>(GetWorld()->GetFirstPlayerController())) {
+		TMap<FString, FString> promptTextData;
+
+		FString TimeString = FDateTime::UtcNow().ToString(TEXT("%Y-%m-%d-%H-%M-%S"));
+
+		//TimeString = "2023-11-20-10-35-55";
+		RuntimeGenereateAIstartTime = TimeString;
+		UE_LOG(LogTemp, Warning, TEXT("Text To 3D_TimeString -  : %s"), *RuntimeGenereateAIstartTime)
+		promptTextData.Add("MakeTimeStamp", TimeString);
+		
+		FString prompt = pc->InGameWidgetPtr->WB_HousingWidget->prompt_txt->GetText().ToString();
+		promptTextData.Add("Prompt", prompt);
+		GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Purple, FString::Printf(TEXT("prompt: %s"), *prompt), true, FVector2D(2, 2));
+
+		APawn* pawn = pc->GetPawn();
+		FString Maker = pawn->GetPlayerState()->GetPlayerName();
+		GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Purple, FString::Printf(TEXT("MakerName: %s"), *Maker), true, FVector2D(2, 2));
+		promptTextData.Add("Maker", Maker);
+
+		FString jsonData = UJsonParseLibrary::MakeJson(promptTextData);
+		GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Purple, FString::Printf(TEXT("Send: %s"), *jsonData), true, FVector2D(2, 2));
+		TSharedRef<IHttpRequest> req = httpModule.CreateRequest();
+		req->SetURL(PostURL);
+		req->SetVerb(TEXT("POST"));
+		req->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
+		req->SetContentAsString(jsonData);
+		req->OnProcessRequestComplete().BindUObject(this, &AHttpRequestActor::OnPostData);
+		req->ProcessRequest();
+
+		bRuntimeGenerateAI = true;
+		
+	}
+
+}
+
+void AHttpRequestActor::OnPostData(TSharedPtr<IHttpRequest> Request, TSharedPtr<IHttpResponse> Response, bool bConnectedSuccessfully)
+{
+	if (bConnectedSuccessfully) {
+		FString receivedData = Response->GetContentAsString();
+		//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Purple, FString::Printf(TEXT("ReCeivedData : %s"),  *receivedData), true, FVector2D(1, 1));
+	}
+	else {
+		//요청 전송 상태 확인
+		EHttpRequestStatus::Type status = Request->GetStatus();
+		switch (status)
+		{
+		case EHttpRequestStatus::NotStarted:
+			break;
+		case EHttpRequestStatus::Processing:
+			break;
+		case EHttpRequestStatus::Failed:
+			break;
+		case EHttpRequestStatus::Failed_ConnectionError:
+			break;
+		case EHttpRequestStatus::Succeeded:
+			break;
+		default:
+			break;
+		}
+
+		//응답코드 확인
+		int32 responseCode = Response->GetResponseCode();
+		//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Purple, FString::Printf(TEXT("ResponseCode : %d"),  responseCode), true, FVector2D(1, 1));
 	}
 }
 

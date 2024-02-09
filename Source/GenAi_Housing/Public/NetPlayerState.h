@@ -16,4 +16,7 @@ class GENAI_HOUSING_API ANetPlayerState : public APlayerState
 
 public:
 	virtual void BeginPlay() override;
+
+	UFUNCTION(Server, Reliable)
+	void ServerSetMyName(const FString& name);
 };

@@ -9,6 +9,10 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include <UMG/Public/Components/WidgetComponent.h>
+#include "../Public/PlayerNameWidget.h"
+#include "../Public/NetPlayerState.h"
+#include <UMG/Public/Components/TextBlock.h>
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -49,6 +53,17 @@ ATP_ThirdPersonCharacter::ATP_ThirdPersonCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+
+	widgetComp = CreateDefaultSubobject<UWidgetComponent>(TEXT("widgetComp"));
+	widgetComp->SetupAttachment(GetCapsuleComponent());
+	widgetComp->SetRelativeLocation(FVector(0, 0, 110));
+	widgetComp->SetWidgetSpace(EWidgetSpace::Screen);
+
+	ConstructorHelpers::FClassFinder<UPlayerNameWidget> tempPlayerNameWB(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprints/Widget/InGame/WB_PlayerName.WB_PlayerName_C'"));
+	if (tempPlayerNameWB.Succeeded()) {
+		PlayerNameWBFactory = tempPlayerNameWB.Class;
+	}
+	widgetComp->SetWidgetClass(PlayerNameWBFactory);
 }
 
 void ATP_ThirdPersonCharacter::BeginPlay()
@@ -63,6 +78,12 @@ void ATP_ThirdPersonCharacter::BeginPlay()
 		{
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
+	}
+	
+	playerNameWB = Cast<UPlayerNameWidget>(widgetComp->GetWidget());
+	if (playerNameWB) {
+		FString playerName = GetPlayerState<ANetPlayerState>()->GetPlayerName();
+		playerNameWB->PlayerNameTxt->SetText(FText::FromString(playerName));
 	}
 }
 

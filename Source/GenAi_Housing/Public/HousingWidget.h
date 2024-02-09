@@ -20,6 +20,9 @@ public:
 		class UButton* ModelingGenerateBtn;
 	UPROPERTY(meta = (BindWidget))
 		class UButton* AiGenerateBtn;
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(meta = (BindWidget), BlueprintReadWrite)
 		class UWidgetSwitcher* HousingWidgetSwitcher;
+	UPROPERTY(meta = (BindWidget), BlueprintReadWrite)
+		class UEditableTextBox* prompt_txt;
+
 };

@@ -7,16 +7,18 @@
 #include "InGameWidget.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class GENAI_HOUSING_API UInGameWidget : public UUserWidget
 {
 	GENERATED_BODY()
-	
+
 public:
 	UPROPERTY(meta = (BindWidget))
-	class UButton* HousingBtn;
+		class UButton* HousingBtn;
 	UPROPERTY(meta = (BindWidget))
-	class UTextBlock* RoomOwnerTxt;
+		class UTextBlock* RoomOwnerTxt;
+	UPROPERTY(meta = (BindWidget))
+		class UHousingWidget* WB_HousingWidget;
 };

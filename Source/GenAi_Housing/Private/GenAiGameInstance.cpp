@@ -25,11 +25,11 @@ void UGenAiGameInstance::Init()
 {
 	IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
 	if (Subsystem != nullptr) {
-		GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Purple, FString::Printf(TEXT("Found Subsystem %s"), * Subsystem->GetSubsystemName().ToString()), true, FVector2D(1, 1));
+		GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Purple, FString::Printf(TEXT("Found Subsystem %s"), *Subsystem->GetSubsystemName().ToString()), true, FVector2D(1, 1));
 		SessionInterface = Subsystem->GetSessionInterface();
 		if (SessionInterface.IsValid()) {
 			GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Purple, FString::Printf(TEXT("Found Session INterface!!")), true, FVector2D(1, 1));
-			
+
 			SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UGenAiGameInstance::OnCreateSessionComplete);
 			SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UGenAiGameInstance::OnFoundExistSession);
 			SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UGenAiGameInstance::OnDestorySessionComplete);
@@ -56,12 +56,12 @@ void UGenAiGameInstance::AccessWorld(FString SessionName)
 	if (SessionInterface.IsValid()) {
 		FNamedOnlineSession* ExistingSession = SessionInterface->GetNamedSession(FName(SessionName));
 		UE_LOG(LogTemp, Warning, TEXT("UGenAiGameInstance::AccessWorld()"))
-		if (ExistingSession != nullptr) {
-			SessionInterface->DestroySession(FName(SessionName));
-		}
-		else {
-			CreateSession(SessionName);
-		}
+			if (ExistingSession != nullptr) {
+				SessionInterface->DestroySession(FName(SessionName));
+			}
+			else {
+				CreateSession(SessionName);
+			}
 	}
 
 }
@@ -72,22 +72,14 @@ void UGenAiGameInstance::OnCreateSessionComplete(FName SessionName, bool Success
 		GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Purple, FString::Printf(TEXT("Could not create Session")), true, FVector2D(2, 2));
 		return;
 	}
-	
+
 	UE_LOG(LogTemp, Warning, TEXT("OnCreateSessionComplete"))
-	FNamedOnlineSession* ExistingSession = SessionInterface->GetNamedSession(FName(SessionName));
-	if (ExistingSession != nullptr) {
-		//if (!ExistingSession->SessionName.ToString().IsEmpty()) { // 세션의 주인과 본인의 아이디를 비교
-			APlayerController* pc = GetWorld()->GetFirstPlayerController();
-			APlayerState* ps = pc->PlayerState;
-			FString PlayerName = ps->GetPlayerName();
-			//if(!PlayerName.Equals(SessionName.ToString()))	return; // 내가 생성한게 아니면 리턴
+		if (APlayerController* pc = GetWorld()->GetFirstPlayerController()) {
+			SetSessionName(SessionName.ToString());
 			UE_LOG(LogTemp, Warning, TEXT("ClientTravel"))
 			pc->ClientTravel("/Game/Levels/InGame?listen", ETravelType::TRAVEL_Absolute);
-		//}
-		//else {
-		//	SessionInterface->DestroySession(FName(SessionName));
-		//}
-	}
+
+		}
 
 }
 
@@ -128,7 +120,7 @@ void UGenAiGameInstance::CreateSession(FString SessionName)
 void UGenAiGameInstance::MyJoinSession(int32 roomNum, FString roomName)
 {
 	UE_LOG(LogTemp, Warning, TEXT("JoinSession RoomNum : %d / RoomName : %s"), roomNum, *roomName)
-	SessionInterface->JoinSession(0, FName(*roomName), sessionSearch->SearchResults[roomNum]);
+		SessionInterface->JoinSession(0, FName(*roomName), sessionSearch->SearchResults[roomNum]);
 	SetSessionName(roomName);
 }
 
@@ -192,6 +184,11 @@ void UGenAiGameInstance::SetSessionName(FString name)
 	CurrSessionName = FName(*name);
 }
 
+void UGenAiGameInstance::SetPlayerName(FString name)
+{
+	PlayerName = name;
+}
+
 void UGenAiGameInstance::OnFoundExistSession(bool bWasSuccessful)
 {
 	if (sessionSearch == nullptr) return;
@@ -217,7 +214,7 @@ void UGenAiGameInstance::OnFoundExistSession(bool bWasSuccessful)
 			UE_LOG(LogTemp, Warning, TEXT("Room Name: %s\nPlayer Count: (%d/%d)\n"), *foundRoomName, currentPlayerCount, maxPlayerCount);
 
 		}
-	
+
 	}
 
 }

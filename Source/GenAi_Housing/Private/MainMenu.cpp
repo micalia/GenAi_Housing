@@ -44,10 +44,10 @@ void UMainMenu::MenuSignUp()
 void UMainMenu::EnterMyRoom()
 {
 	UE_LOG(LogTemp, Warning, TEXT("EnterMyRoom"))
-		APlayerController* pc = GetWorld()->GetFirstPlayerController();
-	APlayerState* ps = pc->PlayerState;
-	FString PlayerName = ps->GetPlayerName();
-	gi->CreateSession(PlayerName);
+	
+	if (gi) {
+		gi->CreateSession(gi->GetPlayerName());
+	}
 }
 
 void UMainMenu::OnFindSession()

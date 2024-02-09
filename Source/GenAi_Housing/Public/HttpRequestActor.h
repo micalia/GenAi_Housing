@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include <HttpModule.h>
 #include "HttpRequestActor.generated.h"
 
 UCLASS()
@@ -66,4 +67,18 @@ public:
 	TSubclassOf<class URoomSlot> RoomSlotFactory;
 
 	void DBLoadUserRooms(); //사용안함
+
+public:
+	//Text to 3d
+	class FHttpModule& httpModule = FHttpModule::Get();
+
+	UPROPERTY(EditAnywhere)
+	FString PostURL;
+
+	UFUNCTION(BlueprintCallable)
+	void PostRequest();
+	void OnPostData(TSharedPtr<IHttpRequest> Request, TSharedPtr<IHttpResponse> Response, bool bConnectedSuccessfully);
+
+	FString RuntimeGenereateAIstartTime;
+	bool bRuntimeGenerateAI;
 };

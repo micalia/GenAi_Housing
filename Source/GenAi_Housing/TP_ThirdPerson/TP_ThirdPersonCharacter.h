@@ -37,6 +37,13 @@ class ATP_ThirdPersonCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* LookAction;
 
+	UPROPERTY(EditAnywhere)
+	class UWidgetComponent* widgetComp;
+
+	UPROPERTY()
+	TSubclassOf<class UPlayerNameWidget> PlayerNameWBFactory;
+	UPROPERTY()
+	class UPlayerNameWidget* playerNameWB;
 public:
 	ATP_ThirdPersonCharacter();
 	
