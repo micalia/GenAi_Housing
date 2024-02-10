@@ -24,5 +24,15 @@ public:
 		class UWidgetSwitcher* HousingWidgetSwitcher;
 	UPROPERTY(meta = (BindWidget), BlueprintReadWrite)
 		class UEditableTextBox* prompt_txt;
+	
+	virtual bool Initialize();
 
+	UFUNCTION()
+	void ChangeSearchModelPanel();
+	UFUNCTION()
+	void ChangeGenerateModelPanel();
+	UPROPERTY(meta = (BindWidget))
+	class UCanvasPanel* AiModelSearchPanel;
+	UPROPERTY(meta = (BindWidget))
+	class UCanvasPanel* ObjGeneratePanel;
 };

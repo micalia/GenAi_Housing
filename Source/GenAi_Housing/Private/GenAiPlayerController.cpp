@@ -18,11 +18,10 @@ void AGenAiPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (InGameWidgetFactory) {
+	if (InGameWidgetFactory != nullptr && IsLocalPlayerController()) {
 		InGameWidgetPtr = CreateWidget<UInGameWidget>(GetWorld(), InGameWidgetFactory);
 		InGameWidgetPtr->AddToViewport(); 
 		UGenAiGameInstance* gi = GetGameInstance<UGenAiGameInstance>();
 		InGameWidgetPtr->RoomOwnerTxt->SetText(FText::FromString(gi->GetSessionName() + " Room"));
-
 	}
 }

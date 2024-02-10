@@ -18,7 +18,6 @@ void ANetPlayerState::BeginPlay()
 		FString playerName = gi->GetGiPlayerName();
 		ServerSetMyName(playerName);
 	}
-	GEngine->AddOnScreenDebugMessage(-1, 20, FColor::Purple, FString::Printf(TEXT("HI playerstate")), true, FVector2D(1, 1));
 }
 
 void ANetPlayerState::ServerSetMyName_Implementation(const FString& name)
