@@ -48,7 +48,7 @@ public:
 	FORCEINLINE FString GetSessionName() { return CurrSessionName.ToString(); }
 	void SetPlayerName(FString name);
 	UFUNCTION(BlueprintCallable)
-	FORCEINLINE FString GetPlayerName() { return PlayerName; }
+	FORCEINLINE FString GetGiPlayerName() { return PlayerName; }
 private:
 	FName CurrSessionName;
 	FString PlayerName = "None";

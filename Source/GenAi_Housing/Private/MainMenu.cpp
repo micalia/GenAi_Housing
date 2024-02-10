@@ -46,7 +46,7 @@ void UMainMenu::EnterMyRoom()
 	UE_LOG(LogTemp, Warning, TEXT("EnterMyRoom"))
 	
 	if (gi) {
-		gi->CreateSession(gi->GetPlayerName());
+		gi->CreateSession(gi->GetGiPlayerName());
 	}
 }
 

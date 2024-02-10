@@ -18,6 +18,7 @@
 #include "..\Public\InGameWidget.h"
 #include <Interfaces\IHttpResponse.h>
 #include "..\Public\HousingWidget.h"
+#include "..\Public\NetPlayerState.h"
 
 // Sets default values
 AHttpRequestActor::AHttpRequestActor()
@@ -106,6 +107,8 @@ void AHttpRequestActor::Login()
 		}
 		//DBLoadUserRooms();
 		gi->SetPlayerName(inputName);
+		//auto ps = GetWorld()->GetFirstPlayerController()->GetPlayerState<ANetPlayerState>();
+		//ps->SetPlayerName(inputName);
 		gi->FindSession(); 
 		MainMenuPtr->WidgetSwitcher->SetActiveWidgetIndex(2);
 	}

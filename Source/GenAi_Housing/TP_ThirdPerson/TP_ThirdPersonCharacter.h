@@ -13,6 +13,9 @@ class ATP_ThirdPersonCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
+public:
+	ATP_ThirdPersonCharacter();
+private:
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom;
@@ -44,11 +47,14 @@ class ATP_ThirdPersonCharacter : public ACharacter
 	TSubclassOf<class UPlayerNameWidget> PlayerNameWBFactory;
 	UPROPERTY()
 	class UPlayerNameWidget* playerNameWB;
-public:
-	ATP_ThirdPersonCharacter();
-	
+
 
 protected:
+	virtual void PossessedBy(AController* NewController) override;
+	void UpdateNickName();
+	void SetNickName();
+
+	virtual void OnRep_PlayerState();
 
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);
@@ -63,11 +69,16 @@ protected:
 	
 	// To add mapping context
 	virtual void BeginPlay();
-
+	virtual void Tick(float DeltaTime);
 public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+	FORCEINLINE void SetUserName(FString name) { UserName = name; }
+	FORCEINLINE FString GetUserName() { return UserName; }
+private:
+	FString UserName;
 };
 

@@ -15,9 +15,10 @@ void ANetPlayerState::BeginPlay()
 	// 로컬 플레이어가 각자의 게임 인스턴스에 저장된 세션 이름을 가져와서 서버 RPC로 이름 등록 요청을 한다.
 	if (GetPlayerController() && GetPlayerController()->IsLocalPlayerController() && gi != nullptr)
 	{
-		FString playerName = gi->GetPlayerName();
+		FString playerName = gi->GetGiPlayerName();
 		ServerSetMyName(playerName);
 	}
+	GEngine->AddOnScreenDebugMessage(-1, 20, FColor::Purple, FString::Printf(TEXT("HI playerstate")), true, FVector2D(1, 1));
 }
 
 void ANetPlayerState::ServerSetMyName_Implementation(const FString& name)

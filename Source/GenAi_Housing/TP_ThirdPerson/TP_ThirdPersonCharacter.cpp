@@ -13,6 +13,8 @@
 #include "../Public/PlayerNameWidget.h"
 #include "../Public/NetPlayerState.h"
 #include <UMG/Public/Components/TextBlock.h>
+#include "../Public/GenAiGameInstance.h"
+
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -66,6 +68,45 @@ ATP_ThirdPersonCharacter::ATP_ThirdPersonCharacter()
 	widgetComp->SetWidgetClass(PlayerNameWBFactory);
 }
 
+void ATP_ThirdPersonCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	UpdateNickName();
+}
+
+void ATP_ThirdPersonCharacter::UpdateNickName()
+{
+	if (auto gi = GetGameInstance<UGenAiGameInstance>()) {
+		auto ps = GetPlayerState<ANetPlayerState>();
+		ps->ServerSetMyName(gi->GetGiPlayerName());
+	}
+	else {
+		GEngine->AddOnScreenDebugMessage(-1, 20, FColor::Purple, FString::Printf(TEXT("gi is null")), true, FVector2D(1, 1));
+	}
+}
+
+void ATP_ThirdPersonCharacter::SetNickName()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 20, FColor::Purple, FString::Printf(TEXT("SetNickName!!")), true, FVector2D(1, 1));
+	APlayerState* ps = GetPlayerState();
+	if (ensure(playerNameWB)) {
+		if (ensureMsgf(ps, TEXT("log"))) {
+			if (ensureMsgf(!ps->GetPlayerName().IsEmpty(), TEXT("log"))) {
+				GEngine->AddOnScreenDebugMessage(-1, 20, FColor::Purple, FString::Printf(TEXT("gi : %s"), *ps->GetPlayerName()), true, FVector2D(1, 1));
+				playerNameWB->PlayerNameTxt->SetText(FText::FromString(ps->GetPlayerName()));
+			}
+		}
+	}
+}
+
+void ATP_ThirdPersonCharacter::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+
+	UpdateNickName();
+}
+
 void ATP_ThirdPersonCharacter::BeginPlay()
 {
 	// Call the base class  
@@ -79,12 +120,26 @@ void ATP_ThirdPersonCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
-	
+
 	playerNameWB = Cast<UPlayerNameWidget>(widgetComp->GetWidget());
-	if (playerNameWB) {
-		FString playerName = GetPlayerState<ANetPlayerState>()->GetPlayerName();
-		playerNameWB->PlayerNameTxt->SetText(FText::FromString(playerName));
+	/*if (ensure(playerNameWB)) {
+		GEngine->AddOnScreenDebugMessage(-1, 20, FColor::Purple, FString::Printf(TEXT("GetUserName: %s"), *GetUserName()), true, FVector2D(1, 1));
+		playerNameWB->PlayerNameTxt->SetText(FText::FromString(GetUserName()));
 	}
+	else {
+		GEngine->AddOnScreenDebugMessage(-1, 20, FColor::Purple, FString::Printf(TEXT("GetUserName: not")), true, FVector2D(1, 1));
+
+	}*/
+	GEngine->AddOnScreenDebugMessage(-1, 20, FColor::Purple, FString::Printf(TEXT("HI Character")), true, FVector2D(1, 1));
+	FTimerHandle ChangeHandler;
+	GetWorldTimerManager().SetTimer(ChangeHandler, this, &ATP_ThirdPersonCharacter::SetNickName, 0.5f, false);
+	
+}
+
+void ATP_ThirdPersonCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	
 }
 
 //////////////////////////////////////////////////////////////////////////
