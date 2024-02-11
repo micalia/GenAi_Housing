@@ -23,19 +23,18 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	UPROPERTY(EditAnywhere)
-	FString AI_IP = "192.168.219.103";
-	UPROPERTY(EditAnywhere)
+	FString AI_IP = "192.168.219.107";
 	FString AI_PORT = "5001";
-
-	UPROPERTY(EditAnywhere)
-	FString DB_IP = "192.168.219.103";
-	UPROPERTY(EditAnywhere)
+	FString AI_FBX_PATH = "/static/output/text3d/fbx/";
+	FString AI_TEXTURE_PATH = "/static/output/text3d/texture/";
+	UPROPERTY(BlueprintReadOnly)
+	FString AI_FBX_FULL_PATH = AI_IP + ":" + AI_PORT + AI_FBX_PATH;
+	UPROPERTY(BlueprintReadOnly)
+	FString AI_TEXTURE_FULL_PATH = AI_IP + ":" + AI_PORT + AI_TEXTURE_PATH;
+	
+	FString DB_IP = "192.168.219.107";
 	FString DB_USER = "root";
-	UPROPERTY(EditAnywhere)
 	FString DB_PWD = "1234";
-	UPROPERTY(EditAnywhere)
 	FString DB_NAME = "housingdb";
 	UPROPERTY(EditAnywhere)
 	int ConnectionTimeout = 10;
@@ -63,6 +62,18 @@ public:
 
 	UFUNCTION()
 	void OnSlotCreated(FString roomName, int32 currentPlayers, int32 maxPlayers, int32 sessionIdx);
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UObjSlot> objSlotFactory;
+
+	UFUNCTION(BlueprintCallable)
+	void GetObjDataFromDB();
+	void GetObjThumbRequest(class UObjSlot* ObjSlot, const FString& ObjPrompt, const FString& MakeTimeStamp);
+	void OnGetThumbData(TSharedPtr<IHttpRequest> Request, TSharedPtr<IHttpResponse> Response, bool bConnectedSuccessfully);
+	void SetThumbTexture(class UTexture2D* tex, FString fileName);
+
+	UPROPERTY()
+	TMap<FString, class UObjSlot*> spawnGenerateAiIconMap;
 public:
 	TSubclassOf<class URoomSlot> RoomSlotFactory;
 

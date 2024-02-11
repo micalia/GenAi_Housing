@@ -19,11 +19,15 @@
 #include <Interfaces\IHttpResponse.h>
 #include "..\Public\HousingWidget.h"
 #include "..\Public\NetPlayerState.h"
+#include "..\Public\ObjSlot.h"
+#include <GenericPlatform\GenericPlatformHttp.h>
+#include <ImageUtils.h>
+#include <UMG\Public\Components\Image.h>
 
 // Sets default values
 AHttpRequestActor::AHttpRequestActor()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	ConstructorHelpers::FClassFinder<URoomSlot> RoomSlotBPClass(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprints/Widget/Menu/WB_RoomSlot.WB_RoomSlot_C'"));
@@ -36,16 +40,16 @@ AHttpRequestActor::AHttpRequestActor()
 void AHttpRequestActor::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	MySqlDB = NewObject<UMySQLDatabase>();
-	
+
 	Conn = MySqlDB->MySQLInitConnection(
 		DB_IP,
 		DB_USER,
 		DB_PWD,
 		DB_NAME,
-		ConnectionTimeout, 
-		ReadTimeout, 
+		ConnectionTimeout,
+		ReadTimeout,
 		WriteTimeout);
 
 	gi = Cast<UGenAiGameInstance>(GetGameInstance());
@@ -53,6 +57,11 @@ void AHttpRequestActor::BeginPlay()
 
 	httpModule = FHttpModule::Get();
 	PostURL = AI_IP + ":" + AI_PORT + TEXT("/text2obj");
+
+	FString LoadObjSlotClass = TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprints/Widget/InGame/WB_ObjSlot.WB_ObjSlot_C'");
+	UClass* loadedObject = StaticLoadClass(UObject::StaticClass(), nullptr, *LoadObjSlotClass);
+
+	objSlotFactory = loadedObject;
 }
 
 // Called every frame
@@ -67,7 +76,7 @@ void AHttpRequestActor::SignUp()
 	UMainMenu* MainMenuPtr = GetMainMenuWidget();
 	if (MainMenuPtr) {
 		FString SelectQuery = L"SELECT nickName FROM userInfo WHERE nickName= '" +
-							MainMenuPtr->signUpNickTxt->GetText().ToString() + "'";
+			MainMenuPtr->signUpNickTxt->GetText().ToString() + "'";
 		FMySQLConnectoreQueryResult SelectResult = MySqlDB->MySQLConnectorGetData(SelectQuery, Conn);
 		if (SelectResult.ResultRows.Num() > 0) {
 			GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Purple, FString::Printf(TEXT("already exist user name")), true, FVector2D(2, 2));
@@ -75,9 +84,9 @@ void AHttpRequestActor::SignUp()
 		}
 
 		FString InsertQuery = L"INSERT INTO userInfo VALUES('" +
-							MainMenuPtr->signUpNickTxt->GetText().ToString() + 
-							"', '" + 
-							MainMenuPtr->signUpPwdTxt->GetText().ToString() + "')";
+			MainMenuPtr->signUpNickTxt->GetText().ToString() +
+			"', '" +
+			MainMenuPtr->signUpPwdTxt->GetText().ToString() + "')";
 		if (MySqlDB->MySQLConnectorExecuteQuery(InsertQuery, Conn)) {
 			GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Purple, FString::Printf(TEXT("Join Success!!")), true, FVector2D(2, 2));
 			MainMenuPtr->WidgetSwitcher->SetActiveWidgetIndex(0);
@@ -109,7 +118,7 @@ void AHttpRequestActor::Login()
 		gi->SetPlayerName(inputName);
 		//auto ps = GetWorld()->GetFirstPlayerController()->GetPlayerState<ANetPlayerState>();
 		//ps->SetPlayerName(inputName);
-		gi->FindSession(); 
+		gi->FindSession();
 		MainMenuPtr->WidgetSwitcher->SetActiveWidgetIndex(2);
 	}
 }
@@ -128,13 +137,100 @@ void AHttpRequestActor::OnSlotCreated(FString roomName, int32 currentPlayers, in
 	}
 }
 
+void AHttpRequestActor::GetObjDataFromDB()
+{
+	AGenAiPlayerController* pc = Cast<AGenAiPlayerController>(GetWorld()->GetFirstPlayerController());
+	if (pc !=nullptr && pc->InGameWidgetPtr != nullptr) {
+		if (Conn) {
+			FString query = L"SELECT * FROM `objInfo`";
+			FMySQLConnectoreQueryResult QueryResult = MySqlDB->MySQLConnectorGetData(query, Conn);
+
+			if (QueryResult.Success == false) {
+				Conn = MySqlDB->MySQLInitConnection(DB_IP, DB_USER, DB_PWD, DB_NAME, ConnectionTimeout, ReadTimeout, WriteTimeout);
+				QueryResult = MySqlDB->MySQLConnectorGetData(query, Conn);
+			}
+
+			for (int i = 0; i < QueryResult.ResultRows.Num(); i++) {
+				FObjDataInfo row;
+				row.objIndex = FCString::Atoi(*QueryResult.ResultRows[i].Fields[0].Value);
+				row.objName = QueryResult.ResultRows[i].Fields[1].Value;
+				row.objPrompt = QueryResult.ResultRows[i].Fields[2].Value;
+				row.makeTimeStamp = QueryResult.ResultRows[i].Fields[3].Value;
+				row.maker = QueryResult.ResultRows[i].Fields[4].Value;
+				row.owner = QueryResult.ResultRows[i].Fields[5].Value;
+
+				UObjSlot* objSlot = CreateWidget<UObjSlot>(GetWorld(), objSlotFactory);
+
+				if (objSlot) {
+					objSlot->objDataInfo = FObjDataInfo(row.objIndex, row.objName, row.objPrompt, row.makeTimeStamp, row.maker, row.owner);
+					objSlot->objNameTxt->SetText(FText::FromString("Name : " + row.objName));
+					objSlot->makerNameTxt->SetText(FText::FromString("Maker : " + row.maker));
+					GetObjThumbRequest(objSlot, objSlot->objDataInfo.objPrompt, objSlot->objDataInfo.makeTimeStamp);
+
+					pc->InGameWidgetPtr->WB_HousingWidget->ObjSlotScroll->AddChild(objSlot);
+
+				}
+			}
+
+		}
+		else {
+			Conn = MySqlDB->MySQLInitConnection(DB_IP, DB_USER, DB_PWD, DB_NAME, ConnectionTimeout, ReadTimeout, WriteTimeout);
+		}
+
+	}
+
+}
+
+void AHttpRequestActor::GetObjThumbRequest(class UObjSlot* ObjSlot, const FString& ObjPrompt, const FString& MakeTimeStamp)
+{
+	TSharedRef<IHttpRequest> req = FHttpModule::Get().CreateRequest();
+
+	FString ThumbFileName = MakeTimeStamp + "_" + ObjPrompt + "_thumb.png";
+ 	FString EncodedFilePath = FGenericPlatformHttp::UrlEncode(ThumbFileName);
+	FString ThumbSavePath = "/static/output/text3d/thumb/" + EncodedFilePath;
+	FString GenAiThumbUrl = AI_IP +":" + AI_PORT + ThumbSavePath;
+
+	req->SetURL(GenAiThumbUrl);
+	req->SetVerb("GET");
+	req->SetHeader(TEXT("Content-Type"), TEXT("image/jpeg"));
+	req->OnProcessRequestComplete().BindUObject(this, &AHttpRequestActor::OnGetThumbData);
+	req->ProcessRequest();
+
+	FString reqURL = req->GetURL();
+
+	spawnGenerateAiIconMap.Add(reqURL, ObjSlot);
+}
+
+void AHttpRequestActor::OnGetThumbData(TSharedPtr<IHttpRequest> Request, TSharedPtr<IHttpResponse> Response, bool bConnectedSuccessfully)
+{
+	if (bConnectedSuccessfully) {
+		if (Response->GetResponseCode() == 200) {
+			FString reqURL = Request->GetURL();
+			TArray<uint8> texBites = Response->GetContent();
+			UTexture2D* realTex = FImageUtils::ImportBufferAsTexture2D(texBites);
+			SetThumbTexture(realTex, reqURL);
+		}
+		else {
+			FString reqURL = Request->GetURL();
+		}
+	}
+}
+
+void AHttpRequestActor::SetThumbTexture(class UTexture2D* tex, FString fileName)
+{
+	if (tex != nullptr && !fileName.Equals("")) { 
+		UObjSlot* objSlotRef = spawnGenerateAiIconMap.FindRef(fileName);
+		objSlotRef->SlotImage->SetBrushFromTexture(tex);
+	}
+}
+
 void AHttpRequestActor::DBLoadUserRooms()
 {
 	UMainMenu* MainMenuPtr = GetMainMenuWidget();
 	if (MainMenuPtr) {
 		FString SelectQuery = L"SELECT nickName FROM userInfo";
 		FMySQLConnectoreQueryResult SelectResult = MySqlDB->MySQLConnectorGetData(SelectQuery, Conn);
-		
+
 		for (int i = 0; i < SelectResult.ResultRows.Num(); i++)
 		{
 			if (URoomSlot* RoomSlot = CreateWidget<URoomSlot>(GetWorld(), RoomSlotFactory)) {
@@ -149,7 +245,7 @@ void AHttpRequestActor::DBLoadUserRooms()
 					RoomSlot->RoomNameTxt->SetText(FText::FromString(UserName + " Room / Not Found Session"));
 				}
 				RoomSlot->OwnerUserName = UserName;
-				MainMenuPtr->RoomList->AddChild(RoomSlot); 
+				MainMenuPtr->RoomList->AddChild(RoomSlot);
 			}
 		}
 
@@ -166,8 +262,8 @@ void AHttpRequestActor::PostRequest()
 		//TimeString = "2023-11-20-10-35-55";
 		RuntimeGenereateAIstartTime = TimeString;
 		UE_LOG(LogTemp, Warning, TEXT("Text To 3D_TimeString -  : %s"), *RuntimeGenereateAIstartTime)
-		promptTextData.Add("MakeTimeStamp", TimeString);
-		
+			promptTextData.Add("MakeTimeStamp", TimeString);
+
 		FString prompt = pc->InGameWidgetPtr->WB_HousingWidget->prompt_txt->GetText().ToString();
 		promptTextData.Add("Prompt", prompt);
 		GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Purple, FString::Printf(TEXT("prompt: %s"), *prompt), true, FVector2D(2, 2));
@@ -188,7 +284,7 @@ void AHttpRequestActor::PostRequest()
 		req->ProcessRequest();
 
 		bRuntimeGenerateAI = true;
-		
+
 	}
 
 }

@@ -21,6 +21,19 @@ public:
 
 	TSubclassOf<class UInGameWidget> InGameWidgetFactory;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	class UInGameWidget* InGameWidgetPtr;
+
+	UFUNCTION(BlueprintCallable)
+	FString UrlEncode(const FString originFileName);
+
+	UPROPERTY(BlueprintReadWrite, Replicated)
+	class ACustomFBXImportManager* controllerFbxImportManager;
+
+	virtual void OnPossess(APawn* InPawn) override;
+
+	UFUNCTION(Server, Reliable)
+	void SpawnFbxImporter();
+
+	bool bSpawnFbxImporter = false;
 };

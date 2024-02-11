@@ -49,12 +49,13 @@ public:
 	void SetPlayerName(FString name);
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE FString GetGiPlayerName() { return PlayerName; }
+	UPROPERTY()
+	class UMainMenu* Menu;
 private:
 	FName CurrSessionName;
 	FString PlayerName = "None";
 	TSubclassOf<class UMainMenu> MenuClass;
 	
-	class UMainMenu* Menu;
 
 	void OnCreateSessionComplete(FName SessionName, bool Success);
 	void OnDestorySessionComplete(FName SessionName, bool Success);

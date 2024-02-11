@@ -24,7 +24,8 @@ public:
 		class UWidgetSwitcher* HousingWidgetSwitcher;
 	UPROPERTY(meta = (BindWidget), BlueprintReadWrite)
 		class UEditableTextBox* prompt_txt;
-	
+	UPROPERTY(EditAnywhere, meta = (BindWidget), BlueprintReadWrite)
+		class UTaskItem* WB_TaskItem;
 	virtual bool Initialize();
 
 	UFUNCTION()
@@ -35,4 +36,7 @@ public:
 	class UCanvasPanel* AiModelSearchPanel;
 	UPROPERTY(meta = (BindWidget))
 	class UCanvasPanel* ObjGeneratePanel;
+
+	UPROPERTY(meta = (BindWidget))
+	class UScrollBox* ObjSlotScroll;
 };

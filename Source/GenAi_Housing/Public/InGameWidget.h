@@ -19,6 +19,6 @@ public:
 		class UButton* HousingBtn;
 	UPROPERTY(meta = (BindWidget))
 		class UTextBlock* RoomOwnerTxt;
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(meta = (BindWidget), BlueprintReadWrite)
 		class UHousingWidget* WB_HousingWidget;
 };
