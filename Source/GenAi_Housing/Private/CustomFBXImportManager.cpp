@@ -22,6 +22,7 @@ void ACustomFBXImportManager::BeginPlay()
 	onDownCompleteDel.BindDynamic(this, &ACustomFBXImportManager::OnFbxStorageComplete);
 	onTextureProgressDel.BindDynamic(this, &ACustomFBXImportManager::OnTextureStorageProgress);
 	onTextureDownCompleteDel.BindDynamic(this, &ACustomFBXImportManager::OnTextureStorageComplete);
+
 }
 
 void ACustomFBXImportManager::DownFbxFileCPP(FString fbxUrl, FString saveUrl, FString fbxFileName, FVector spawnLoc)

@@ -36,4 +36,7 @@ public:
 	void SpawnFbxImporter();
 
 	bool bSpawnFbxImporter = false;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void HousingSystem();
 };

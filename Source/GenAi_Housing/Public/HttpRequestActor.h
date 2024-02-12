@@ -23,7 +23,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	FString AI_IP = "192.168.219.107";
+	FString AI_IP = "192.168.219.106";
 	FString AI_PORT = "5001";
 	FString AI_FBX_PATH = "/static/output/text3d/fbx/";
 	FString AI_TEXTURE_PATH = "/static/output/text3d/texture/";
@@ -32,7 +32,7 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	FString AI_TEXTURE_FULL_PATH = AI_IP + ":" + AI_PORT + AI_TEXTURE_PATH;
 	
-	FString DB_IP = "192.168.219.107";
+	FString DB_IP = AI_IP;
 	FString DB_USER = "root";
 	FString DB_PWD = "1234";
 	FString DB_NAME = "housingdb";

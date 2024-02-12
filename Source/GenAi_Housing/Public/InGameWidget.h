@@ -21,4 +21,8 @@ public:
 		class UTextBlock* RoomOwnerTxt;
 	UPROPERTY(meta = (BindWidget), BlueprintReadWrite)
 		class UHousingWidget* WB_HousingWidget;
+	
+	virtual bool Initialize();
+	UFUNCTION()
+	void OnClickHousingSystem();
 };
