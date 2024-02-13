@@ -14,6 +14,7 @@ class GENAI_HOUSING_API ACustomFBXMeshActor : public AFBXMeshActor
 {
 	GENERATED_BODY()
 public:
+	ACustomFBXMeshActor();
 	UPROPERTY(Replicated, BlueprintReadWrite)
 	FString FileName;
 	UPROPERTY(Replicated, BlueprintReadWrite)

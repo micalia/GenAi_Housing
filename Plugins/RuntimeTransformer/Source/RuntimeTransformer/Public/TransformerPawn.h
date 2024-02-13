@@ -464,7 +464,8 @@ private:
 	void SetDomain(ETransformationDomain Domain);
 
 public:
-
+	UPROPERTY(BlueprintReadWrite)
+		TArray<class USceneComponent*> SelectedComponents;
 	/* 
 	* Function Similar to MouseTraceByObjectTypes
 	* Performs a Local Trace for Gizmos (since they appear differently for each player)
@@ -727,6 +728,8 @@ public:
 	void ResyncSelection();
 
 	//Networking Variables
+	UPROPERTY(BlueprintReadWrite)
+	FTransform	NetworkDeltaTransform;
 private:
 
 	/*
@@ -754,8 +757,6 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Replicated Runtime Transformer", meta = (AllowPrivateAccess = "true"))
 	float CloneReplicationCheckFrequency;
 
-	FTransform	NetworkDeltaTransform;
-
 	//List of clone actor/components that need replication but haven't been replicated yet
 	TArray<class USceneComponent*> UnreplicatedComponentClones;
 
@@ -764,6 +765,7 @@ private:
 
 
 	//Other Vars
+	
 private:
 
 	//The Current Space being used, whether it is Local or World.
@@ -816,7 +818,6 @@ private:
 	 * Array storing Selected Components. Although a quick O(1) removal is needed (like a Set),
 	 * it is Crucial that we maintain the order of the elements as they were selected
 	 */
-	TArray<class USceneComponent*> SelectedComponents;
 
 	/*
 	* Map storing the Snap values for each transformation

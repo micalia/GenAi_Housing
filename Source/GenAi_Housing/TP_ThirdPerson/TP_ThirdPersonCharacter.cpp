@@ -78,8 +78,11 @@ void ATP_ThirdPersonCharacter::PossessedBy(AController* NewController)
 void ATP_ThirdPersonCharacter::UpdateNickName()
 {
 	if (auto gi = GetGameInstance<UGenAiGameInstance>()) {
-		auto ps = GetPlayerState<ANetPlayerState>();
-		ps->ServerSetMyName(gi->GetGiPlayerName());
+		if (auto ps = GetPlayerState<ANetPlayerState>()) {
+			if (!gi->GetGiPlayerName().Equals("None")) {
+				ps->ServerSetMyName(gi->GetGiPlayerName());
+			}
+		}
 	}
 	else {
 		GEngine->AddOnScreenDebugMessage(-1, 20, FColor::Purple, FString::Printf(TEXT("gi is null")), true, FVector2D(1, 1));
