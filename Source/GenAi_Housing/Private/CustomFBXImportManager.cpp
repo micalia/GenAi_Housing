@@ -29,7 +29,7 @@ void ACustomFBXImportManager::DownFbxFileCPP(FString fbxUrl, FString saveUrl, FS
 {
 	FString contentType = "application/octet-stream";
 	UFileToStorageDownloader::DownloadFileToStorage(fbxUrl, saveUrl, 400.0f, contentType, false, onProgressDel, onDownCompleteDel);
-	currFbxFileName = fbxFileName;
+	currSaveFbxPath = saveUrl;
 	currSpawnLoc = spawnLoc;
 }
 
@@ -53,7 +53,7 @@ void ACustomFBXImportManager::OnFbxStorageProgress(int64 BytesReceived, int64 Co
 
 void ACustomFBXImportManager::OnFbxStorageComplete(EDownloadToStorageResult Result)
 {
-	onDownComplete(currFbxFileName, currSpawnLoc);
+	onDownComplete(currSaveFbxPath, currSpawnLoc);
 }
 
 void ACustomFBXImportManager::OnTextureStorageProgress(int64 BytesReceived, int64 ContentLength, float ProgressRatio)
@@ -66,7 +66,7 @@ void ACustomFBXImportManager::OnTextureStorageComplete(EDownloadToStorageResult 
 
 }
 
-void ACustomFBXImportManager::CreateFBXActorInServer(FString fileName, FVector SpawnLoc, class ACustomFBXImportManager* fbxImporter, class AGenAiPlayerController* PlayerController)
+void ACustomFBXImportManager::CreateFBXActorInServer(FString fileName, FVector SpawnLoc, class ACustomFBXImportManager* fbxImporter, class AGenAiPlayerController* PlayerController, int32 objIndex)
 {
 	UClass* CurrentActorClass;
 	if (IsValid(FBXActorClass))
@@ -82,13 +82,15 @@ void ACustomFBXImportManager::CreateFBXActorInServer(FString fileName, FVector S
 	spawnConfig.TransformScaleMethod = ESpawnActorScaleMethod::MultiplyWithRoot;
 	FString inputFileName = fileName;
 	FVector inputSpawnLoc = SpawnLoc;
-	auto doFunc = [inputFileName, inputSpawnLoc](AActor* ObjectToModify)
+	int32 inputObjIndex = objIndex;
+	auto doFunc = [inputFileName, inputSpawnLoc, inputObjIndex](AActor* ObjectToModify)
 	{
 		ACustomFBXMeshActor* fbxMeshActorModify = Cast<ACustomFBXMeshActor>(ObjectToModify);
 		if (fbxMeshActorModify)
 		{
 			fbxMeshActorModify->FileName = inputFileName;
 			fbxMeshActorModify->SpawnLoc = inputSpawnLoc;
+			fbxMeshActorModify->ObjIndex = inputObjIndex;
 		}
 	};
 
@@ -133,6 +135,7 @@ void ACustomFBXImportManager::CustomImportFBXFile(const FString& FbxDownPath, FV
 	ImportSettings->ImportID = CustomCurrentImportID;
 	ImportSettings->SpawnTransform = FTransform(FRotator(), SpawnLoc, CustomCurrentScale);
 	ImportSettings->Filepath = FbxDownPath;
+	GEngine->AddOnScreenDebugMessage(-1, 20, FColor::Purple, FString::Printf(TEXT("FbxDownPath : %s"), *FbxDownPath), true, FVector2D(1, 1));
 	ImportSettings->FBXAxis = FVector(static_cast<uint8>(CustomCurrentCoordinate), static_cast<uint8>(CustomCurrentUpVector), static_cast<uint8>(CustomCurrentFrontVector));
 
 	ImportSettings->SpawnFBXActor = false;

@@ -48,7 +48,7 @@ public: //Download
 
 	UFUNCTION()
 	void OnFbxStorageComplete(EDownloadToStorageResult Result);
-	FString currFbxFileName;
+	FString currSaveFbxPath;
 	FVector currSpawnLoc;
 
 	UFUNCTION()
@@ -61,7 +61,7 @@ public: //Download
 	void onDownComplete(const FString& downFbxName, FVector spawnLoc);
 
 	UFUNCTION(BlueprintCallable)
-	void CreateFBXActorInServer(FString fileName, FVector SpawnLoc, class ACustomFBXImportManager* fbxImporter, class AGenAiPlayerController* PlayerController);
+	void CreateFBXActorInServer(FString fileName, FVector SpawnLoc, class ACustomFBXImportManager* fbxImporter, class AGenAiPlayerController* PlayerController, int32 objIndex);
 
 	UPROPERTY(BlueprintReadOnly, Category = "Import")
 	TMap<int32, class ACustomFBXMeshActor*> customImportActorMap;

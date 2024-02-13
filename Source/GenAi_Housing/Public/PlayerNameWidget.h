@@ -15,7 +15,7 @@ class GENAI_HOUSING_API UPlayerNameWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(meta=(BindWidget))
+	UPROPERTY(meta=(BindWidget), BlueprintReadWrite)
 	class UTextBlock* PlayerNameTxt;
 	
 };

@@ -7,6 +7,23 @@
 #include <HttpModule.h>
 #include "HttpRequestActor.generated.h"
 
+USTRUCT()
+struct FRoomInfo {
+	GENERATED_BODY()
+
+	UPROPERTY()
+	FString nickName;
+	UPROPERTY()
+	int32 objIndex;
+	UPROPERTY()
+	FString position;
+	UPROPERTY()
+	FString rotation;
+	UPROPERTY()
+	FString scale;
+
+};
+
 UCLASS()
 class GENAI_HOUSING_API AHttpRequestActor : public AActor
 {
@@ -92,4 +109,6 @@ public:
 
 	FString RuntimeGenereateAIstartTime;
 	bool bRuntimeGenerateAI;
+
+	void InsertObjDataToDB(TArray<FRoomInfo> RoomInfoArr);
 };

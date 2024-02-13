@@ -13,5 +13,9 @@ UCLASS()
 class GENAI_HOUSING_API AHousingPawn : public ATransformerPawn
 {
 	GENERATED_BODY()
-	
+public:
+	AHousingPawn();
+
+	UPROPERTY(BlueprintReadWrite, Replicated)
+	FString CurrUserName = TEXT("");
 };

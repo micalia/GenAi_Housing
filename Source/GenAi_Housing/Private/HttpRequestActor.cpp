@@ -320,6 +320,28 @@ void AHttpRequestActor::OnPostData(TSharedPtr<IHttpRequest> Request, TSharedPtr<
 	}
 }
 
+void AHttpRequestActor::InsertObjDataToDB(TArray<FRoomInfo> RoomInfoArr)
+{
+	if (Conn == nullptr) {
+		Conn = MySqlDB->MySQLInitConnection(
+			DB_IP,
+			DB_USER,
+			DB_PWD,
+			DB_NAME,
+			ConnectionTimeout,
+			ReadTimeout,
+			WriteTimeout);
+	}
+	for (int i = 0; i < RoomInfoArr.Num(); i++)
+	{
+		FString InsertQuery = L"INSERT INTO roomInfo VALUES('" + RoomInfoArr[i].nickName+
+								"', "+ FString::FromInt(RoomInfoArr[i].objIndex) +", '" + RoomInfoArr[i].position +"',  '"+
+			RoomInfoArr[i].rotation + "', '"+ RoomInfoArr[i].scale +"')";
+		MySqlDB->MySQLConnectorExecuteQuery(InsertQuery, Conn);
+
+	}
+}
+
 UMainMenu* AHttpRequestActor::GetMainMenuWidget()
 {
 	TArray<UUserWidget*> ActiveWidgets;

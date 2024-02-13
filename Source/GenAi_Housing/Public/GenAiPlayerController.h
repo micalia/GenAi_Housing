@@ -39,4 +39,8 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void HousingSystem();
+
+	UFUNCTION(BlueprintCallable, Server, Reliable)
+	void Server_InsertObjDataToDB(const FString& userName);
+	
 };

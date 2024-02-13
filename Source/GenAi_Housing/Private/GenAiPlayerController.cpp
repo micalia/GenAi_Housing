@@ -9,6 +9,10 @@
 #include <GenericPlatform\GenericPlatformHttp.h>
 #include "..\Public\CustomFBXImportManager.h"
 #include <Kismet\KismetMathLibrary.h>
+#include "EngineUtils.h"
+#include "../Public/GenAiGameState.h"
+#include "../Public/HttpRequestActor.h"
+#include "../Public/CustomFBXMeshActor.h"
 
 AGenAiPlayerController::AGenAiPlayerController()
 {
@@ -44,6 +48,27 @@ void AGenAiPlayerController::OnPossess(APawn* InPawn)
 			SpawnFbxImporter_Implementation();
 		}
 	}
+}
+
+void AGenAiPlayerController::Server_InsertObjDataToDB_Implementation(const FString& userName)
+{
+	auto httpRequestActor = GetWorld()->GetGameState<AGenAiGameState>()->HttpRequestActor;
+	if (httpRequestActor == nullptr) return;
+	
+	TArray<FRoomInfo> roomInfoArr;
+	for (TActorIterator<ACustomFBXMeshActor> it(GetWorld()); it; ++it) {
+		ACustomFBXMeshActor* fbxActor = *it;
+
+		FRoomInfo roomInfo;
+		roomInfo.nickName = userName;
+		roomInfo.objIndex = fbxActor->ObjIndex;
+		roomInfo.position = fbxActor->GetActorLocation().ToString();
+		roomInfo.rotation = fbxActor->GetActorRotation().ToString();
+		roomInfo.scale = fbxActor->GetActorScale3D().ToString();
+		roomInfoArr.Add(roomInfo);
+	}
+	
+	httpRequestActor->InsertObjDataToDB(roomInfoArr);
 }
 
 void AGenAiPlayerController::SpawnFbxImporter_Implementation()

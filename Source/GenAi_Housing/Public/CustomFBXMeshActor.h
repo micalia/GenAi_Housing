@@ -19,4 +19,6 @@ public:
 	FString FileName;
 	UPROPERTY(Replicated, BlueprintReadWrite)
 	FVector SpawnLoc;
+	UPROPERTY(Replicated, BlueprintReadWrite)
+	int32 ObjIndex;
 };
