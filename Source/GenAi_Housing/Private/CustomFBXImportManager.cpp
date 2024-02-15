@@ -83,7 +83,8 @@ void ACustomFBXImportManager::CreateFBXActorInServer(FString fileName, FVector S
 	FString inputFileName = fileName;
 	FVector inputSpawnLoc = SpawnLoc;
 	int32 inputObjIndex = objIndex;
-	auto doFunc = [inputFileName, inputSpawnLoc, inputObjIndex](AActor* ObjectToModify)
+	int32 inputCurrentImportID = CustomCurrentImportID;
+	auto doFunc = [inputFileName, inputSpawnLoc, inputObjIndex, inputCurrentImportID](AActor* ObjectToModify)
 	{
 		ACustomFBXMeshActor* fbxMeshActorModify = Cast<ACustomFBXMeshActor>(ObjectToModify);
 		if (fbxMeshActorModify)
@@ -91,6 +92,7 @@ void ACustomFBXImportManager::CreateFBXActorInServer(FString fileName, FVector S
 			fbxMeshActorModify->FileName = inputFileName;
 			fbxMeshActorModify->SpawnLoc = inputSpawnLoc;
 			fbxMeshActorModify->ObjIndex = inputObjIndex;
+			fbxMeshActorModify->CustomCurrentImportID = inputCurrentImportID;
 		}
 	};
 
@@ -127,15 +129,23 @@ void ACustomFBXImportManager::OnRep_ImportActorMap()
 	}
 }
 
-void ACustomFBXImportManager::CustomImportFBXFile(const FString& FbxDownPath, FVector SpawnLoc, class ACustomFBXImportManager* fbxImportManager)
+void ACustomFBXImportManager::CustomImportFBXFile(const FString& FbxDownPath, FTransform SpawnTrans, class ACustomFBXImportManager* fbxImportManager)
 {
 	ACustomFBXImportManager* customImporter = Cast<ACustomFBXImportManager>(fbxImportManager);
+	UE_LOG(LogTemp, Warning, TEXT("fbxdownPath: %s / SpawnTrans: %s"), *FbxDownPath, *SpawnTrans.ToString())
+		if(fbxImportManager){
+			UE_LOG(LogTemp, Warning, TEXT("fbx importer exist"))
+		}
+		else {
+			UE_LOG(LogTemp, Warning, TEXT("fbx importer null"))
 
+		}
+	GEngine->AddOnScreenDebugMessage(-1, 29990, FColor::Purple, FString::Printf(TEXT("Custom CUrrId : %d"), CustomCurrentImportID), true, FVector2D(1, 1));
 	TSharedPtr<FFBXImportSettings> ImportSettings = MakeShareable(new FFBXImportSettings());
 	ImportSettings->ImportID = CustomCurrentImportID;
-	ImportSettings->SpawnTransform = FTransform(FRotator(), SpawnLoc, CustomCurrentScale);
+	//ImportSettings->SpawnTransform = FTransform(FRotator(), SpawnTrans, CustomCurrentScale);
+	ImportSettings->SpawnTransform = FTransform(SpawnTrans);
 	ImportSettings->Filepath = FbxDownPath;
-	GEngine->AddOnScreenDebugMessage(-1, 20, FColor::Purple, FString::Printf(TEXT("FbxDownPath : %s"), *FbxDownPath), true, FVector2D(1, 1));
 	ImportSettings->FBXAxis = FVector(static_cast<uint8>(CustomCurrentCoordinate), static_cast<uint8>(CustomCurrentUpVector), static_cast<uint8>(CustomCurrentFrontVector));
 
 	ImportSettings->SpawnFBXActor = false;

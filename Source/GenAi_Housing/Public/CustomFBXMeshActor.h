@@ -20,5 +20,7 @@ public:
 	UPROPERTY(Replicated, BlueprintReadWrite)
 	FVector SpawnLoc;
 	UPROPERTY(Replicated, BlueprintReadWrite)
-	int32 ObjIndex;
+		int32 ObjIndex;
+	UPROPERTY(Replicated, BlueprintReadWrite)
+	int32 CustomCurrentImportID;
 };

@@ -3,3 +3,8 @@
 
 #include "PlayerNameWidget.h"
 
+void UPlayerNameWidget::NativeConstruct()
+{
+	Super::NativeConstruct();
+	GetOwnerWidget
+}

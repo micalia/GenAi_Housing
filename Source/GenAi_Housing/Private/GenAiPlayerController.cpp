@@ -37,7 +37,8 @@ void AGenAiPlayerController::BeginPlay()
 
 	if (IsLocalController()) {
 		FString LogMsg = TEXT("Load FBX!!");
-		LoadFbxFilesToFbxActor();
+		FTimerHandle ChangeHandler;
+		GetWorldTimerManager().SetTimer(ChangeHandler, this, &AGenAiPlayerController::LoadFbxFilesToFbxActor, 0.5f, false);
 		if (HasAuthority()) {
 			UE_LOG(LogTemp, Warning, TEXT("%s > Ser > %s > %s"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__), *LogMsg)
 				GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple, FString::Printf(TEXT("%s > Ser > %s > %s"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__), *LogMsg), true, FVector2D(1, 1));
@@ -78,7 +79,7 @@ void AGenAiPlayerController::LoadFbxFilesToFbxActor()
 			if (fbxActorArr.Num() > 0) {
 				auto fbxActor = Cast<ACustomFBXMeshActor>(fbxActorArr[0]);
 				GEngine->AddOnScreenDebugMessage(-1, 20, FColor::Purple, FString::Printf(TEXT("Load FBX Transform: %s"), *fbxActor->GetActorTransform().ToString()), true, FVector2D(1, 1));
-					//LocalModelingDown(fbxActor->FileName, fbxActor->GetActor);
+				LocalModelingDown(fbxActor->FileName, fbxActor->GetActorTransform(), controllerFbxImportManager, this, fbxActor->CustomCurrentImportID);
 			}
 		}
 		else {
@@ -118,17 +119,15 @@ void AGenAiPlayerController::Server_InsertObjDataToDB_Implementation(const FStri
 
 void AGenAiPlayerController::SpawnFbxImporter_Implementation()
 {
-	UE_LOG(LogTemp, Warning, TEXT("1111"))
 	if (bSpawnFbxImporter == false) {
 		FString ImporterBlueprintReference = TEXT("/Script/Engine.Blueprint'/Game/Blueprints/BP_CustomFbxImporter.BP_CustomFbxImporter_C'");
 		UClass* loadedObject = StaticLoadClass(UObject::StaticClass(), nullptr, *ImporterBlueprintReference);
-		controllerFbxImportManager = GetWorld()->SpawnActor<ACustomFBXImportManager>(loadedObject,
-			FVector(UKismetMathLibrary::RandomFloatInRange(2200, 3260), 2410, 200),
-			FRotator(0)
-			);
-		UE_LOG(LogTemp, Warning, TEXT("22222"))
+
+		for (TActorIterator<ACustomFBXImportManager> it(GetWorld()); it; ++it) {
+			controllerFbxImportManager = *it;
+		}
+
 		if (controllerFbxImportManager) {
-			UE_LOG(LogTemp, Warning, TEXT("33333"))
 			bSpawnFbxImporter = true;
 			controllerFbxImportManager->SetOwner(this);
 		}

@@ -87,7 +87,7 @@ public:
 	EFBXAxis CustomCurrentFrontVector = EFBXAxis::Front;
 
 	UFUNCTION(BlueprintCallable)
-	void CustomImportFBXFile(const FString& FbxDownPath, FVector SpawnLoc, class ACustomFBXImportManager* fbxImportManager);
+	void CustomImportFBXFile(const FString& FbxDownPath, FTransform SpawnTrans, class ACustomFBXImportManager* fbxImportManager);
 	
 	TSharedPtr<FAsyncTask<class FCustomImportFBXTask>> customImportFBXTask;
 	void CustomResetTask();

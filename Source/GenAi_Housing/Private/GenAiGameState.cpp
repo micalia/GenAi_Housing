@@ -12,4 +12,5 @@ void AGenAiGameState::BeginPlay()
 	for (TActorIterator<AHttpRequestActor> it(GetWorld()); it; ++it) {
 		HttpRequestActor = *it;
 	}
+
 }

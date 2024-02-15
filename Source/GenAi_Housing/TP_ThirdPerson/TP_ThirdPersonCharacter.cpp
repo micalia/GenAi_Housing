@@ -71,7 +71,7 @@ ATP_ThirdPersonCharacter::ATP_ThirdPersonCharacter()
 void ATP_ThirdPersonCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
-
+	SetNickName();
 	UpdateNickName();
 }
 
@@ -107,6 +107,7 @@ void ATP_ThirdPersonCharacter::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
 
+	SetNickName();
 	UpdateNickName();
 }
 
@@ -134,8 +135,12 @@ void ATP_ThirdPersonCharacter::BeginPlay()
 
 	}*/
 	GEngine->AddOnScreenDebugMessage(-1, 20, FColor::Purple, FString::Printf(TEXT("HI Character")), true, FVector2D(1, 1));
+
+	/*UWorld* World = GetWorld();
+	World->GameStateSetEvent.AddUObject(this, );
+	World->
 	FTimerHandle ChangeHandler;
-	GetWorldTimerManager().SetTimer(ChangeHandler, this, &ATP_ThirdPersonCharacter::SetNickName, 0.5f, false);
+	GetWorldTimerManager().SetTimer(ChangeHandler, this, &ATP_ThirdPersonCharacter::SetNickName, 0.5f, false);*/
 	
 }
 
