@@ -42,5 +42,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Server, Reliable)
 	void Server_InsertObjDataToDB(const FString& userName);
+
+	void LoadFbxFilesToFbxActor();
 	
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void LocalModelingDown(const FString& FileName, FTransform SpawnTrans, class ACustomFBXImportManager* FbxImportManager, class AGenAiPlayerController* PlayerController);
 };

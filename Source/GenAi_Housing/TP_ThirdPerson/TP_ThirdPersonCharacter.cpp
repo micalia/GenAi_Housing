@@ -14,7 +14,7 @@
 #include "../Public/NetPlayerState.h"
 #include <UMG/Public/Components/TextBlock.h>
 #include "../Public/GenAiGameInstance.h"
-
+#include "EngineUtils.h"
 
 
 //////////////////////////////////////////////////////////////////////////

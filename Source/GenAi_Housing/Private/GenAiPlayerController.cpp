@@ -13,6 +13,8 @@
 #include "../Public/GenAiGameState.h"
 #include "../Public/HttpRequestActor.h"
 #include "../Public/CustomFBXMeshActor.h"
+#include <Kismet/GameplayStatics.h>
+
 
 AGenAiPlayerController::AGenAiPlayerController()
 {
@@ -32,6 +34,19 @@ void AGenAiPlayerController::BeginPlay()
 		UGenAiGameInstance* gi = GetGameInstance<UGenAiGameInstance>();
 		InGameWidgetPtr->RoomOwnerTxt->SetText(FText::FromString(gi->GetSessionName() + " Room"));
 	}
+
+	if (IsLocalController()) {
+		FString LogMsg = TEXT("Load FBX!!");
+		LoadFbxFilesToFbxActor();
+		if (HasAuthority()) {
+			UE_LOG(LogTemp, Warning, TEXT("%s > Ser > %s > %s"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__), *LogMsg)
+				GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple, FString::Printf(TEXT("%s > Ser > %s > %s"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__), *LogMsg), true, FVector2D(1, 1));
+		}
+		else {
+			UE_LOG(LogTemp, Warning, TEXT("%s > Cli > %s > %s"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__), *LogMsg)
+				GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple, FString::Printf(TEXT("%s > Cli > %s > %s"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__), *LogMsg), true, FVector2D(1, 1));
+		}
+	}
 }
 
 FString AGenAiPlayerController::UrlEncode(const FString originFileName)
@@ -48,6 +63,36 @@ void AGenAiPlayerController::OnPossess(APawn* InPawn)
 			SpawnFbxImporter_Implementation();
 		}
 	}
+}
+
+void AGenAiPlayerController::LoadFbxFilesToFbxActor()
+{
+	AGenAiGameState* gs = GetWorld()->GetGameState<AGenAiGameState>();
+	UE_LOG(LogTemp, Warning, TEXT("gsgsgs"))
+	if (ensure(gs)) {
+		UE_LOG(LogTemp, Warning, TEXT("gsgsgs11111"))
+		if (ensure(controllerFbxImportManager)) {
+			UE_LOG(LogTemp, Warning, TEXT("gsgsgs22222"))
+			TArray<AActor*> fbxActorArr;
+			UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACustomFBXMeshActor::StaticClass(), fbxActorArr);
+			if (fbxActorArr.Num() > 0) {
+				auto fbxActor = Cast<ACustomFBXMeshActor>(fbxActorArr[0]);
+				GEngine->AddOnScreenDebugMessage(-1, 20, FColor::Purple, FString::Printf(TEXT("Load FBX Transform: %s"), *fbxActor->GetActorTransform().ToString()), true, FVector2D(1, 1));
+					//LocalModelingDown(fbxActor->FileName, fbxActor->GetActor);
+			}
+		}
+		else {
+			GEngine->AddOnScreenDebugMessage(-1, 20, FColor::Purple, FString::Printf(TEXT("iMPORTER is null")), true, FVector2D(1, 1));
+		}
+	}
+	else {
+		GEngine->AddOnScreenDebugMessage(-1, 20, FColor::Purple, FString::Printf(TEXT("gs is null")), true, FVector2D(1, 1));
+	}
+		
+		//&& controllerFbxImportManager != nullptr)) {
+		//controllerFbxImportManager->
+		//gs->HttpRequestActor->GetFileNamesByIds(fbxActorArr);
+	
 }
 
 void AGenAiPlayerController::Server_InsertObjDataToDB_Implementation(const FString& userName)
@@ -73,6 +118,7 @@ void AGenAiPlayerController::Server_InsertObjDataToDB_Implementation(const FStri
 
 void AGenAiPlayerController::SpawnFbxImporter_Implementation()
 {
+	UE_LOG(LogTemp, Warning, TEXT("1111"))
 	if (bSpawnFbxImporter == false) {
 		FString ImporterBlueprintReference = TEXT("/Script/Engine.Blueprint'/Game/Blueprints/BP_CustomFbxImporter.BP_CustomFbxImporter_C'");
 		UClass* loadedObject = StaticLoadClass(UObject::StaticClass(), nullptr, *ImporterBlueprintReference);
@@ -80,12 +126,15 @@ void AGenAiPlayerController::SpawnFbxImporter_Implementation()
 			FVector(UKismetMathLibrary::RandomFloatInRange(2200, 3260), 2410, 200),
 			FRotator(0)
 			);
+		UE_LOG(LogTemp, Warning, TEXT("22222"))
 		if (controllerFbxImportManager) {
+			UE_LOG(LogTemp, Warning, TEXT("33333"))
 			bSpawnFbxImporter = true;
 			controllerFbxImportManager->SetOwner(this);
 		}
 	}
 	else {
+		UE_LOG(LogTemp, Warning, TEXT("4444"))
 		bSpawnFbxImporter = true;
 	}
 }

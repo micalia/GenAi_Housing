@@ -31,10 +31,10 @@ public:
 
 public: //Download
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void Server_ModelingDown(const FString& fileName, FVector SpawnLoc, class ACustomFBXImportManager* fbxImporter, class AGenAiPlayerController* PlayerController);
+	void Server_ModelingDown(const FString& fileName, FTransform SpawnTransform, class ACustomFBXImportManager* fbxImporter, class AGenAiPlayerController* PlayerController);
 
 	UFUNCTION(BlueprintCallable)
-	void DownFbxFileCPP(FString fbxUrl, FString saveUrl, FString fbxFileName, FVector spawnLoc);
+	void DownFbxFileCPP(FString fbxUrl, FString saveUrl, FString fbxFileName, FTransform spawnTrans);
 	UFUNCTION(BlueprintCallable)
 	void DownTextureFileCPP(FString textureUrl, FString saveUrl);
 
@@ -49,7 +49,7 @@ public: //Download
 	UFUNCTION()
 	void OnFbxStorageComplete(EDownloadToStorageResult Result);
 	FString currSaveFbxPath;
-	FVector currSpawnLoc;
+	FTransform currSpawnTrans;
 
 	UFUNCTION()
 	void OnTextureStorageProgress(int64 BytesReceived, int64 ContentLength, float ProgressRatio);
@@ -58,7 +58,7 @@ public: //Download
 	void OnTextureStorageComplete(EDownloadToStorageResult Result);
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void onDownComplete(const FString& downFbxName, FVector spawnLoc);
+	void onDownComplete(const FString& downFbxName, FTransform spawnTrans);
 
 	UFUNCTION(BlueprintCallable)
 	void CreateFBXActorInServer(FString fileName, FVector SpawnLoc, class ACustomFBXImportManager* fbxImporter, class AGenAiPlayerController* PlayerController, int32 objIndex);

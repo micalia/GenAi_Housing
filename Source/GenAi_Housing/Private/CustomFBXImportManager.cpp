@@ -25,12 +25,12 @@ void ACustomFBXImportManager::BeginPlay()
 
 }
 
-void ACustomFBXImportManager::DownFbxFileCPP(FString fbxUrl, FString saveUrl, FString fbxFileName, FVector spawnLoc)
+void ACustomFBXImportManager::DownFbxFileCPP(FString fbxUrl, FString saveUrl, FString fbxFileName, FTransform spawnTrans)
 {
 	FString contentType = "application/octet-stream";
 	UFileToStorageDownloader::DownloadFileToStorage(fbxUrl, saveUrl, 400.0f, contentType, false, onProgressDel, onDownCompleteDel);
 	currSaveFbxPath = saveUrl;
-	currSpawnLoc = spawnLoc;
+	currSpawnTrans = spawnTrans;
 }
 
 void ACustomFBXImportManager::DownTextureFileCPP(FString textureUrl, FString saveUrl)
@@ -53,7 +53,7 @@ void ACustomFBXImportManager::OnFbxStorageProgress(int64 BytesReceived, int64 Co
 
 void ACustomFBXImportManager::OnFbxStorageComplete(EDownloadToStorageResult Result)
 {
-	onDownComplete(currSaveFbxPath, currSpawnLoc);
+	onDownComplete(currSaveFbxPath, currSpawnTrans);
 }
 
 void ACustomFBXImportManager::OnTextureStorageProgress(int64 BytesReceived, int64 ContentLength, float ProgressRatio)
@@ -99,8 +99,8 @@ void ACustomFBXImportManager::CreateFBXActorInServer(FString fileName, FVector S
 	customImportActorMap.Add(CustomCurrentImportID, FBXActor);
 	ReplicatedActorMapWork();
 	CustomOnFBXActorCreated(FBXActor); 
-
-	Server_ModelingDown(fileName, SpawnLoc, fbxImporter, PlayerController);
+	
+	Server_ModelingDown(fileName, FBXActor->GetActorTransform(), fbxImporter, PlayerController);
 }
 
 void ACustomFBXImportManager::ReplicatedActorMapWork()

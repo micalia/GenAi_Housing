@@ -111,4 +111,6 @@ public:
 	bool bRuntimeGenerateAI;
 
 	void InsertObjDataToDB(TArray<FRoomInfo> RoomInfoArr);
+
+	void GetFileNamesByIds(TArray<AActor*> fbxActorArr);
 };

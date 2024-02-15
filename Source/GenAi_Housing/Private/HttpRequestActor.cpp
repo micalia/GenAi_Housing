@@ -23,6 +23,7 @@
 #include <GenericPlatform\GenericPlatformHttp.h>
 #include <ImageUtils.h>
 #include <UMG\Public\Components\Image.h>
+#include "..\Public\CustomFBXMeshActor.h"
 
 // Sets default values
 AHttpRequestActor::AHttpRequestActor()
@@ -341,6 +342,51 @@ void AHttpRequestActor::InsertObjDataToDB(TArray<FRoomInfo> RoomInfoArr)
 
 	}
 }
+
+void AHttpRequestActor::GetFileNamesByIds(TArray<AActor*> fbxActorArr)
+{
+	if (Conn) {
+		for (int i = 0; i < fbxActorArr.Num(); i++)
+		{
+			ACustomFBXMeshActor* fbxActor = Cast<ACustomFBXMeshActor>(fbxActorArr[i]);
+			//fbxActor->ObjIndex
+
+			// select * from roomInfo A INNER JOIN objInfo B ON A.objIndex = B.objIndex where nickName = 'Á©¸®'
+
+			if (gi) {
+				FString query = L"SELECT * FROM `roomInfo` A INNER JOIN `objInfo` B ON A.objIndex = B.objIndex where nickName = '" + gi->GetSessionName() + "'";
+				FMySQLConnectoreQueryResult QueryResult = MySqlDB->MySQLConnectorGetData(query, Conn);
+
+			}
+
+		}
+
+		//fbxActorArr
+
+		/*if (QueryResult.Success == false) {
+			Conn = MySqlDB->MySQLInitConnection(DB_IP, DB_USER, DB_PWD, DB_NAME, ConnectionTimeout, ReadTimeout, WriteTimeout);
+			QueryResult = MySqlDB->MySQLConnectorGetData(query, Conn);
+		}
+
+		for (int i = 0; i < QueryResult.ResultRows.Num(); i++) {
+			FObjDataInfo row;
+			row.objIndex = FCString::Atoi(*QueryResult.ResultRows[i].Fields[0].Value);
+			row.objName = QueryResult.ResultRows[i].Fields[1].Value;
+			row.objPrompt = QueryResult.ResultRows[i].Fields[2].Value;
+			row.makeTimeStamp = QueryResult.ResultRows[i].Fields[3].Value;
+			row.maker = QueryResult.ResultRows[i].Fields[4].Value;
+			row.owner = QueryResult.ResultRows[i].Fields[5].Value;
+		}
+		for (int i = 0; i < QueryResult.ResultRows.Num(); i++)
+		{
+
+		}*/
+	}
+	else {
+		Conn = MySqlDB->MySQLInitConnection(DB_IP, DB_USER, DB_PWD, DB_NAME, ConnectionTimeout, ReadTimeout, WriteTimeout);
+	}
+}
+
 
 UMainMenu* AHttpRequestActor::GetMainMenuWidget()
 {
