@@ -12,7 +12,8 @@
 				"Engine",
 				"UMG",
 				"RuntimeFBXImport",
-				"RuntimeTransformer"
+				"RuntimeTransformer",
+				"CoreUObject"
 			]
 		}
 	],

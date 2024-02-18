@@ -76,12 +76,13 @@ void AFBXMeshActor::AddMesh(UMeshNode_Geometry* MeshNode, FTransform SpawnTransf
 
 	FString MeshName = FString::Printf(TEXT("ProceduralMesh%d"), MeshIndex);
 	UProceduralMeshComponent* NewProceduralMesh = NewObject<UProceduralMeshComponent>(this, *MeshName, RF_Transactional);
-	NewProceduralMesh->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+	NewProceduralMesh->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
+	//NewProceduralMesh->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
 
 	NewProceduralMesh->bUseAsyncCooking = true;
 	NewProceduralMesh->bCastDynamicShadow = true;
 	NewProceduralMesh->RegisterComponentWithWorld(world);
-	NewProceduralMesh->SetWorldTransform(SpawnTransform);
+	NewProceduralMesh->SetRelativeTransform(SpawnTransform);
 
 	MeshNodeMap.Add(NewProceduralMesh, MeshNode);
 	

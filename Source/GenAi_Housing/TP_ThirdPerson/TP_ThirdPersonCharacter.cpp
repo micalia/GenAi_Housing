@@ -9,12 +9,13 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include <UMG/Public/Components/WidgetComponent.h>
 #include "../Public/PlayerNameWidget.h"
 #include "../Public/NetPlayerState.h"
 #include <UMG/Public/Components/TextBlock.h>
 #include "../Public/GenAiGameInstance.h"
 #include "EngineUtils.h"
+#include "Net/UnrealNetwork.h"
+#include "../Public/NameWidgetComponent.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -56,7 +57,7 @@ ATP_ThirdPersonCharacter::ATP_ThirdPersonCharacter()
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 
-	widgetComp = CreateDefaultSubobject<UWidgetComponent>(TEXT("widgetComp"));
+	widgetComp = CreateDefaultSubobject<UNameWidgetComponent>(TEXT("widgetComp"));
 	widgetComp->SetupAttachment(GetCapsuleComponent());
 	widgetComp->SetRelativeLocation(FVector(0, 0, 110));
 	widgetComp->SetWidgetSpace(EWidgetSpace::Screen);
@@ -68,10 +69,24 @@ ATP_ThirdPersonCharacter::ATP_ThirdPersonCharacter()
 	widgetComp->SetWidgetClass(PlayerNameWBFactory);
 }
 
+void ATP_ThirdPersonCharacter::TestWorld()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 9999, FColor::Purple, FString::Printf(TEXT("%s > %s > TestWorld"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__)), true, FVector2D(1, 1));
+}
+
+void ATP_ThirdPersonCharacter::NameWidgetUpdate()
+{
+	for (TActorIterator<ATP_ThirdPersonCharacter> it(GetWorld()); it; ++it) {
+		ATP_ThirdPersonCharacter* actor = *it;
+		GEngine->AddOnScreenDebugMessage(-1, 9999, FColor::Purple, FString::Printf(TEXT("%s > %s > Name: %s"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__), *actor->GetName()), true, FVector2D(1, 1));
+		actor->OnPlayerName.Broadcast();
+	}
+}
+
 void ATP_ThirdPersonCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
-	SetNickName();
+
 	UpdateNickName();
 }
 
@@ -89,25 +104,11 @@ void ATP_ThirdPersonCharacter::UpdateNickName()
 	}
 }
 
-void ATP_ThirdPersonCharacter::SetNickName()
-{
-	GEngine->AddOnScreenDebugMessage(-1, 20, FColor::Purple, FString::Printf(TEXT("SetNickName!!")), true, FVector2D(1, 1));
-	APlayerState* ps = GetPlayerState();
-	if (ensure(playerNameWB)) {
-		if (ensureMsgf(ps, TEXT("log"))) {
-			if (ensureMsgf(!ps->GetPlayerName().IsEmpty(), TEXT("log"))) {
-				GEngine->AddOnScreenDebugMessage(-1, 20, FColor::Purple, FString::Printf(TEXT("gi : %s"), *ps->GetPlayerName()), true, FVector2D(1, 1));
-				playerNameWB->PlayerNameTxt->SetText(FText::FromString(ps->GetPlayerName()));
-			}
-		}
-	}
-}
 
 void ATP_ThirdPersonCharacter::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
 
-	SetNickName();
 	UpdateNickName();
 }
 
@@ -124,31 +125,41 @@ void ATP_ThirdPersonCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
-
-	playerNameWB = Cast<UPlayerNameWidget>(widgetComp->GetWidget());
-	/*if (ensure(playerNameWB)) {
-		GEngine->AddOnScreenDebugMessage(-1, 20, FColor::Purple, FString::Printf(TEXT("GetUserName: %s"), *GetUserName()), true, FVector2D(1, 1));
-		playerNameWB->PlayerNameTxt->SetText(FText::FromString(GetUserName()));
-	}
-	else {
-		GEngine->AddOnScreenDebugMessage(-1, 20, FColor::Purple, FString::Printf(TEXT("GetUserName: not")), true, FVector2D(1, 1));
-
-	}*/
-	GEngine->AddOnScreenDebugMessage(-1, 20, FColor::Purple, FString::Printf(TEXT("HI Character")), true, FVector2D(1, 1));
-
-	/*UWorld* World = GetWorld();
-	World->GameStateSetEvent.AddUObject(this, );
-	World->
-	FTimerHandle ChangeHandler;
-	GetWorldTimerManager().SetTimer(ChangeHandler, this, &ATP_ThirdPersonCharacter::SetNickName, 0.5f, false);*/
-	
 }
 
 void ATP_ThirdPersonCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
 }
+
+void ATP_ThirdPersonCharacter::SetPlayerNameOnServer_Implementation(const FString& InCustomPlayerName)
+{
+	CustomPlayerName = InCustomPlayerName;
+	NameWidgetUpdate();
+}
+
+void ATP_ThirdPersonCharacter::SetUpLocal(class UPlayerNameWidget* InNameWidget)
+{
+	if (InNameWidget) {
+		OnPlayerName.AddUObject(InNameWidget, &UPlayerNameWidget::UpdateName);
+		if (IsLocallyControlled()) {
+			if (auto gi = Cast<UGenAiGameInstance>(GetWorld()->GetGameInstance())) {
+				if (HasAuthority()) {
+					SetPlayerNameOnServer_Implementation(gi->GetGiPlayerName());
+				}
+				else {
+					SetPlayerNameOnServer(gi->GetGiPlayerName());
+				}
+			}
+		}
+	}
+}
+
+void ATP_ThirdPersonCharacter::OnRep_SetPlayerName()
+{
+	NameWidgetUpdate();
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 // Input
@@ -208,6 +219,41 @@ void ATP_ThirdPersonCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
+void ATP_ThirdPersonCharacter::SetUpCharacterNameWidget(class UPlayerNameWidget* InWidget, class AActor* InPlayer)
+{
+	if (HasAuthority()) {
+		UPlayerNameWidget* NameWidget = Cast<UPlayerNameWidget>(InWidget);
+		if (auto player = Cast<ATP_ThirdPersonCharacter>(InPlayer)) {
+			GEngine->AddOnScreenDebugMessage(-1, 9999, FColor::Purple, FString::Printf(TEXT("%s > %s > This is Call??"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__)), true, FVector2D(1, 1));
+			if (ensure(NameWidget)) {
+				APlayerState* ps = player->GetPlayerState();
+				if (ensureMsgf(ps, TEXT("log"))) {
+					GEngine->AddOnScreenDebugMessage(-1, 9999, FColor::Purple, FString::Printf(TEXT("%s > %s > PlayerName: %s"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__), *ps->GetPlayerName()), true, FVector2D(1, 1));
+				}
+			}
+		}
+
+	}
+}
 
 
+//void ATP_ThirdPersonCharacter::SetNickName()
+//{
+//	GEngine->AddOnScreenDebugMessage(-1, 20, FColor::Purple, FString::Printf(TEXT("SetNickName!!")), true, FVector2D(1, 1));
+//	APlayerState* ps = GetPlayerState();
+//	if (ensure(playerNameWB)) {
+//		if (ensureMsgf(ps, TEXT("log"))) {
+//			if (ensureMsgf(!ps->GetPlayerName().IsEmpty(), TEXT("log"))) {
+//				GEngine->AddOnScreenDebugMessage(-1, 20, FColor::Purple, FString::Printf(TEXT("gi : %s"), *ps->GetPlayerName()), true, FVector2D(1, 1));
+//				playerNameWB->PlayerNameTxt->SetText(FText::FromString(ps->GetPlayerName()));
+//			}
+//		}
+//	}
+//}
 
+
+void ATP_ThirdPersonCharacter::GetLifetimeReplicatedProps(TArray < class FLifetimeProperty >& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(ATP_ThirdPersonCharacter, CustomPlayerName);
+}

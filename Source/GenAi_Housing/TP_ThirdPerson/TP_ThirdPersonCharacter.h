@@ -5,11 +5,13 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
+#include "../Public/NameWidgetInterface.h"
 #include "TP_ThirdPersonCharacter.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnPlayerNameDelegate);
 
 UCLASS(config=Game)
-class ATP_ThirdPersonCharacter : public ACharacter
+class ATP_ThirdPersonCharacter : public ACharacter, public INameWidgetInterface
 {
 	GENERATED_BODY()
 
@@ -40,19 +42,23 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* LookAction;
 
-	UPROPERTY(EditAnywhere)
-	class UWidgetComponent* widgetComp;
+
+public:
+	FOnPlayerNameDelegate OnPlayerName;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		class UNameWidgetComponent* widgetComp;
 
 	UPROPERTY()
-	TSubclassOf<class UPlayerNameWidget> PlayerNameWBFactory;
+		TSubclassOf<class UPlayerNameWidget> PlayerNameWBFactory;
 	UPROPERTY()
-	class UPlayerNameWidget* playerNameWB;
+		class UPlayerNameWidget* playerNameWB;
 
-
+	void TestWorld();
+	//void SetNickName();
+	void NameWidgetUpdate();
 protected:
 	virtual void PossessedBy(AController* NewController) override;
 	void UpdateNickName();
-	void SetNickName();
 
 	virtual void OnRep_PlayerState();
 
@@ -62,7 +68,7 @@ protected:
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 			
-
+	virtual void SetUpCharacterNameWidget(class UPlayerNameWidget* InWidget, class AActor* InPlayer) override;
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -78,6 +84,16 @@ public:
 
 	FORCEINLINE void SetUserName(FString name) { UserName = name; }
 	FORCEINLINE FString GetUserName() { return UserName; }
+
+	UFUNCTION(Server, Reliable)
+	void SetPlayerNameOnServer(const FString& InCustomPlayerName);
+
+	UPROPERTY(ReplicatedUsing = OnRep_SetPlayerName, BlueprintReadOnly)
+	FString CustomPlayerName;
+	void SetUpLocal(class UPlayerNameWidget* InNameWidget);
+
+	UFUNCTION()
+	void OnRep_SetPlayerName();
 private:
 	FString UserName;
 };

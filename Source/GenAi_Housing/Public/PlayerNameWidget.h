@@ -20,4 +20,10 @@ public:
 	UPROPERTY(meta=(BindWidget), BlueprintReadWrite)
 	class UTextBlock* PlayerNameTxt;
 	
+	FORCEINLINE void SetOwningActor(AActor* NewOwner) { OwningActor = NewOwner; }
+
+	void UpdateName();
+protected:
+	UPROPERTY()
+	TObjectPtr<AActor> OwningActor;
 };

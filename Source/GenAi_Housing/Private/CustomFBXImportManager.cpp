@@ -25,12 +25,13 @@ void ACustomFBXImportManager::BeginPlay()
 
 }
 
-void ACustomFBXImportManager::DownFbxFileCPP(FString fbxUrl, FString saveUrl, FString fbxFileName, FTransform spawnTrans)
+void ACustomFBXImportManager::DownFbxFileCPP(FString fbxUrl, FString saveUrl, FString fbxFileName, FTransform spawnTrans, int32 InRealImportID)
 {
 	FString contentType = "application/octet-stream";
 	UFileToStorageDownloader::DownloadFileToStorage(fbxUrl, saveUrl, 400.0f, contentType, false, onProgressDel, onDownCompleteDel);
 	currSaveFbxPath = saveUrl;
 	currSpawnTrans = spawnTrans;
+	CurrRealImportID = InRealImportID;
 }
 
 void ACustomFBXImportManager::DownTextureFileCPP(FString textureUrl, FString saveUrl)
@@ -53,7 +54,7 @@ void ACustomFBXImportManager::OnFbxStorageProgress(int64 BytesReceived, int64 Co
 
 void ACustomFBXImportManager::OnFbxStorageComplete(EDownloadToStorageResult Result)
 {
-	onDownComplete(currSaveFbxPath, currSpawnTrans);
+	onDownComplete(currSaveFbxPath, currSpawnTrans, CurrRealImportID);
 }
 
 void ACustomFBXImportManager::OnTextureStorageProgress(int64 BytesReceived, int64 ContentLength, float ProgressRatio)
@@ -102,7 +103,7 @@ void ACustomFBXImportManager::CreateFBXActorInServer(FString fileName, FVector S
 	ReplicatedActorMapWork();
 	CustomOnFBXActorCreated(FBXActor); 
 	
-	Server_ModelingDown(fileName, FBXActor->GetActorTransform(), fbxImporter, PlayerController);
+	Server_ModelingDown(fileName, FBXActor->GetActorTransform(), fbxImporter, PlayerController, CustomCurrentImportID);
 }
 
 void ACustomFBXImportManager::ReplicatedActorMapWork()
@@ -129,7 +130,7 @@ void ACustomFBXImportManager::OnRep_ImportActorMap()
 	}
 }
 
-void ACustomFBXImportManager::CustomImportFBXFile(const FString& FbxDownPath, FTransform SpawnTrans, class ACustomFBXImportManager* fbxImportManager)
+void ACustomFBXImportManager::CustomImportFBXFile(const FString& FbxDownPath, FTransform SpawnTrans, class ACustomFBXImportManager* fbxImportManager, int32 InLoadQueueElementId)
 {
 	ACustomFBXImportManager* customImporter = Cast<ACustomFBXImportManager>(fbxImportManager);
 	UE_LOG(LogTemp, Warning, TEXT("fbxdownPath: %s / SpawnTrans: %s"), *FbxDownPath, *SpawnTrans.ToString())
@@ -141,10 +142,21 @@ void ACustomFBXImportManager::CustomImportFBXFile(const FString& FbxDownPath, FT
 
 		}
 	GEngine->AddOnScreenDebugMessage(-1, 29990, FColor::Purple, FString::Printf(TEXT("Custom CUrrId : %d"), CustomCurrentImportID), true, FVector2D(1, 1));
+	auto MyClientPc = Cast<AGenAiPlayerController>(GetWorld()->GetFirstPlayerController());
+
 	TSharedPtr<FFBXImportSettings> ImportSettings = MakeShareable(new FFBXImportSettings());
-	ImportSettings->ImportID = CustomCurrentImportID;
+	//if (MyClientPc && MyClientPc->LoadFbxActorQueue.IsEmpty() || ) {
+	if (HasAuthority()) {
+		ImportSettings->ImportID = CustomCurrentImportID;
+	}
+	else {
+		ImportSettings->ImportID = InLoadQueueElementId;
+	}
+	GEngine->AddOnScreenDebugMessage(-1, 9999, FColor::Purple, FString::Printf(TEXT("%s > %s > CustomFBX Import() ID : %d"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__), ImportSettings->ImportID), true, FVector2D(1, 1));
 	//ImportSettings->SpawnTransform = FTransform(FRotator(), SpawnTrans, CustomCurrentScale);
-	ImportSettings->SpawnTransform = FTransform(SpawnTrans);
+
+	FTransform importTrans = FTransform(FRotator(0), FVector(0), FVector(8));
+	ImportSettings->SpawnTransform = FTransform(importTrans);
 	ImportSettings->Filepath = FbxDownPath;
 	ImportSettings->FBXAxis = FVector(static_cast<uint8>(CustomCurrentCoordinate), static_cast<uint8>(CustomCurrentUpVector), static_cast<uint8>(CustomCurrentFrontVector));
 
@@ -162,6 +174,19 @@ void ACustomFBXImportManager::CustomImportFBXFile(const FString& FbxDownPath, FT
 	////FBX
 	customImportFBXTask = MakeShareable(new FAsyncTask<FCustomImportFBXTask>(fbxImportManager, FBXSceneImporter));
 	customImportFBXTask->StartBackgroundTask();
+
+	// 기존 서버에 존재하던 모델링을 임포트 하는 것인지, 새로운 FbxActor를 생성하는 로직인지 체크
+	// 만약 Queue에 데이터가 존재한다면 CurrentImportID를 증가시키지 않음
+	if (MyClientPc && MyClientPc->LoadFbxActorQueue.IsEmpty()) {
+		auto ServerPc = Cast<AGenAiPlayerController>(GetOwner());
+		if (ServerPc && ServerPc->HasAuthority()) {
+			GEngine->AddOnScreenDebugMessage(-1, 9999, FColor::Purple, FString::Printf(TEXT("%s > %s > Server_IncreaseCustomCurrentImportID_Implementation"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__)), true, FVector2D(1, 1));
+			Server_IncreaseCustomCurrentImportID_Implementation();
+		}
+	}
+	else {
+		MyClientPc->LoadFbxActorQueue.Pop();
+	}
 
 	FBXSceneImporters.Add(FBXSceneImporter);
 }
@@ -207,9 +232,14 @@ void ACustomFBXImportManager::CustomHandleImportCompleted(UCustomFBXSceneImporte
 		{
 			(*ImportActor)->FinishImport(RootNodes);
 			(*ImportActor)->MeshPath = ImportSettings->Filepath;
-			CustomOnImportCompleted(*ImportActor);
+			CustomOnImportCompleted(*ImportActor, SceneImporter);
 		}
 	}
+}
+
+void ACustomFBXImportManager::Server_IncreaseCustomCurrentImportID_Implementation()
+{
+	CustomCurrentImportID++;
 }
 
 void ACustomFBXImportManager::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

@@ -16,5 +16,6 @@ void ACustomFBXMeshActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& 
 	DOREPLIFETIME(ACustomFBXMeshActor, SpawnLoc);
 	DOREPLIFETIME(ACustomFBXMeshActor, ObjIndex);
 	DOREPLIFETIME(ACustomFBXMeshActor, CustomCurrentImportID);
+	DOREPLIFETIME(ACustomFBXMeshActor, ProceduralWorldScale);
 }
 

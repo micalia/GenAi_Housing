@@ -14,7 +14,7 @@
 #include "../Public/HttpRequestActor.h"
 #include "../Public/CustomFBXMeshActor.h"
 #include <Kismet/GameplayStatics.h>
-
+#include <../Plugins/Runtime/ProceduralMeshComponent/Source/ProceduralMeshComponent/Public/ProceduralMeshComponent.h>
 
 AGenAiPlayerController::AGenAiPlayerController()
 {
@@ -48,6 +48,34 @@ void AGenAiPlayerController::BeginPlay()
 				GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple, FString::Printf(TEXT("%s > Cli > %s > %s"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__), *LogMsg), true, FVector2D(1, 1));
 		}
 	}
+
+}
+
+void CheckUObjectIsValid(const UObject* InObject, const FString& InTag) {
+	if (InObject->IsValidLowLevel()) {
+		GEngine->AddOnScreenDebugMessage(-1, 9999, FColor::Purple, FString::Printf(TEXT("%s > %s > [%s] Is Valid UE Object"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__), *InTag), true, FVector2D(1, 1));
+	}
+	else {
+		GEngine->AddOnScreenDebugMessage(-1, 9999, FColor::Purple, FString::Printf(TEXT("%s > %s > [%s] Not Valid UE Object"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__), *InTag), true, FVector2D(1, 1));
+		GEngine->AddOnScreenDebugMessage(-1, 9999, FColor::Purple, FString::Printf(TEXT("%s > %s > One More Check Actors"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__)), true, FVector2D(1, 1));
+		
+	}
+}
+
+void CheckUObjectIsNull(const UObject* InObject, const FString& InTag) {
+	if (nullptr == InObject) {
+		GEngine->AddOnScreenDebugMessage(-1, 9999, FColor::Purple, FString::Printf(TEXT("%s > %s > NullPTR UE Object"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__)), true, FVector2D(1, 1));
+	}
+	else {
+		GEngine->AddOnScreenDebugMessage(-1, 9999, FColor::Purple, FString::Printf(TEXT("%s > %s > Not Null ptr UE Object"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__)), true, FVector2D(1, 1));
+
+	}
+}
+
+void AGenAiPlayerController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
 }
 
 FString AGenAiPlayerController::UrlEncode(const FString originFileName)
@@ -66,6 +94,35 @@ void AGenAiPlayerController::OnPossess(APawn* InPawn)
 	}
 }
 
+void AGenAiPlayerController::ChkFbxActorQueue()
+{
+	if (!LoadFbxActorQueue.IsEmpty()) {
+		ACustomFBXMeshActor* HeadElement = nullptr;
+		LoadFbxActorQueue.Peek(HeadElement);
+		CheckUObjectIsNull(HeadElement, TEXT("LoadFbxActorQueue"));
+		CheckUObjectIsValid(HeadElement, TEXT("LoadFbxActorQueue"));
+		
+		LocalModelingDown(HeadElement->FileName, HeadElement->GetActorTransform(), controllerFbxImportManager, this, HeadElement->CustomCurrentImportID);
+		GEngine->AddOnScreenDebugMessage(-1, 9999, FColor::Purple, FString::Printf(TEXT("%s > %s > Dequeue Import FbxActor"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__)), true, FVector2D(1, 1));
+	}
+	else {
+		GEngine->AddOnScreenDebugMessage(-1, 9999, FColor::Purple, FString::Printf(TEXT("%s > %s > Not exisit data in ActorQueue"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__)), true, FVector2D(1, 1));
+		TArray<AActor*> fbxActorArr;
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACustomFBXMeshActor::StaticClass(), fbxActorArr);
+		for (int i = 0; i < fbxActorArr.Num(); i++)
+		{
+			auto FbxActor = Cast<ACustomFBXMeshActor>(fbxActorArr[i]);
+			auto mesh = fbxActorArr[i]->GetComponentByClass<UProceduralMeshComponent>();
+			if (mesh == nullptr) {
+				DrawDebugSphere(GetWorld(), fbxActorArr[i]->GetActorLocation(), 20.0f, 32, FColor::Red, false, 999.0f);
+				LoadFbxActorQueue.Enqueue(FbxActor);
+				ChkFbxActorQueue();
+			}
+		}
+	}
+
+}
+
 void AGenAiPlayerController::LoadFbxFilesToFbxActor()
 {
 	AGenAiGameState* gs = GetWorld()->GetGameState<AGenAiGameState>();
@@ -77,9 +134,15 @@ void AGenAiPlayerController::LoadFbxFilesToFbxActor()
 			TArray<AActor*> fbxActorArr;
 			UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACustomFBXMeshActor::StaticClass(), fbxActorArr);
 			if (fbxActorArr.Num() > 0) {
-				auto fbxActor = Cast<ACustomFBXMeshActor>(fbxActorArr[0]);
-				GEngine->AddOnScreenDebugMessage(-1, 20, FColor::Purple, FString::Printf(TEXT("Load FBX Transform: %s"), *fbxActor->GetActorTransform().ToString()), true, FVector2D(1, 1));
-				LocalModelingDown(fbxActor->FileName, fbxActor->GetActorTransform(), controllerFbxImportManager, this, fbxActor->CustomCurrentImportID);
+				for (int i = 0; i < fbxActorArr.Num(); i++)
+				{
+					ACustomFBXMeshActor* fbxActor = Cast<ACustomFBXMeshActor>(fbxActorArr[i]);
+					LoadFbxActorQueue.Enqueue(fbxActor);
+					GEngine->AddOnScreenDebugMessage(-1, 20, FColor::Purple, FString::Printf(TEXT("Load FBX Transform: %s"), *fbxActor->GetActorTransform().ToString()), true, FVector2D(1, 1));
+					
+				}
+
+				ChkFbxActorQueue();
 			}
 		}
 		else {
@@ -90,10 +153,33 @@ void AGenAiPlayerController::LoadFbxFilesToFbxActor()
 		GEngine->AddOnScreenDebugMessage(-1, 20, FColor::Purple, FString::Printf(TEXT("gs is null")), true, FVector2D(1, 1));
 	}
 		
-		//&& controllerFbxImportManager != nullptr)) {
-		//controllerFbxImportManager->
-		//gs->HttpRequestActor->GetFileNamesByIds(fbxActorArr);
+}
+
+void AGenAiPlayerController::TestQueue()
+{
+	/*ACustomFBXMeshActor* HeadElement = nullptr;
+	if (!LoadFbxActorQueue.IsEmpty()) {
+		LoadFbxActorQueue.Dequeue(HeadElement);
+		CheckUObjectIsNull(HeadElement, TEXT("LoadFbxActorQueue"));
+		CheckUObjectIsValid(HeadElement, TEXT("LoadFbxActorQueue"));
+	}
+	else {
+		GEngine->AddOnScreenDebugMessage(-1, 9999, FColor::Purple, 
+			FString::Printf(TEXT("%s > %s > LoadFbxActorQueue Empty!"), 
+				*FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
+				*FString(__FUNCTION__)), true, FVector2D(1, 1));
+	}*/
 	
+	//GEngine->AddOnScreenDebugMessage(-1, 9999, FColor::Purple,
+	//	FString::Printf(TEXT("%s > %s > --------------------------------------"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__)), true, FVector2D(1, 1));
+	/*if (chk) {
+		GEngine->AddOnScreenDebugMessage(-1, 9999, FColor::Purple, FString::Printf(TEXT("%s > %s > chk false"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__)), true, FVector2D(1, 1));
+		chk = false;
+	}
+	else {
+		GEngine->AddOnScreenDebugMessage(-1, 9999, FColor::Purple, FString::Printf(TEXT("%s > %s > chk true"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__)), true, FVector2D(1, 1));
+		chk = true;
+	}*/
 }
 
 void AGenAiPlayerController::Server_InsertObjDataToDB_Implementation(const FString& userName)

@@ -23,4 +23,6 @@ public:
 		int32 ObjIndex;
 	UPROPERTY(Replicated, BlueprintReadWrite)
 	int32 CustomCurrentImportID;
+	UPROPERTY(Replicated, BlueprintReadWrite)
+	FVector ProceduralWorldScale = FVector(50);
 };

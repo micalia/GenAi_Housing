@@ -4,6 +4,7 @@
 #include "GenAiGameState.h"
 #include "EngineUtils.h"
 #include "..\Public\HttpRequestActor.h"
+#include "..\TP_ThirdPerson\TP_ThirdPersonCharacter.h"
 
 void AGenAiGameState::BeginPlay()
 {

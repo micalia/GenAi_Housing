@@ -31,10 +31,10 @@ public:
 
 public: //Download
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void Server_ModelingDown(const FString& fileName, FTransform SpawnTransform, class ACustomFBXImportManager* fbxImporter, class AGenAiPlayerController* PlayerController);
+	void Server_ModelingDown(const FString& fileName, FTransform SpawnTransform, class ACustomFBXImportManager* fbxImporter, class AGenAiPlayerController* PlayerController, int32 InCustomCurrImportID);
 
 	UFUNCTION(BlueprintCallable)
-	void DownFbxFileCPP(FString fbxUrl, FString saveUrl, FString fbxFileName, FTransform spawnTrans);
+	void DownFbxFileCPP(FString fbxUrl, FString saveUrl, FString fbxFileName, FTransform spawnTrans, int32 InCurrImportID);
 	UFUNCTION(BlueprintCallable)
 	void DownTextureFileCPP(FString textureUrl, FString saveUrl);
 
@@ -50,6 +50,7 @@ public: //Download
 	void OnFbxStorageComplete(EDownloadToStorageResult Result);
 	FString currSaveFbxPath;
 	FTransform currSpawnTrans;
+	int32 CurrRealImportID;
 
 	UFUNCTION()
 	void OnTextureStorageProgress(int64 BytesReceived, int64 ContentLength, float ProgressRatio);
@@ -58,7 +59,7 @@ public: //Download
 	void OnTextureStorageComplete(EDownloadToStorageResult Result);
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void onDownComplete(const FString& downFbxName, FTransform spawnTrans);
+	void onDownComplete(const FString& downFbxName, FTransform spawnTrans, int32 currImportID);
 
 	UFUNCTION(BlueprintCallable)
 	void CreateFBXActorInServer(FString fileName, FVector SpawnLoc, class ACustomFBXImportManager* fbxImporter, class AGenAiPlayerController* PlayerController, int32 objIndex);
@@ -80,14 +81,14 @@ public: //Download
 public:
 	FVector CustomCurrentScale = FVector(1);
 	UPROPERTY(EditAnywhere, Category = "SpawnAxis")
-	EFBXCoordinate CustomCurrentCoordinate = EFBXCoordinate::RightHanded;
+	EFBXCoordinate CustomCurrentCoordinate = EFBXCoordinate::LeftHanded;
 	UPROPERTY(EditAnywhere, Category = "SpawnAxis")
 	EFBXAxis CustomCurrentUpVector = EFBXAxis::Front;
 	UPROPERTY(EditAnywhere, Category = "SpawnAxis")
-	EFBXAxis CustomCurrentFrontVector = EFBXAxis::Front;
+	EFBXAxis CustomCurrentFrontVector = EFBXAxis::Up;
 
 	UFUNCTION(BlueprintCallable)
-	void CustomImportFBXFile(const FString& FbxDownPath, FTransform SpawnTrans, class ACustomFBXImportManager* fbxImportManager);
+	void CustomImportFBXFile(const FString& FbxDownPath, FTransform SpawnTrans, class ACustomFBXImportManager* fbxImportManager, int32 InLoadQueueElementId);
 	
 	TSharedPtr<FAsyncTask<class FCustomImportFBXTask>> customImportFBXTask;
 	void CustomResetTask();
@@ -95,15 +96,19 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Import")
 	class UMaterialImportSettings* CustomMaterialImportSettings;
 	
+	UPROPERTY(EditAnywhere)
 	bool CustomTransformVertexToAbsolute;
 	UFUNCTION()
 	void CustomHandleMeshNodeCreated(int32 ImportID, UMeshNode_Geometry* NewMeshNode, const FTransform& SpawnTransform);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void CustomHandleImportCompleted(UCustomFBXSceneImporter* SceneImporter);
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void CustomOnImportCompleted(class ACustomFBXMeshActor* MeshActor);
+	void CustomOnImportCompleted(class ACustomFBXMeshActor* MeshActor, UCustomFBXSceneImporter* SceneImporter);
+
+	UFUNCTION(Server, Reliable)
+	void Server_IncreaseCustomCurrentImportID();
 	/*
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)

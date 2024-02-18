@@ -18,6 +18,7 @@ public:
 	AGenAiPlayerController();
 
 	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaTime) override;
 
 	TSubclassOf<class UInGameWidget> InGameWidgetFactory;
 
@@ -43,8 +44,17 @@ public:
 	UFUNCTION(BlueprintCallable, Server, Reliable)
 	void Server_InsertObjDataToDB(const FString& userName);
 
+	TQueue<class ACustomFBXMeshActor*> LoadFbxActorQueue;
+
+	UFUNCTION(BlueprintCallable)
+	void ChkFbxActorQueue();
+
 	void LoadFbxFilesToFbxActor();
+	bool chk;
+	UFUNCTION(BlueprintCallable)
+	void TestQueue();
 	
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void LocalModelingDown(const FString& FileName, FTransform SpawnTrans, class ACustomFBXImportManager* FbxImportManager, class AGenAiPlayerController* PlayerController, int32 CurrentImportID);
+
 };
