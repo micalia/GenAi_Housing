@@ -75,7 +75,7 @@ void UGenAiGameInstance::OnCreateSessionComplete(FName SessionName, bool Success
 
 	UE_LOG(LogTemp, Warning, TEXT("OnCreateSessionComplete"))
 		if (APlayerController* pc = GetWorld()->GetFirstPlayerController()) {
-			SetSessionName(SessionName.ToString());
+			//SetSessionName(SessionName.ToString());
 			UE_LOG(LogTemp, Warning, TEXT("ClientTravel"))
 			pc->ClientTravel("/Game/Levels/InGame?listen", ETravelType::TRAVEL_Absolute);
 
@@ -100,18 +100,20 @@ void UGenAiGameInstance::CreateSession(FString SessionName)
 		if (SessionInterface.IsValid()) {
 			FOnlineSessionSettings SessionSettings;
 			SessionSettings.bIsDedicated = false;
+			SessionSettings.bIsLANMatch = IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" ? true : false;
 			SessionSettings.bAllowInvites = true;
 			SessionSettings.bAllowJoinInProgress = true;
 			SessionSettings.bAllowJoinViaPresence = true;
-			SessionSettings.bIsLANMatch = IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" ? true : false;
-			SessionSettings.bShouldAdvertise = true;
+			SessionSettings.bShouldAdvertise = true; // 현재 세션을 광고할지 (스팀의 다른 플레이어에게 세션 홍보 여부)
+			SessionSettings.bUsesPresence = true;
 			SessionSettings.bUseLobbiesIfAvailable = true;
 			SessionSettings.NumPublicConnections = PlayerMaxCount;
-
+			
 			SessionSettings.Set(FName("RoomName"), SessionName, EOnlineDataAdvertisementType::Type::ViaOnlineServiceAndPing);
-
-			SessionInterface->CreateSession(0, FName(*SessionName), SessionSettings);
 			SetSessionName(SessionName);
+
+			SessionName = TEXT("GameSession");
+			SessionInterface->CreateSession(0, FName(*SessionName), SessionSettings);
 			GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Purple, FString::Printf(TEXT("Create Session")), true, FVector2D(2, 2));
 		}
 	}
@@ -205,7 +207,7 @@ void UGenAiGameInstance::OnFoundExistSession(bool bWasSuccessful)
 		{
 			FString foundRoomName;
 			results[i].Session.SessionSettings.Get(FName("RoomName"), foundRoomName);
-
+			
 			int32 maxPlayerCount = results[i].Session.SessionSettings.NumPublicConnections;
 			int32 currentPlayerCount = maxPlayerCount - results[i].Session.NumOpenPublicConnections;
 

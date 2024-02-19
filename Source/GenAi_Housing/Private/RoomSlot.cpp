@@ -25,7 +25,7 @@ void URoomSlot::SetSessionInfo(const FString roomName, const int32 currPlayer, c
 	roomIndex = idx;
 	RoomNameTxt->SetText(FText::FromString(roomName +
 		" Room / Exist Session / (" +
-		FString::FromInt(maxPlayer) +
-		"/" + FString::FromInt(currPlayer) + ")"));
+		FString::FromInt(currPlayer) +
+		"/" + FString::FromInt(maxPlayer) + ")"));
 	OwnerUserName = roomName;
 }
