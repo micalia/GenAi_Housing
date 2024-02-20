@@ -11,7 +11,8 @@
 #include <GameFramework/PlayerState.h>
 #include <UMG/Public/Blueprint/WidgetBlueprintLibrary.h>
 #include "../Public/RoomSlot.h"
-
+#include "EngineUtils.h"
+#include "../Public/HttpRequestActor.h"
 
 UGenAiGameInstance::UGenAiGameInstance(const FObjectInitializer& ObjectInitializer)
 {
@@ -194,27 +195,39 @@ void UGenAiGameInstance::SetPlayerName(FString name)
 void UGenAiGameInstance::OnFoundExistSession(bool bWasSuccessful)
 {
 	if (sessionSearch == nullptr) return;
-	TArray<FOnlineSessionSearchResult> results = sessionSearch->SearchResults;
+	TArray<FOnlineSessionSearchResult> FoundSessions = sessionSearch->SearchResults;
 
 	UE_LOG(LogTemp, Warning, TEXT("Find Results: %s"), bWasSuccessful ? *FString("Success!") : *FString("Failed..."));
 
 	if (bWasSuccessful)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Session Count: %d"), results.Num());
+		AHttpRequestActor* httpActor = nullptr;
+		for (TActorIterator<AHttpRequestActor> it(GetWorld()); it; ++it) {
+			httpActor = *it;
+		}
+		if (httpActor == nullptr) return;
+		
+		UE_LOG(LogTemp, Warning, TEXT("Session Count: %d"), FoundSessions.Num());
 		DeleteSessionSlots();
 
-		for (int32 i = 0; i < results.Num(); i++)
+		TSet<FString>& SelectUserArrRef = httpActor->DBLoadUserRooms();
+		for (int i = 0; i < FoundSessions.Num(); i++)
 		{
-			FString foundRoomName;
-			results[i].Session.SessionSettings.Get(FName("RoomName"), foundRoomName);
-			
-			int32 maxPlayerCount = results[i].Session.SessionSettings.NumPublicConnections;
-			int32 currentPlayerCount = maxPlayerCount - results[i].Session.NumOpenPublicConnections;
+			FString FoundRoomName;
+			FoundSessions[i].Session.SessionSettings.Get(FName("RoomName"), FoundRoomName);
+			FString* ExistUserRoom = SelectUserArrRef.Find(FoundRoomName);
+			if (ExistUserRoom) {
+				SelectUserArrRef.Remove(FoundRoomName);
+				int32 maxPlayerCount = FoundSessions[i].Session.SessionSettings.NumPublicConnections;
+				int32 currentPlayerCount = maxPlayerCount - FoundSessions[i].Session.NumOpenPublicConnections;
 
-			onCreateSlot.Broadcast(foundRoomName, currentPlayerCount, maxPlayerCount, i);
-			// 로그로 확인하기
-			UE_LOG(LogTemp, Warning, TEXT("Room Name: %s\nPlayer Count: (%d/%d)\n"), *foundRoomName, currentPlayerCount, maxPlayerCount);
+				onCreateSlot.Broadcast(FoundRoomName, currentPlayerCount, maxPlayerCount, i);
+			}
+		}
 
+		for (const FString& UserRoom : SelectUserArrRef)
+		{
+			onCreateSlot.Broadcast(UserRoom, 0, PlayerMaxCount, -1);
 		}
 
 	}

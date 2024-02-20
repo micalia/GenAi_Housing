@@ -40,7 +40,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	FString AI_IP = "192.168.219.105";
+	FString AI_IP = "192.168.219.106";
 	FString AI_PORT = "5001";
 	FString AI_FBX_PATH = "/static/output/text3d/fbx/";
 	FString AI_TEXTURE_PATH = "/static/output/text3d/texture/";
@@ -94,7 +94,8 @@ public:
 public:
 	TSubclassOf<class URoomSlot> RoomSlotFactory;
 
-	void DBLoadUserRooms(); //사용안함
+	TSet<FString> SelectUsersArr;
+	TSet<FString>& DBLoadUserRooms();
 
 public:
 	//Text to 3d

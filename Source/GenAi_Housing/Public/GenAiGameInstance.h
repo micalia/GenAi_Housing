@@ -51,6 +51,8 @@ public:
 	FORCEINLINE FString GetGiPlayerName() { return PlayerName; }
 	UPROPERTY()
 	class UMainMenu* Menu;
+
+	TMap<FString, int32> FindSessionArr;
 private:
 	FName CurrSessionName;
 	FString PlayerName = "None";

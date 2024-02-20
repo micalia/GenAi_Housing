@@ -225,32 +225,25 @@ void AHttpRequestActor::SetThumbTexture(class UTexture2D* tex, FString fileName)
 	}
 }
 
-void AHttpRequestActor::DBLoadUserRooms()
+TSet<FString>& AHttpRequestActor::DBLoadUserRooms()
 {
-	UMainMenu* MainMenuPtr = GetMainMenuWidget();
-	if (MainMenuPtr) {
-		FString SelectQuery = L"SELECT nickName FROM userInfo";
-		FMySQLConnectoreQueryResult SelectResult = MySqlDB->MySQLConnectorGetData(SelectQuery, Conn);
-
-		for (int i = 0; i < SelectResult.ResultRows.Num(); i++)
-		{
-			if (URoomSlot* RoomSlot = CreateWidget<URoomSlot>(GetWorld(), RoomSlotFactory)) {
-				FString UserName = SelectResult.ResultRows[i].Fields[0].Value;
-
-				FNamedOnlineSession* ExistingSession = gi->SessionInterface->GetNamedSession(FName(UserName));
-				if (ExistingSession != nullptr) {
-					int32 currentPlayerCount = gi->PlayerMaxCount - ExistingSession->NumOpenPublicConnections;
-					RoomSlot->RoomNameTxt->SetText(FText::FromString(UserName + " Room / Exist Session / (" + FString::FromInt(gi->PlayerMaxCount) + "/" + FString::FromInt(currentPlayerCount) + ")"));
-				}
-				else {
-					RoomSlot->RoomNameTxt->SetText(FText::FromString(UserName + " Room / Not Found Session"));
-				}
-				RoomSlot->OwnerUserName = UserName;
-				MainMenuPtr->RoomList->AddChild(RoomSlot);
-			}
-		}
-
+	SelectUsersArr.Empty();
+	
+	FString SelectQuery = L"SELECT nickName FROM userInfo";
+	if (MySqlDB == nullptr) {
+		UE_LOG(LogTemp, Warning, TEXT("MySqlDB is Null"))
+		return SelectUsersArr;
 	}
+	
+	FMySQLConnectoreQueryResult SelectResult = MySqlDB->MySQLConnectorGetData(SelectQuery, Conn);
+
+	for (const auto& ResultRow : SelectResult.ResultRows)
+	{
+		FString UserName = ResultRow.Fields[0].Value;
+		SelectUsersArr.Add(UserName);
+	}
+
+	return SelectUsersArr;
 }
 
 void AHttpRequestActor::PostRequest()
