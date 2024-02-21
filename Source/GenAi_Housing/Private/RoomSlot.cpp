@@ -17,7 +17,14 @@ void URoomSlot::EnterRoom()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Purple, FString::Printf(TEXT("EnterRoom!")), true, FVector2D(2, 2));
 	UGenAiGameInstance* Gi = Cast<UGenAiGameInstance>(GetGameInstance());
-	Gi->MyJoinSession(roomIndex, OwnerUserName);
+	if (Gi) {
+		if (roomIndex == -1) {
+			Gi->CreateSession(OwnerUserName);
+		}
+		else {
+			Gi->MyJoinSession(roomIndex, OwnerUserName);
+		}
+	}
 }
 
 void URoomSlot::SetSessionInfo(const FString roomName, const int32 currPlayer, const int32 maxPlayer, const int32 idx)
