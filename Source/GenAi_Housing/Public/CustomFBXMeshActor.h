@@ -25,4 +25,8 @@ public:
 	int32 CustomCurrentImportID;
 	UPROPERTY(Replicated, BlueprintReadWrite)
 	FVector ProceduralWorldScale = FVector(50);
+	UPROPERTY(Replicated, BlueprintReadWrite)
+	FVector SpawnScale = FVector(1);
+
+	virtual void BeginPlay() override;
 };

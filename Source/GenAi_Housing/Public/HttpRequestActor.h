@@ -21,7 +21,8 @@ struct FRoomInfo {
 	FString rotation;
 	UPROPERTY()
 	FString scale;
-
+	UPROPERTY()
+	FString fileName;
 };
 
 UCLASS()
@@ -114,4 +115,8 @@ public:
 	void InsertObjDataToDB(TArray<FRoomInfo> RoomInfoArr);
 
 	void GetFileNamesByIds(TArray<AActor*> fbxActorArr);
+
+public:
+	TArray<FRoomInfo> RoomObjArr;
+	TArray<FRoomInfo>& GetRoomObjDataFromDB();
 };

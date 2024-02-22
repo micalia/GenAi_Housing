@@ -42,7 +42,7 @@ public:
 	void HousingSystem();
 
 	UFUNCTION(BlueprintCallable, Server, Reliable)
-	void Server_InsertObjDataToDB(const FString& userName);
+	void Server_InsertObjDataToDB(const FString& SessionName);
 
 	TQueue<class ACustomFBXMeshActor*> LoadFbxActorQueue;
 

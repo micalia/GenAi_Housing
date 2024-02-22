@@ -6,6 +6,7 @@
 #include "Actors/FBXImportManager.h"
 #include "BaseFilesDownloader.h"
 #include "FileToStorageDownloader.h"
+#include "HttpRequestActor.h"
 #include "CustomFBXImportManager.generated.h"
 
 USTRUCT()
@@ -63,6 +64,8 @@ public: //Download
 
 	UFUNCTION(BlueprintCallable)
 	void CreateFBXActorInServer(FString fileName, FVector SpawnLoc, class ACustomFBXImportManager* fbxImporter, class AGenAiPlayerController* PlayerController, int32 objIndex);
+	UFUNCTION(Server, Reliable)	// 방에 첫번째 사람이 입장했을때 실행되는 함수
+	void ServerCreateFBXActor(const TArray<FRoomInfo>& InRoomInfoArr, class ACustomFBXImportManager* fbxImporter, class AGenAiPlayerController* PlayerController);
 
 	UPROPERTY(BlueprintReadOnly, Category = "Import")
 	TMap<int32, class ACustomFBXMeshActor*> customImportActorMap;
@@ -76,8 +79,6 @@ public: //Download
 	UPROPERTY(ReplicatedUsing = OnRep_ImportActorMap)
 	TArray<FCustomReplicatedImportActorMap_Int_Actor> customImportActorArray;
 
-	UFUNCTION(BlueprintImplementableEvent)
-	void CustomOnFBXActorCreated(class ACustomFBXMeshActor* meshActor);
 public:
 	FVector CustomCurrentScale = FVector(1);
 	UPROPERTY(EditAnywhere, Category = "SpawnAxis")
@@ -109,6 +110,8 @@ public:
 
 	UFUNCTION(Server, Reliable)
 	void Server_IncreaseCustomCurrentImportID();
+
+	//FTimerHandle LoadObjDelay;
 	/*
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)

@@ -101,7 +101,7 @@ void AGenAiPlayerController::ChkFbxActorQueue()
 		LoadFbxActorQueue.Peek(HeadElement);
 		CheckUObjectIsNull(HeadElement, TEXT("LoadFbxActorQueue"));
 		CheckUObjectIsValid(HeadElement, TEXT("LoadFbxActorQueue"));
-		
+		FTransform debug = HeadElement->GetActorTransform();
 		LocalModelingDown(HeadElement->FileName, HeadElement->GetActorTransform(), controllerFbxImportManager, this, HeadElement->CustomCurrentImportID);
 		GEngine->AddOnScreenDebugMessage(-1, 9999, FColor::Purple, FString::Printf(TEXT("%s > %s > Dequeue Import FbxActor"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__)), true, FVector2D(1, 1));
 	}
@@ -126,11 +126,8 @@ void AGenAiPlayerController::ChkFbxActorQueue()
 void AGenAiPlayerController::LoadFbxFilesToFbxActor()
 {
 	AGenAiGameState* gs = GetWorld()->GetGameState<AGenAiGameState>();
-	UE_LOG(LogTemp, Warning, TEXT("gsgsgs"))
 	if (ensure(gs)) {
-		UE_LOG(LogTemp, Warning, TEXT("gsgsgs11111"))
 		if (ensure(controllerFbxImportManager)) {
-			UE_LOG(LogTemp, Warning, TEXT("gsgsgs22222"))
 			TArray<AActor*> fbxActorArr;
 			UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACustomFBXMeshActor::StaticClass(), fbxActorArr);
 			if (fbxActorArr.Num() > 0) {
@@ -182,7 +179,7 @@ void AGenAiPlayerController::TestQueue()
 	}*/
 }
 
-void AGenAiPlayerController::Server_InsertObjDataToDB_Implementation(const FString& userName)
+void AGenAiPlayerController::Server_InsertObjDataToDB_Implementation(const FString& SessionName)
 {
 	auto httpRequestActor = GetWorld()->GetGameState<AGenAiGameState>()->HttpRequestActor;
 	if (httpRequestActor == nullptr) return;
@@ -192,7 +189,7 @@ void AGenAiPlayerController::Server_InsertObjDataToDB_Implementation(const FStri
 		ACustomFBXMeshActor* fbxActor = *it;
 
 		FRoomInfo roomInfo;
-		roomInfo.nickName = userName;
+		roomInfo.nickName = SessionName;
 		roomInfo.objIndex = fbxActor->ObjIndex;
 		roomInfo.position = fbxActor->GetActorLocation().ToString();
 		roomInfo.rotation = fbxActor->GetActorRotation().ToString();

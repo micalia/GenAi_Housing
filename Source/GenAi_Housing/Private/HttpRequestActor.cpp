@@ -151,6 +151,18 @@ void AHttpRequestActor::GetObjDataFromDB()
 				QueryResult = MySqlDB->MySQLConnectorGetData(query, Conn);
 			}
 
+			TArray<UUserWidget*> ObjSlotWidgets;
+			UWidgetBlueprintLibrary::GetAllWidgetsOfClass(GetWorld(), ObjSlotWidgets, UObjSlot::StaticClass(), false);
+
+			// 각 위젯을 제거합니다.
+			for (UUserWidget* Slot : ObjSlotWidgets)
+			{
+				if (IsValid(Slot) && Cast<UObjSlot>(Slot))
+				{
+					Slot->RemoveFromParent();
+				}
+			}
+
 			for (int i = 0; i < QueryResult.ResultRows.Num(); i++) {
 				FObjDataInfo row;
 				row.objIndex = FCString::Atoi(*QueryResult.ResultRows[i].Fields[0].Value);
@@ -380,6 +392,60 @@ void AHttpRequestActor::GetFileNamesByIds(TArray<AActor*> fbxActorArr)
 	}
 }
 
+TArray<FRoomInfo>& AHttpRequestActor::GetRoomObjDataFromDB()
+{
+	if (Conn == nullptr) {
+		Conn = MySqlDB->MySQLInitConnection(
+			DB_IP,
+			DB_USER,
+			DB_PWD,
+			DB_NAME,
+			ConnectionTimeout,
+			ReadTimeout,
+			WriteTimeout);
+	}
+	if (gi == nullptr) {
+		gi = Cast<UGenAiGameInstance>(GetGameInstance());
+	}
+
+	RoomObjArr.Empty();
+	if (Conn && gi) {
+		FString query = L"SELECT * FROM `roomInfo` A INNER JOIN `objInfo` B ON A.objIndex = B.objIndex where nickName = '" + gi->GetSessionName() + "'";
+		UE_LOG(LogTemp, Warning, TEXT("Query: %s"), *query)
+		FMySQLConnectoreQueryResult QueryResult = MySqlDB->MySQLConnectorGetData(query, Conn);
+		
+		for (const auto& Result : QueryResult.ResultRows)
+		{
+			FRoomInfo RoomObj;
+			RoomObj.nickName = Result.Fields[1].Value;
+			RoomObj.objIndex = FCString::Atoi(*Result.Fields[2].Value);
+			RoomObj.position = Result.Fields[3].Value;
+			RoomObj.rotation = Result.Fields[4].Value;
+			RoomObj.scale = Result.Fields[5].Value;
+			RoomObj.fileName = Result.Fields[9].Value + "_" + Result.Fields[8].Value;
+
+			RoomObjArr.Add(RoomObj);
+			/*TArray<FString> SplitPos;
+			int32 Count = Pos.ParseIntoArray(SplitPos, TEXT(" "), true);
+			for (int32 i = 0; i < Count; i++)
+			{
+				if (i == 0) {
+					RoomObj. SplitPos[i].Replace(L"X=", L"");
+				}
+				else if (i == 1) {
+
+				}
+				else if (i == 2) {
+
+				}
+			}*/
+
+			//RoomObj.position = Result.Fields[2].Value;
+
+		}
+	}
+	return RoomObjArr;
+}
 
 UMainMenu* AHttpRequestActor::GetMainMenuWidget()
 {

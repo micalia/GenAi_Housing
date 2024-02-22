@@ -9,6 +9,7 @@
 #include "HousingWidget.h"
 #include "AsyncTasks/CustomFBXAsyncTasks.h"
 #include "Net/UnrealNetwork.h"
+#include "../Public/HttpRequestActor.h"
 
 ACustomFBXImportManager::ACustomFBXImportManager() {
 	bReplicates = true;
@@ -101,9 +102,104 @@ void ACustomFBXImportManager::CreateFBXActorInServer(FString fileName, FVector S
 	ACustomFBXMeshActor* FBXActor = GetWorld()->SpawnActor<ACustomFBXMeshActor>(CurrentActorClass, SpawnLoc, FRotator::ZeroRotator, spawnConfig);
 	customImportActorMap.Add(CustomCurrentImportID, FBXActor);
 	ReplicatedActorMapWork();
-	CustomOnFBXActorCreated(FBXActor); 
 	
 	Server_ModelingDown(fileName, FBXActor->GetActorTransform(), fbxImporter, PlayerController, CustomCurrentImportID);
+}
+
+void ACustomFBXImportManager::ServerCreateFBXActor_Implementation(const TArray<FRoomInfo>& InRoomInfoArr, class ACustomFBXImportManager* fbxImporter, class AGenAiPlayerController* PlayerController)
+{
+	UClass* CurrentActorClass;
+	if (IsValid(FBXActorClass))
+	{
+		CurrentActorClass = FBXActorClass;
+	}
+	else {
+		CurrentActorClass = ACustomFBXMeshActor::StaticClass();
+	}
+
+	for (int32 i = 0; i < InRoomInfoArr.Num();i++)
+	{
+		FActorSpawnParameters spawnConfig;
+		spawnConfig.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		spawnConfig.TransformScaleMethod = ESpawnActorScaleMethod::MultiplyWithRoot;
+		FString inputFileName = InRoomInfoArr[i].fileName;
+		
+#pragma region SpawnTransform
+		FVector SpawnLocation;
+		TArray<FString> SplitPos;
+		int32 Count = InRoomInfoArr[i].position.ParseIntoArray(SplitPos, TEXT(" "), true);
+		for (int32 p = 0; p < Count; p++)
+		{
+			if (p == 0) {
+				SpawnLocation.X = FCString::Atod(*SplitPos[p].Replace(L"X=", L""));
+			}
+			else if (p == 1) {
+				SpawnLocation.Y = FCString::Atod(*SplitPos[p].Replace(L"Y=", L""));
+			}
+			else if (p == 2) {
+				SpawnLocation.Z = FCString::Atod(*SplitPos[p].Replace(L"Z=", L""));
+			}
+		}
+
+		FRotator SpawnRotator;
+		TArray<FString> SplitRot;
+		int32 RotCount = InRoomInfoArr[i].rotation.ParseIntoArray(SplitRot, TEXT(" "), true);
+		for (int32 r = 0; r < RotCount; r++)
+		{
+			if (r == 0) {
+				SpawnRotator.Pitch = FCString::Atod(*SplitRot[r].Replace(L"P=", L""));
+			}
+			else if (r == 1) {
+				SpawnRotator.Yaw = FCString::Atod(*SplitRot[r].Replace(L"Y=", L""));
+			}
+			else if (r == 2) {
+				SpawnRotator.Roll = FCString::Atod(*SplitRot[r].Replace(L"R=", L""));
+			}
+		}
+
+		FVector SpawnScale;
+		TArray<FString> SplitScale;
+		int32 ScaleCount = InRoomInfoArr[i].scale.ParseIntoArray(SplitScale, TEXT(" "), true);
+		for (int32 s = 0; s < ScaleCount; s++)
+		{
+			if (s == 0) {
+				SpawnScale.X = FCString::Atod(*SplitScale[s].Replace(L"X=", L""));
+			}
+			else if (s == 1) {
+				SpawnScale.Y = FCString::Atod(*SplitScale[s].Replace(L"Y=", L""));
+			}
+			else if (s == 2) {
+				SpawnScale.Z = FCString::Atod(*SplitScale[s].Replace(L"Z=", L""));
+			}
+		}
+#pragma endregion
+
+		FVector inputSpawnLoc = SpawnLocation;
+		int32 inputObjIndex = InRoomInfoArr[i].objIndex;
+		int32 inputCurrentImportID = CustomCurrentImportID;
+		FVector inputSpawnScale = SpawnScale;
+		auto doFunc = [inputFileName, inputSpawnLoc, inputObjIndex, inputCurrentImportID, inputSpawnScale](AActor* ObjectToModify)
+		{
+			ACustomFBXMeshActor* fbxMeshActorModify = Cast<ACustomFBXMeshActor>(ObjectToModify);
+			if (fbxMeshActorModify)
+			{
+				fbxMeshActorModify->FileName = inputFileName;
+				fbxMeshActorModify->SpawnLoc = inputSpawnLoc;
+				fbxMeshActorModify->ObjIndex = inputObjIndex;
+				fbxMeshActorModify->CustomCurrentImportID = inputCurrentImportID;
+				fbxMeshActorModify->SpawnScale = inputSpawnScale;
+			}
+		};
+
+		FTransform SpawnTransform = FTransform(FQuat(SpawnRotator), SpawnLocation, SpawnScale);
+		GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
+			FString::Printf(TEXT("%s > %s > spawnscale: %s"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
+				*FString(__FUNCTION__), *SpawnScale.ToString()), true, FVector2D(1, 1));
+		spawnConfig.CustomPreSpawnInitalization = doFunc;
+		ACustomFBXMeshActor* FBXActor = GetWorld()->SpawnActor<ACustomFBXMeshActor>(CurrentActorClass, SpawnTransform, spawnConfig);
+		customImportActorMap.Add(CustomCurrentImportID, FBXActor);
+		ReplicatedActorMapWork();
+	}
 }
 
 void ACustomFBXImportManager::ReplicatedActorMapWork()

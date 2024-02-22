@@ -45,6 +45,7 @@ public:
 	void DeleteSessionSlots();
 
 	void SetSessionName(FString name);
+	UFUNCTION(BlueprintCallable)
 	FORCEINLINE FString GetSessionName() { return CurrSessionName.ToString(); }
 	void SetPlayerName(FString name);
 	UFUNCTION(BlueprintCallable)
