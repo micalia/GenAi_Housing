@@ -11,6 +11,7 @@ public class RuntimeTransformer : ModuleRules
 		PublicIncludePaths.AddRange(
 			new string[] {
 				// ... add public include paths required here ...
+				"Actors/Public"
 			}
 			);
 				
@@ -38,6 +39,8 @@ public class RuntimeTransformer : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
+				"RuntimeFBXImport",
+				"GenAi_Housing"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

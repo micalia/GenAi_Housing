@@ -17,6 +17,10 @@
 
 /* Interface */
 #include "FocusableObject.h"
+#include "Actors/FBXMeshActor.h"
+#include "GenAi_Housing/Public/CustomFBXMeshActor.h"
+#include "GenAi_Housing/Public/GenAiPlayerController.h"
+
 
 // Sets default values
 ATransformerPawn::ATransformerPawn()
@@ -825,8 +829,14 @@ TArray<USceneComponent*> ATransformerPawn::DeselectAll(bool bDestroyDeselected)
 				//We destroy the actor if no components are left to destroy, or the system is currently ActorBased
 				if (bComponentBased && actor->GetComponents().Num() > 1)
 					c->DestroyComponent(true);
-				else
-					actor->Destroy();
+				else {
+					ACustomFBXMeshActor* FbxActor = Cast<ACustomFBXMeshActor>(actor);
+					auto Pc = Cast<AGenAiPlayerController>(GetWorld()->GetFirstPlayerController());
+					if (FbxActor && Pc) {
+						Pc->DeleteObjArr.Add(FbxActor->RoomObjIndex);
+						actor->Destroy();
+					}
+				}
 			}
 		}
 	}

@@ -19,5 +19,6 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	class AHttpRequestActor* HttpRequestActor;
 
-
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	void ServerInsertChk(const FString& SessionName);
 };

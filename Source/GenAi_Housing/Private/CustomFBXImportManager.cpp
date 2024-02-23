@@ -178,7 +178,8 @@ void ACustomFBXImportManager::ServerCreateFBXActor_Implementation(const TArray<F
 		int32 inputObjIndex = InRoomInfoArr[i].objIndex;
 		int32 inputCurrentImportID = CustomCurrentImportID;
 		FVector inputSpawnScale = SpawnScale;
-		auto doFunc = [inputFileName, inputSpawnLoc, inputObjIndex, inputCurrentImportID, inputSpawnScale](AActor* ObjectToModify)
+		int32 inputRoomObjIndex = InRoomInfoArr[i].roomObjIndex;
+		auto doFunc = [inputFileName, inputSpawnLoc, inputObjIndex, inputCurrentImportID, inputSpawnScale, inputRoomObjIndex](AActor* ObjectToModify)
 		{
 			ACustomFBXMeshActor* fbxMeshActorModify = Cast<ACustomFBXMeshActor>(ObjectToModify);
 			if (fbxMeshActorModify)
@@ -188,6 +189,7 @@ void ACustomFBXImportManager::ServerCreateFBXActor_Implementation(const TArray<F
 				fbxMeshActorModify->ObjIndex = inputObjIndex;
 				fbxMeshActorModify->CustomCurrentImportID = inputCurrentImportID;
 				fbxMeshActorModify->SpawnScale = inputSpawnScale;
+				fbxMeshActorModify->RoomObjIndex = inputRoomObjIndex;
 			}
 		};
 
@@ -198,6 +200,7 @@ void ACustomFBXImportManager::ServerCreateFBXActor_Implementation(const TArray<F
 		spawnConfig.CustomPreSpawnInitalization = doFunc;
 		ACustomFBXMeshActor* FBXActor = GetWorld()->SpawnActor<ACustomFBXMeshActor>(CurrentActorClass, SpawnTransform, spawnConfig);
 		customImportActorMap.Add(CustomCurrentImportID, FBXActor);
+		CustomCurrentImportID++;
 		ReplicatedActorMapWork();
 	}
 }
@@ -242,12 +245,12 @@ void ACustomFBXImportManager::CustomImportFBXFile(const FString& FbxDownPath, FT
 
 	TSharedPtr<FFBXImportSettings> ImportSettings = MakeShareable(new FFBXImportSettings());
 	//if (MyClientPc && MyClientPc->LoadFbxActorQueue.IsEmpty() || ) {
-	if (HasAuthority()) {
+	/*if (HasAuthority()) {
 		ImportSettings->ImportID = CustomCurrentImportID;
 	}
 	else {
+	}*/
 		ImportSettings->ImportID = InLoadQueueElementId;
-	}
 	GEngine->AddOnScreenDebugMessage(-1, 9999, FColor::Purple, FString::Printf(TEXT("%s > %s > CustomFBX Import() ID : %d"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__), ImportSettings->ImportID), true, FVector2D(1, 1));
 	//ImportSettings->SpawnTransform = FTransform(FRotator(), SpawnTrans, CustomCurrentScale);
 

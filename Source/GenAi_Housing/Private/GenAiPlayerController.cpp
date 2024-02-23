@@ -104,6 +104,12 @@ void AGenAiPlayerController::ChkFbxActorQueue()
 		FTransform debug = HeadElement->GetActorTransform();
 		LocalModelingDown(HeadElement->FileName, HeadElement->GetActorTransform(), controllerFbxImportManager, this, HeadElement->CustomCurrentImportID);
 		GEngine->AddOnScreenDebugMessage(-1, 9999, FColor::Purple, FString::Printf(TEXT("%s > %s > Dequeue Import FbxActor"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__)), true, FVector2D(1, 1));
+		GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
+			FString::Printf(TEXT("%s > %s > Deque Trans: %s"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
+				*FString(__FUNCTION__), *HeadElement->GetActorTransform().ToString()), true, FVector2D(1, 1));
+		GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
+			FString::Printf(TEXT("%s > %s > Deque Trans: %d"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
+				*FString(__FUNCTION__), HeadElement->CustomCurrentImportID), true, FVector2D(1, 1));
 	}
 	else {
 		GEngine->AddOnScreenDebugMessage(-1, 9999, FColor::Purple, FString::Printf(TEXT("%s > %s > Not exisit data in ActorQueue"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__)), true, FVector2D(1, 1));
@@ -113,7 +119,7 @@ void AGenAiPlayerController::ChkFbxActorQueue()
 		{
 			auto FbxActor = Cast<ACustomFBXMeshActor>(fbxActorArr[i]);
 			auto mesh = fbxActorArr[i]->GetComponentByClass<UProceduralMeshComponent>();
-			if (mesh == nullptr) {
+			if  (mesh == nullptr) {
 				DrawDebugSphere(GetWorld(), fbxActorArr[i]->GetActorLocation(), 20.0f, 32, FColor::Red, false, 999.0f);
 				LoadFbxActorQueue.Enqueue(FbxActor);
 				ChkFbxActorQueue();
@@ -179,9 +185,21 @@ void AGenAiPlayerController::TestQueue()
 	}*/
 }
 
+void AGenAiPlayerController::DeleteRoomObjInfoToDB()
+{
+	auto Gs = GetWorld()->GetGameState<AGenAiGameState>();
+	if (Gs) {
+		Gs->HttpRequestActor->DeleteRoomObjInfo(DeleteObjArr);
+	}
+}
+
 void AGenAiPlayerController::Server_InsertObjDataToDB_Implementation(const FString& SessionName)
 {
-	auto httpRequestActor = GetWorld()->GetGameState<AGenAiGameState>()->HttpRequestActor;
+	auto Gs = GetWorld()->GetGameState<AGenAiGameState>();
+	if (Gs) {
+		Gs->ServerInsertChk(SessionName);
+	}
+	/*auto httpRequestActor = GetWorld()->GetGameState<AGenAiGameState>()->HttpRequestActor;
 	if (httpRequestActor == nullptr) return;
 	
 	TArray<FRoomInfo> roomInfoArr;
@@ -197,7 +215,7 @@ void AGenAiPlayerController::Server_InsertObjDataToDB_Implementation(const FStri
 		roomInfoArr.Add(roomInfo);
 	}
 	
-	httpRequestActor->InsertObjDataToDB(roomInfoArr);
+	httpRequestActor->InsertObjDataToDB(roomInfoArr);*/
 }
 
 void AGenAiPlayerController::SpawnFbxImporter_Implementation()

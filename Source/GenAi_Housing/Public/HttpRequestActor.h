@@ -23,6 +23,18 @@ struct FRoomInfo {
 	FString scale;
 	UPROPERTY()
 	FString fileName;
+	UPROPERTY()
+	int32 roomObjIndex;
+
+	bool operator==(const FRoomInfo& InRoomInfo) const 
+	{
+		return roomObjIndex == InRoomInfo.roomObjIndex;
+	}
+
+	friend FORCEINLINE uint32 GetTypeHash(const FRoomInfo& InRoomInfoData) 
+	{
+		return GetTypeHash(InRoomInfoData.roomObjIndex);
+	}
 };
 
 UCLASS()
@@ -41,7 +53,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	FString AI_IP = "192.168.219.106";
+	FString AI_IP = "192.168.219.104";
 	FString AI_PORT = "5001";
 	FString AI_FBX_PATH = "/static/output/text3d/fbx/";
 	FString AI_TEXTURE_PATH = "/static/output/text3d/texture/";
@@ -112,11 +124,13 @@ public:
 	FString RuntimeGenereateAIstartTime;
 	bool bRuntimeGenerateAI;
 
-	void InsertObjDataToDB(TArray<FRoomInfo> RoomInfoArr);
+	void InsertObjDataToDB(TSet<FRoomInfo> InRoomInfoArr);
 
 	void GetFileNamesByIds(TArray<AActor*> fbxActorArr);
 
 public:
 	TArray<FRoomInfo> RoomObjArr;
 	TArray<FRoomInfo>& GetRoomObjDataFromDB();
+
+	void DeleteRoomObjInfo(TArray<int32>& InDeleteArr);
 };

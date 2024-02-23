@@ -12,7 +12,7 @@ ACustomFBXMeshActor::ACustomFBXMeshActor()
 void ACustomFBXMeshActor::BeginPlay()
 {
 	Super::BeginPlay();
-	SetActorScale3D(SpawnScale);
+	//SetActorScale3D(SpawnScale);
 }
 
 void ACustomFBXMeshActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -24,5 +24,6 @@ void ACustomFBXMeshActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& 
 	DOREPLIFETIME(ACustomFBXMeshActor, CustomCurrentImportID);
 	DOREPLIFETIME(ACustomFBXMeshActor, ProceduralWorldScale);
 	DOREPLIFETIME(ACustomFBXMeshActor, SpawnScale);
+	DOREPLIFETIME(ACustomFBXMeshActor, RoomObjIndex);
 }
 

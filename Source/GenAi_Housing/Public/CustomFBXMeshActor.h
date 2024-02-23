@@ -27,6 +27,8 @@ public:
 	FVector ProceduralWorldScale = FVector(50);
 	UPROPERTY(Replicated, BlueprintReadWrite)
 	FVector SpawnScale = FVector(1);
+	UPROPERTY(Replicated, BlueprintReadWrite)
+	int32 RoomObjIndex;
 
 	virtual void BeginPlay() override;
 };

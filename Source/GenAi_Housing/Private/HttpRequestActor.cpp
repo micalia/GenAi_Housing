@@ -241,18 +241,31 @@ TSet<FString>& AHttpRequestActor::DBLoadUserRooms()
 {
 	SelectUsersArr.Empty();
 	
-	FString SelectQuery = L"SELECT nickName FROM userInfo";
-	if (MySqlDB == nullptr) {
-		UE_LOG(LogTemp, Warning, TEXT("MySqlDB is Null"))
-		return SelectUsersArr;
-	}
+	if (Conn) {
+		FString SelectQuery = L"SELECT nickName FROM userInfo";
+		if (MySqlDB == nullptr) {
+			UE_LOG(LogTemp, Warning, TEXT("MySqlDB is Null"))
+			return SelectUsersArr;
+		}
 	
-	FMySQLConnectoreQueryResult SelectResult = MySqlDB->MySQLConnectorGetData(SelectQuery, Conn);
+		FMySQLConnectoreQueryResult SelectResult = MySqlDB->MySQLConnectorGetData(SelectQuery, Conn);
 
-	for (const auto& ResultRow : SelectResult.ResultRows)
-	{
-		FString UserName = ResultRow.Fields[0].Value;
-		SelectUsersArr.Add(UserName);
+		for (const auto& ResultRow : SelectResult.ResultRows)
+		{
+			FString UserName = ResultRow.Fields[0].Value;
+			SelectUsersArr.Add(UserName);
+		}
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("Not Init Sql Conn"))
+		Conn = MySqlDB->MySQLInitConnection(
+			DB_IP,
+			DB_USER,
+			DB_PWD,
+			DB_NAME,
+			ConnectionTimeout,
+			ReadTimeout,
+			WriteTimeout);
 	}
 
 	return SelectUsersArr;
@@ -326,7 +339,7 @@ void AHttpRequestActor::OnPostData(TSharedPtr<IHttpRequest> Request, TSharedPtr<
 	}
 }
 
-void AHttpRequestActor::InsertObjDataToDB(TArray<FRoomInfo> RoomInfoArr)
+void AHttpRequestActor::InsertObjDataToDB(TSet<FRoomInfo> InRoomInfoArr)
 {
 	if (Conn == nullptr) {
 		Conn = MySqlDB->MySQLInitConnection(
@@ -338,14 +351,23 @@ void AHttpRequestActor::InsertObjDataToDB(TArray<FRoomInfo> RoomInfoArr)
 			ReadTimeout,
 			WriteTimeout);
 	}
-	for (int i = 0; i < RoomInfoArr.Num(); i++)
+
+	for (const FRoomInfo& InRoomInfo: InRoomInfoArr)
 	{
-		FString InsertQuery = L"INSERT INTO roomInfo VALUES('" + RoomInfoArr[i].nickName+
-								"', "+ FString::FromInt(RoomInfoArr[i].objIndex) +", '" + RoomInfoArr[i].position +"',  '"+
-			RoomInfoArr[i].rotation + "', '"+ RoomInfoArr[i].scale +"')";
+		FString InsertQuery = L"INSERT INTO roomInfo VALUES(null, '" + InRoomInfo.nickName +
+			"', " + FString::FromInt(InRoomInfo.objIndex) + ", '" + InRoomInfo.position + "',  '" +
+			InRoomInfo.rotation + "', '" + InRoomInfo.scale + "')";
+		MySqlDB->MySQLConnectorExecuteQuery(InsertQuery, Conn);
+	}
+
+	/*for (int i = 0; i < InRoomInfoArr.Num(); i++)
+	{
+		FString InsertQuery = L"INSERT INTO roomInfo VALUES(null, '" + InRoomInfoArr[i].nickName +
+			"', " + FString::FromInt(InRoomInfoArr[i].objIndex) + ", '" + InRoomInfoArr[i].position + "',  '" +
+			InRoomInfoArr[i].rotation + "', '" + InRoomInfoArr[i].scale +"')";
 		MySqlDB->MySQLConnectorExecuteQuery(InsertQuery, Conn);
 
-	}
+	}*/
 }
 
 void AHttpRequestActor::GetFileNamesByIds(TArray<AActor*> fbxActorArr)
@@ -417,6 +439,7 @@ TArray<FRoomInfo>& AHttpRequestActor::GetRoomObjDataFromDB()
 		for (const auto& Result : QueryResult.ResultRows)
 		{
 			FRoomInfo RoomObj;
+			RoomObj.roomObjIndex = FCString::Atoi(*Result.Fields[0].Value);
 			RoomObj.nickName = Result.Fields[1].Value;
 			RoomObj.objIndex = FCString::Atoi(*Result.Fields[2].Value);
 			RoomObj.position = Result.Fields[3].Value;
@@ -425,26 +448,34 @@ TArray<FRoomInfo>& AHttpRequestActor::GetRoomObjDataFromDB()
 			RoomObj.fileName = Result.Fields[9].Value + "_" + Result.Fields[8].Value;
 
 			RoomObjArr.Add(RoomObj);
-			/*TArray<FString> SplitPos;
-			int32 Count = Pos.ParseIntoArray(SplitPos, TEXT(" "), true);
-			for (int32 i = 0; i < Count; i++)
-			{
-				if (i == 0) {
-					RoomObj. SplitPos[i].Replace(L"X=", L"");
-				}
-				else if (i == 1) {
-
-				}
-				else if (i == 2) {
-
-				}
-			}*/
-
-			//RoomObj.position = Result.Fields[2].Value;
-
 		}
 	}
 	return RoomObjArr;
+}
+
+void AHttpRequestActor::DeleteRoomObjInfo(TArray<int32>& InDeleteArr)
+{
+	if (Conn == nullptr) {
+		Conn = MySqlDB->MySQLInitConnection(
+			DB_IP,
+			DB_USER,
+			DB_PWD,
+			DB_NAME,
+			ConnectionTimeout,
+			ReadTimeout,
+			WriteTimeout);
+	}
+
+	for (const int32& DeleteObjIdx : InDeleteArr)
+	{
+		FString DeleteQuery = L"DELETE FROM roomInfo WHERE idx = "+ FString::FromInt(DeleteObjIdx);
+		if (!MySqlDB->MySQLConnectorExecuteQuery(DeleteQuery, Conn)) {
+			GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
+				FString::Printf(TEXT("%s > %s > FaileDelete"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
+					*FString(__FUNCTION__)), true, FVector2D(1, 1));
+		}
+	}
+	InDeleteArr.Empty();
 }
 
 UMainMenu* AHttpRequestActor::GetMainMenuWidget()

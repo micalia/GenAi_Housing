@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameMode.h"
+#include "HttpRequestActor.h"
 #include "HousingGameMode.generated.h"
 
 /**
@@ -19,4 +20,7 @@ public:
 	void Logout(AController* Exiting) override;
 
 	uint32 NumberOfPlayers = 0;
+
+	TSet<FRoomInfo> CurrRoomObjArr;
+	TSet<FRoomInfo>& GetRoomObjIndexArr();
 };

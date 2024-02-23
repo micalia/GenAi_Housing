@@ -57,4 +57,7 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void LocalModelingDown(const FString& FileName, FTransform SpawnTrans, class ACustomFBXImportManager* FbxImportManager, class AGenAiPlayerController* PlayerController, int32 CurrentImportID);
 
+	TArray<int32> DeleteObjArr;
+	UFUNCTION(BlueprintCallable)
+	void DeleteRoomObjInfoToDB();
 };
