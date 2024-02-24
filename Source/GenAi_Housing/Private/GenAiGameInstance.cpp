@@ -113,7 +113,7 @@ void UGenAiGameInstance::CreateSession(FString SessionName)
 			SessionSettings.Set(FName("RoomName"), SessionName, EOnlineDataAdvertisementType::Type::ViaOnlineServiceAndPing);
 			SetSessionName(SessionName);
 
-			SessionName = TEXT("GameSession");
+			//SessionName = TEXT("GameSession");
 			SessionInterface->CreateSession(0, FName(*SessionName), SessionSettings);
 			GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Purple, FString::Printf(TEXT("Create Session")), true, FVector2D(2, 2));
 		}

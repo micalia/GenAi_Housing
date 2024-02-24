@@ -45,8 +45,9 @@ void ACustomFBXImportManager::OnFbxStorageProgress(int64 BytesReceived, int64 Co
 {
 	AGenAiPlayerController* pc = Cast<AGenAiPlayerController>(GetWorld()->GetFirstPlayerController());
 	if (ProgressRatio >= 1) { 
-		pc->InGameWidgetPtr->WB_HousingWidget->WB_TaskItem->SetProgress(ProgressRatio);
 		pc->InGameWidgetPtr->WB_HousingWidget->WB_TaskItem->SetVisibility(ESlateVisibility::Hidden);
+		ProgressRatio = 0;
+		pc->InGameWidgetPtr->WB_HousingWidget->WB_TaskItem->SetProgress(ProgressRatio);
 	}
 	else {
 		pc->InGameWidgetPtr->WB_HousingWidget->WB_TaskItem->SetProgress(ProgressRatio);
