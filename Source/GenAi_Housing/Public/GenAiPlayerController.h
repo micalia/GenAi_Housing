@@ -60,4 +60,5 @@ public:
 	TArray<int32> DeleteObjArr;
 	UFUNCTION(BlueprintCallable)
 	void DeleteRoomObjInfoToDB();
+
 };

@@ -24,6 +24,8 @@
 #include <ImageUtils.h>
 #include <UMG\Public\Components\Image.h>
 #include "..\Public\CustomFBXMeshActor.h"
+#include "..\Public\GenAiGameState.h"
+#include <UMG\Public\Components\CircularThrobber.h>
 
 // Sets default values
 AHttpRequestActor::AHttpRequestActor()
@@ -278,9 +280,12 @@ void AHttpRequestActor::PostRequest()
 		req->SetContentAsString(jsonData);
 		req->OnProcessRequestComplete().BindUObject(this, &AHttpRequestActor::OnPostData);
 		req->ProcessRequest();
-
+		
 		bRuntimeGenerateAI = true;
 
+		RequestObjName = prompt;
+		RequestMakeTime = TimeString;
+		ChkGenerateResult();
 	}
 
 }
@@ -434,21 +439,52 @@ void AHttpRequestActor::DeleteRoomObjInfo(TArray<int32>& InDeleteArr)
 	
 }
 
+void AHttpRequestActor::ChkGenerateResult()
+{
+	OnMySQLInitConnection();
+	if (Conn) {
+		GEngine->AddOnScreenDebugMessage(-1, 0.5, FColor::Purple,
+			FString::Printf(TEXT("%s > %s > ChkGenerateResult"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
+				*FString(__FUNCTION__)), true, FVector2D(1, 1));
+		FString GetCountQuery = L"SELECT COUNT(*) FROM objInfo WHERE objName='" + RequestObjName +
+			"' AND makeTimeStamp='" + RequestMakeTime + "'";
+		
+		FMySQLConnectoreQueryResult CountResult = MySqlDB->MySQLConnectorGetData(GetCountQuery, Conn);
+		if (CountResult.Success) {
+			int32 ObjCount = FCString::Atoi(*CountResult.ResultRows[0].Fields[0].Value);
+			if (ObjCount > 0) {
+				AGenAiGameState* Gs = Cast<AGenAiGameState>(GetWorld()->GetGameState());
+				if (Gs) {
+					if (UInGameWidget* GameWidget = Gs->GetInGameWidget()) { 
+						GameWidget->WB_HousingWidget->NotifyIcon->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+						GameWidget->WB_HousingWidget->GeneratingMark->SetVisibility(ESlateVisibility::Hidden);
+						return;
+					}
+				}
+			}
+		}
+
+	}
+	GetWorldTimerManager().SetTimer(ChkGenerateTimer, this, &AHttpRequestActor::ChkGenerateResult, 1, false);
+}
+
 void AHttpRequestActor::OnMySQLInitConnection()
 {
-	MySqlDB = nullptr;
-	MySqlDB = NewObject<UMySQLDatabase>();
-	Conn = nullptr;
-	Conn = MySqlDB->MySQLInitConnection(
-		DB_IP,
-		DB_USER,
-		DB_PWD,
-		DB_NAME,
-		ConnectionTimeout,
-		ReadTimeout,
-		WriteTimeout);
+	if (MySqlDB == nullptr) {
+		MySqlDB = NewObject<UMySQLDatabase>();
+	}
+	if (Conn == nullptr) {
+		Conn = MySqlDB->MySQLInitConnection(
+			DB_IP,
+			DB_USER,
+			DB_PWD,
+			DB_NAME,
+			ConnectionTimeout,
+			ReadTimeout,
+			WriteTimeout);
+	}
 	if (Conn && Conn->MySQLCheckConnection()) {
-		GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
+		GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Purple,
 			FString::Printf(TEXT("%s > %s > Success Conn"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
 		*FString(__FUNCTION__)), true, FVector2D(1, 1));
 	}

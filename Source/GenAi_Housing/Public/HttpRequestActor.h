@@ -67,11 +67,11 @@ public:
 	FString DB_PWD = TEXT("1234");
 	FString DB_NAME = TEXT("housingdb");
 	UPROPERTY(EditAnywhere)
-		int ConnectionTimeout = 15;
+		int ConnectionTimeout = 230;
 	UPROPERTY(EditAnywhere)
-		int ReadTimeout = 15;
+		int ReadTimeout = 230;
 	UPROPERTY(EditAnywhere)
-		int WriteTimeout = 15;
+		int WriteTimeout = 230;
 
 	UPROPERTY(BlueprintReadWrite)
 		class UMySQLDatabase* MySqlDB;
@@ -134,4 +134,9 @@ public:
 	TArray<FRoomInfo>& GetRoomObjDataFromDB();
 
 	void DeleteRoomObjInfo(TArray<int32>& InDeleteArr);
+private:
+	FTimerHandle ChkGenerateTimer;
+	void ChkGenerateResult();
+	FString RequestMakeTime;
+	FString RequestObjName;
 };

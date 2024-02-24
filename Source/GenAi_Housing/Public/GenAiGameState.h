@@ -21,4 +21,7 @@ public:
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void ServerInsertChk(const FString& SessionName);
+
+	UFUNCTION(BlueprintCallable)
+	class UInGameWidget* GetInGameWidget();
 };

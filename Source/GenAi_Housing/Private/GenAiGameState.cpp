@@ -6,6 +6,8 @@
 #include "..\Public\HttpRequestActor.h"
 #include "..\Public\HousingGameMode.h"
 #include "..\Public\CustomFBXMeshActor.h"
+#include <UMG\Public\Blueprint\WidgetBlueprintLibrary.h>
+#include "..\Public\InGameWidget.h"
 
 void AGenAiGameState::BeginPlay()
 {
@@ -15,6 +17,22 @@ void AGenAiGameState::BeginPlay()
 		HttpRequestActor = *it;
 	}
 
+}
+
+class UInGameWidget* AGenAiGameState::GetInGameWidget()
+{
+	TArray<UUserWidget*> ActiveWidgets;
+	UWidgetBlueprintLibrary::GetAllWidgetsOfClass(GetWorld(), ActiveWidgets, UUserWidget::StaticClass(), false);
+
+	for (UUserWidget* Widget : ActiveWidgets)
+	{
+		UInGameWidget* InGameWidgetPtr = Cast<UInGameWidget>(Widget);
+		if (IsValid(InGameWidgetPtr) && Widget->IsInViewport())
+		{
+			return InGameWidgetPtr;
+		}
+	}
+	return nullptr;
 }
 
 void AGenAiGameState::ServerInsertChk_Implementation(const FString& SessionName)

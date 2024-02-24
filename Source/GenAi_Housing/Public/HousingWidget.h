@@ -39,4 +39,9 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	class UScrollBox* ObjSlotScroll;
+
+	UPROPERTY(meta = (BindWidget), BlueprintReadWrite)
+	class UImage* NotifyIcon;
+	UPROPERTY(meta = (BindWidget), BlueprintReadWrite)
+	class UCircularThrobber* GeneratingMark;
 };
