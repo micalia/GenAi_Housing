@@ -42,17 +42,6 @@ void AHttpRequestActor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	MySqlDB = NewObject<UMySQLDatabase>();
-
-	Conn = MySqlDB->MySQLInitConnection(
-		DB_IP,
-		DB_USER,
-		DB_PWD,
-		DB_NAME,
-		ConnectionTimeout,
-		ReadTimeout,
-		WriteTimeout);
-
 	gi = Cast<UGenAiGameInstance>(GetGameInstance());
 	gi->onCreateSlot.AddDynamic(this, &AHttpRequestActor::OnSlotCreated);
 
@@ -107,7 +96,9 @@ void AHttpRequestActor::Login()
 		FString SelectQuery = L"SELECT nickName FROM userInfo WHERE nickName= '" +
 			inputName + "' and " +
 			"pwd='" + inputPwd + "'";
+		OnMySQLInitConnection();
 		FMySQLConnectoreQueryResult SelectResult = MySqlDB->MySQLConnectorGetData(SelectQuery, Conn);
+		 
 		if (SelectResult.ResultRows.Num() == 0) {
 			GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Purple, FString::Printf(TEXT("Not Found User")), true, FVector2D(2, 2));
 			return;
@@ -142,14 +133,10 @@ void AHttpRequestActor::GetObjDataFromDB()
 {
 	AGenAiPlayerController* pc = Cast<AGenAiPlayerController>(GetWorld()->GetFirstPlayerController());
 	if (pc !=nullptr && pc->InGameWidgetPtr != nullptr) {
+		OnMySQLInitConnection();
 		if (Conn) {
 			FString query = L"SELECT * FROM `objInfo`";
 			FMySQLConnectoreQueryResult QueryResult = MySqlDB->MySQLConnectorGetData(query, Conn);
-
-			if (QueryResult.Success == false) {
-				Conn = MySqlDB->MySQLInitConnection(DB_IP, DB_USER, DB_PWD, DB_NAME, ConnectionTimeout, ReadTimeout, WriteTimeout);
-				QueryResult = MySqlDB->MySQLConnectorGetData(query, Conn);
-			}
 
 			TArray<UUserWidget*> ObjSlotWidgets;
 			UWidgetBlueprintLibrary::GetAllWidgetsOfClass(GetWorld(), ObjSlotWidgets, UObjSlot::StaticClass(), false);
@@ -186,10 +173,7 @@ void AHttpRequestActor::GetObjDataFromDB()
 			}
 
 		}
-		else {
-			Conn = MySqlDB->MySQLInitConnection(DB_IP, DB_USER, DB_PWD, DB_NAME, ConnectionTimeout, ReadTimeout, WriteTimeout);
-		}
-
+		 
 	}
 
 }
@@ -241,13 +225,13 @@ TSet<FString>& AHttpRequestActor::DBLoadUserRooms()
 {
 	SelectUsersArr.Empty();
 	
+	OnMySQLInitConnection();
 	if (Conn) {
 		FString SelectQuery = L"SELECT nickName FROM userInfo";
 		if (MySqlDB == nullptr) {
 			UE_LOG(LogTemp, Warning, TEXT("MySqlDB is Null"))
 			return SelectUsersArr;
 		}
-	
 		FMySQLConnectoreQueryResult SelectResult = MySqlDB->MySQLConnectorGetData(SelectQuery, Conn);
 
 		for (const auto& ResultRow : SelectResult.ResultRows)
@@ -255,17 +239,10 @@ TSet<FString>& AHttpRequestActor::DBLoadUserRooms()
 			FString UserName = ResultRow.Fields[0].Value;
 			SelectUsersArr.Add(UserName);
 		}
+		 
 	}
 	else {
 		UE_LOG(LogTemp, Warning, TEXT("Not Init Sql Conn"))
-		Conn = MySqlDB->MySQLInitConnection(
-			DB_IP,
-			DB_USER,
-			DB_PWD,
-			DB_NAME,
-			ConnectionTimeout,
-			ReadTimeout,
-			WriteTimeout);
 	}
 
 	return SelectUsersArr;
@@ -339,143 +316,148 @@ void AHttpRequestActor::OnPostData(TSharedPtr<IHttpRequest> Request, TSharedPtr<
 	}
 }
 
-void AHttpRequestActor::InsertObjDataToDB(TSet<FRoomInfo> InRoomInfoArr)
+void AHttpRequestActor::UpdateObjDataToDB(TArray<class ACustomFBXMeshActor*> InRoomInfoArr)
 {
-	if (Conn == nullptr) {
-		Conn = MySqlDB->MySQLInitConnection(
-			DB_IP,
-			DB_USER,
-			DB_PWD,
-			DB_NAME,
-			ConnectionTimeout,
-			ReadTimeout,
-			WriteTimeout);
+	OnMySQLInitConnection();
+
+	if (Conn) {
+		for (const ACustomFBXMeshActor* InRoomInfo : InRoomInfoArr)
+		{
+			FString UpdateQuery = L"UPDATE roomInfo SET position =  '" + InRoomInfo->GetActorLocation().ToString() + "', rotation = '" +
+				InRoomInfo->GetActorRotation().ToString() + "', scale = '" + InRoomInfo->GetActorScale3D().ToString() + 
+				"' WHERE idx = " + FString::FromInt(InRoomInfo->RoomObjIndex);
+			if (MySqlDB->MySQLConnectorExecuteQuery(UpdateQuery, Conn)) {
+				GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
+					FString::Printf(TEXT("%s > %s > Success Update"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
+						*FString(__FUNCTION__)), true, FVector2D(1, 1));
+			}
+			else {
+				GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
+					FString::Printf(TEXT("%s > %s > Fail Update"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
+						*FString(__FUNCTION__)), true, FVector2D(1, 1));
+			}
+		}
+		 
 	}
-
-	for (const FRoomInfo& InRoomInfo: InRoomInfoArr)
-	{
-		FString InsertQuery = L"INSERT INTO roomInfo VALUES(null, '" + InRoomInfo.nickName +
-			"', " + FString::FromInt(InRoomInfo.objIndex) + ", '" + InRoomInfo.position + "',  '" +
-			InRoomInfo.rotation + "', '" + InRoomInfo.scale + "')";
-		MySqlDB->MySQLConnectorExecuteQuery(InsertQuery, Conn);
-	}
-
-	/*for (int i = 0; i < InRoomInfoArr.Num(); i++)
-	{
-		FString InsertQuery = L"INSERT INTO roomInfo VALUES(null, '" + InRoomInfoArr[i].nickName +
-			"', " + FString::FromInt(InRoomInfoArr[i].objIndex) + ", '" + InRoomInfoArr[i].position + "',  '" +
-			InRoomInfoArr[i].rotation + "', '" + InRoomInfoArr[i].scale +"')";
-		MySqlDB->MySQLConnectorExecuteQuery(InsertQuery, Conn);
-
-	}*/
 }
 
-void AHttpRequestActor::GetFileNamesByIds(TArray<AActor*> fbxActorArr)
+void AHttpRequestActor::InsertObjDataToDB(TArray<class ACustomFBXMeshActor*> InAddFbxInfoActorArr, TSet<FRoomInfo>& InRoomObjIndexArr)
 {
-	if (Conn) {
-		for (int i = 0; i < fbxActorArr.Num(); i++)
-		{
-			ACustomFBXMeshActor* fbxActor = Cast<ACustomFBXMeshActor>(fbxActorArr[i]);
-			//fbxActor->ObjIndex
-
-			// select * from roomInfo A INNER JOIN objInfo B ON A.objIndex = B.objIndex where nickName = 'Á©¸®'
-
-			if (gi) {
-				FString query = L"SELECT * FROM `roomInfo` A INNER JOIN `objInfo` B ON A.objIndex = B.objIndex where nickName = '" + gi->GetSessionName() + "'";
-				FMySQLConnectoreQueryResult QueryResult = MySqlDB->MySQLConnectorGetData(query, Conn);
-
-			}
-
-		}
-
-		//fbxActorArr
-
-		/*if (QueryResult.Success == false) {
-			Conn = MySqlDB->MySQLInitConnection(DB_IP, DB_USER, DB_PWD, DB_NAME, ConnectionTimeout, ReadTimeout, WriteTimeout);
-			QueryResult = MySqlDB->MySQLConnectorGetData(query, Conn);
-		}
-
-		for (int i = 0; i < QueryResult.ResultRows.Num(); i++) {
-			FObjDataInfo row;
-			row.objIndex = FCString::Atoi(*QueryResult.ResultRows[i].Fields[0].Value);
-			row.objName = QueryResult.ResultRows[i].Fields[1].Value;
-			row.objPrompt = QueryResult.ResultRows[i].Fields[2].Value;
-			row.makeTimeStamp = QueryResult.ResultRows[i].Fields[3].Value;
-			row.maker = QueryResult.ResultRows[i].Fields[4].Value;
-			row.owner = QueryResult.ResultRows[i].Fields[5].Value;
-		}
-		for (int i = 0; i < QueryResult.ResultRows.Num(); i++)
-		{
-
-		}*/
+	OnMySQLInitConnection();
+	if (gi == nullptr) {
+		gi = Cast<UGenAiGameInstance>(GetGameInstance());
 	}
-	else {
-		Conn = MySqlDB->MySQLInitConnection(DB_IP, DB_USER, DB_PWD, DB_NAME, ConnectionTimeout, ReadTimeout, WriteTimeout);
+	for (ACustomFBXMeshActor* InAddFbxActor: InAddFbxInfoActorArr)
+	{
+		FRoomInfo roomInfo;
+		roomInfo.nickName = gi->GetSessionName();
+		roomInfo.objIndex = InAddFbxActor->ObjIndex;
+		roomInfo.position = InAddFbxActor->GetActorLocation().ToString();
+		roomInfo.rotation = InAddFbxActor->GetActorRotation().ToString();
+		roomInfo.scale = InAddFbxActor->GetActorScale3D().ToString();
+
+		FString InsertQuery = L"INSERT INTO roomInfo VALUES(null, '" + roomInfo.nickName +
+		"', " + FString::FromInt(roomInfo.objIndex) + ", '" + roomInfo.position + "',  '" +
+			roomInfo.rotation + "', '" + roomInfo.scale + "')";
+		if (MySqlDB->MySQLConnectorExecuteQuery(InsertQuery, Conn)) {
+			FString GetLastInsertID = "SELECT LAST_INSERT_ID()";
+			FMySQLConnectoreQueryResult GetLastInsertIDResult = MySqlDB->MySQLConnectorGetData(GetLastInsertID, Conn);
+
+			for (const auto& ResultRow : GetLastInsertIDResult.ResultRows)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
+					FString::Printf(TEXT("%s > %s > Insert Sucess"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
+						*FString(__FUNCTION__)), true, FVector2D(1, 1));
+				int32 idx = FCString::Atoi(*ResultRow.Fields[0].Value);
+				InAddFbxActor->RoomObjIndex = idx;
+				roomInfo.roomObjIndex = idx;
+				InRoomObjIndexArr.Add(roomInfo);
+			}
+		}
 	}
 }
 
 TArray<FRoomInfo>& AHttpRequestActor::GetRoomObjDataFromDB()
 {
-	if (Conn == nullptr) {
-		Conn = MySqlDB->MySQLInitConnection(
-			DB_IP,
-			DB_USER,
-			DB_PWD,
-			DB_NAME,
-			ConnectionTimeout,
-			ReadTimeout,
-			WriteTimeout);
-	}
+	OnMySQLInitConnection();
 	if (gi == nullptr) {
 		gi = Cast<UGenAiGameInstance>(GetGameInstance());
 	}
-
-	RoomObjArr.Empty();
-	if (Conn && gi) {
-		FString query = L"SELECT * FROM `roomInfo` A INNER JOIN `objInfo` B ON A.objIndex = B.objIndex where nickName = '" + gi->GetSessionName() + "'";
-		UE_LOG(LogTemp, Warning, TEXT("Query: %s"), *query)
-		FMySQLConnectoreQueryResult QueryResult = MySqlDB->MySQLConnectorGetData(query, Conn);
+	if (Conn) {
+		RoomObjArr.Empty();
+		if (Conn && gi) {
+			FString query = L"SELECT * FROM `roomInfo` A INNER JOIN `objInfo` B ON A.objIndex = B.objIndex where nickName = '" + gi->GetSessionName() + "'";
+			UE_LOG(LogTemp, Warning, TEXT("Query: %s"), *query)
+			FMySQLConnectoreQueryResult QueryResult = MySqlDB->MySQLConnectorGetData(query, Conn);
 		
-		for (const auto& Result : QueryResult.ResultRows)
-		{
-			FRoomInfo RoomObj;
-			RoomObj.roomObjIndex = FCString::Atoi(*Result.Fields[0].Value);
-			RoomObj.nickName = Result.Fields[1].Value;
-			RoomObj.objIndex = FCString::Atoi(*Result.Fields[2].Value);
-			RoomObj.position = Result.Fields[3].Value;
-			RoomObj.rotation = Result.Fields[4].Value;
-			RoomObj.scale = Result.Fields[5].Value;
-			RoomObj.fileName = Result.Fields[9].Value + "_" + Result.Fields[8].Value;
+			for (const auto& Result : QueryResult.ResultRows)
+			{
+				FRoomInfo RoomObj;
+				RoomObj.roomObjIndex = FCString::Atoi(*Result.Fields[0].Value);
+				RoomObj.nickName = Result.Fields[1].Value;
+				RoomObj.objIndex = FCString::Atoi(*Result.Fields[2].Value);
+				RoomObj.position = Result.Fields[3].Value;
+				RoomObj.rotation = Result.Fields[4].Value;
+				RoomObj.scale = Result.Fields[5].Value;
+				RoomObj.fileName = Result.Fields[9].Value + "_" + Result.Fields[8].Value;
 
-			RoomObjArr.Add(RoomObj);
+				RoomObjArr.Add(RoomObj);
+			}
 		}
+		 
 	}
 	return RoomObjArr;
 }
 
 void AHttpRequestActor::DeleteRoomObjInfo(TArray<int32>& InDeleteArr)
 {
-	if (Conn == nullptr) {
-		Conn = MySqlDB->MySQLInitConnection(
-			DB_IP,
-			DB_USER,
-			DB_PWD,
-			DB_NAME,
-			ConnectionTimeout,
-			ReadTimeout,
-			WriteTimeout);
-	}
+	OnMySQLInitConnection();
 
-	for (const int32& DeleteObjIdx : InDeleteArr)
-	{
-		FString DeleteQuery = L"DELETE FROM roomInfo WHERE idx = "+ FString::FromInt(DeleteObjIdx);
-		if (!MySqlDB->MySQLConnectorExecuteQuery(DeleteQuery, Conn)) {
-			GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
-				FString::Printf(TEXT("%s > %s > FaileDelete"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
-					*FString(__FUNCTION__)), true, FVector2D(1, 1));
+	if (Conn) {
+		for (const int32& DeleteObjIdx : InDeleteArr)
+		{
+			FString DeleteQuery = L"DELETE FROM roomInfo WHERE idx = "+ FString::FromInt(DeleteObjIdx);
+			if (MySqlDB->MySQLConnectorExecuteQuery(DeleteQuery, Conn)) {
+				GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
+					FString::Printf(TEXT("%s > %s > Success Delete"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
+						*FString(__FUNCTION__)), true, FVector2D(1, 1));
+			}
+			else {
+				GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
+					FString::Printf(TEXT("%s > %s > Fail Delete"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
+						*FString(__FUNCTION__)), true, FVector2D(1, 1));
+			}
 		}
+		InDeleteArr.Empty();
+
 	}
-	InDeleteArr.Empty();
+	
+}
+
+void AHttpRequestActor::OnMySQLInitConnection()
+{
+	MySqlDB = nullptr;
+	MySqlDB = NewObject<UMySQLDatabase>();
+	Conn = nullptr;
+	Conn = MySqlDB->MySQLInitConnection(
+		DB_IP,
+		DB_USER,
+		DB_PWD,
+		DB_NAME,
+		ConnectionTimeout,
+		ReadTimeout,
+		WriteTimeout);
+	if (Conn && Conn->MySQLCheckConnection()) {
+		GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
+			FString::Printf(TEXT("%s > %s > Success Conn"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
+		*FString(__FUNCTION__)), true, FVector2D(1, 1));
+	}
+	else {
+GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
+	FString::Printf(TEXT("%s > %s > Fail Conn"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
+		*FString(__FUNCTION__)), true, FVector2D(1, 1));
+
+	}
 }
 
 UMainMenu* AHttpRequestActor::GetMainMenuWidget()

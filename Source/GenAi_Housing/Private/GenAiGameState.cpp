@@ -22,30 +22,42 @@ void AGenAiGameState::ServerInsertChk_Implementation(const FString& SessionName)
 	if (HttpRequestActor == nullptr) return;
 	AHousingGameMode* Gm = Cast<AHousingGameMode>(GetWorld()->GetAuthGameMode());
 	if (Gm) {
-		TSet<FRoomInfo>& RoomObjIndexArr = Gm->GetRoomObjIndexArr();
-
-		TSet<FRoomInfo> RoomInfoArr;
+		TArray<ACustomFBXMeshActor*> RoomActorArr;
 		for (TActorIterator<ACustomFBXMeshActor> it(GetWorld()); it; ++it) {
 			ACustomFBXMeshActor* fbxActor = *it;
 
-			FRoomInfo roomInfo;
+			/*FRoomInfo roomInfo;
 			roomInfo.nickName = SessionName;
 			roomInfo.objIndex = fbxActor->ObjIndex;
 			roomInfo.position = fbxActor->GetActorLocation().ToString();
 			roomInfo.rotation = fbxActor->GetActorRotation().ToString();
 			roomInfo.scale = fbxActor->GetActorScale3D().ToString();
-			roomInfo.roomObjIndex = fbxActor->RoomObjIndex;
-			RoomInfoArr.Add(roomInfo);
+			roomInfo.roomObjIndex = fbxActor->RoomObjIndex;*/
+			RoomActorArr.Add(fbxActor);
 		}
+		HttpRequestActor->UpdateObjDataToDB(RoomActorArr);
 
-		for (FRoomInfo& RoomObjIndex : RoomObjIndexArr)
+		TSet<FRoomInfo>& RoomObjIndexArr = Gm->GetRoomObjIndexArr();
+		TArray<ACustomFBXMeshActor*> AddFbxInfoActorArr;
+		for (const auto RoomActor : RoomActorArr)
 		{
-			if (RoomInfoArr.Find(RoomObjIndex)) {
-				RoomInfoArr.Remove(RoomObjIndex);
+			if (RoomActor->RoomObjIndex == 0) {
+				AddFbxInfoActorArr.Add(RoomActor);
 			}
 		}
+		/*for (FRoomInfo& RoomObjIndex : RoomObjIndexArr)
+		{
+			for (int32 i = 0; i < RoomInfoArr.Num(); i++)
+			{
+				if (RoomInfoArr[i].roomObjIndex == RoomObjIndex.roomObjIndex) {
+					EqualElementArr.Add(RoomInfoArr[i]);
+				}
+			}
+		}*/
 
-		HttpRequestActor->InsertObjDataToDB(RoomInfoArr);
+		if (!AddFbxInfoActorArr.IsEmpty()) {
+			HttpRequestActor->InsertObjDataToDB(AddFbxInfoActorArr, RoomObjIndexArr);
+		}
 
 	}
 }

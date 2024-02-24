@@ -113,7 +113,7 @@ void UGenAiGameInstance::CreateSession(FString SessionName)
 			SessionSettings.Set(FName("RoomName"), SessionName, EOnlineDataAdvertisementType::Type::ViaOnlineServiceAndPing);
 			SetSessionName(SessionName);
 
-			//SessionName = TEXT("GameSession");
+			SessionName = TEXT("GameSession");
 			SessionInterface->CreateSession(0, FName(*SessionName), SessionSettings);
 			GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Purple, FString::Printf(TEXT("Create Session")), true, FVector2D(2, 2));
 		}
@@ -194,6 +194,9 @@ void UGenAiGameInstance::SetPlayerName(FString name)
 
 void UGenAiGameInstance::OnFoundExistSession(bool bWasSuccessful)
 {
+	GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
+		FString::Printf(TEXT("%s > %s > FoundExistSession"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
+			*FString(__FUNCTION__)), true, FVector2D(1, 1));
 	if (sessionSearch == nullptr) return;
 	TArray<FOnlineSessionSearchResult> FoundSessions = sessionSearch->SearchResults;
 
@@ -244,4 +247,7 @@ void UGenAiGameInstance::FindSession()
 
 	// 서버에 세션 검색을 요청하기
 	SessionInterface->FindSessions(0, sessionSearch.ToSharedRef());
+	GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
+		FString::Printf(TEXT("%s > %s > FindSession"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
+			*FString(__FUNCTION__)), true, FVector2D(1, 1));
 }

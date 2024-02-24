@@ -53,31 +53,33 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	FString AI_IP = "192.168.219.104";
-	FString AI_PORT = "5001";
-	FString AI_FBX_PATH = "/static/output/text3d/fbx/";
-	FString AI_TEXTURE_PATH = "/static/output/text3d/texture/";
+	FString AI_IP = TEXT("192.168.219.105");
+	FString AI_PORT = TEXT("5001");
+	FString AI_FBX_PATH = TEXT("/static/output/text3d/fbx/");
+	FString AI_TEXTURE_PATH = TEXT("/static/output/text3d/texture/");
 	UPROPERTY(BlueprintReadOnly)
 	FString AI_FBX_FULL_PATH = AI_IP + ":" + AI_PORT + AI_FBX_PATH;
 	UPROPERTY(BlueprintReadOnly)
 	FString AI_TEXTURE_FULL_PATH = AI_IP + ":" + AI_PORT + AI_TEXTURE_PATH;
 	
 	FString DB_IP = AI_IP;
-	FString DB_USER = "root";
-	FString DB_PWD = "1234";
-	FString DB_NAME = "housingdb";
+	FString DB_USER = TEXT("root");
+	FString DB_PWD = TEXT("1234");
+	FString DB_NAME = TEXT("housingdb");
 	UPROPERTY(EditAnywhere)
-	int ConnectionTimeout = 10;
+	int ConnectionTimeout = 15;
 	UPROPERTY(EditAnywhere)
-	int ReadTimeout = 10;
+	int ReadTimeout = 15;
 	UPROPERTY(EditAnywhere)
-	int WriteTimeout = 10;
+	int WriteTimeout = 15;
 
 	UPROPERTY(BlueprintReadWrite)
 	class UMySQLDatabase* MySqlDB;
 
 	UPROPERTY(BlueprintReadWrite)
 	class UMySQLConnection* Conn;
+
+	void OnMySQLInitConnection();
 	
 	UFUNCTION(BlueprintCallable)
 	class UMainMenu* GetMainMenuWidget();
@@ -124,9 +126,8 @@ public:
 	FString RuntimeGenereateAIstartTime;
 	bool bRuntimeGenerateAI;
 
-	void InsertObjDataToDB(TSet<FRoomInfo> InRoomInfoArr);
-
-	void GetFileNamesByIds(TArray<AActor*> fbxActorArr);
+	void UpdateObjDataToDB(TArray<class ACustomFBXMeshActor*> InRoomInfoArr);
+	void InsertObjDataToDB(TArray<class ACustomFBXMeshActor*> InAddFbxInfoActorArr, TSet<FRoomInfo>& InRoomObjIndexArr);
 
 public:
 	TArray<FRoomInfo> RoomObjArr;
