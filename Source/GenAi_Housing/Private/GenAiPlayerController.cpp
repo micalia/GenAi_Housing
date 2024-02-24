@@ -18,8 +18,8 @@
 
 AGenAiPlayerController::AGenAiPlayerController()
 {
-	ConstructorHelpers::FClassFinder<UInGameWidget> InGameWBClass(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprints/Widget/InGame/WB_InGameWidget.WB_InGameWidget_C'"));
-	if (InGameWBClass.Succeeded()) {
+	static ConstructorHelpers::FClassFinder<UInGameWidget> InGameWBClass(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprints/Widget/InGame/WB_InGameWidget.WB_InGameWidget_C'"));
+	if (ensure(InGameWBClass.Class != nullptr)) {
 		InGameWidgetFactory = InGameWBClass.Class;
 	}
 }
@@ -99,14 +99,11 @@ void AGenAiPlayerController::ChkFbxActorQueue()
 	if (!LoadFbxActorQueue.IsEmpty()) {
 		ACustomFBXMeshActor* HeadElement = nullptr;
 		LoadFbxActorQueue.Peek(HeadElement);
-		CheckUObjectIsNull(HeadElement, TEXT("LoadFbxActorQueue"));
-		CheckUObjectIsValid(HeadElement, TEXT("LoadFbxActorQueue"));
+		/*CheckUObjectIsNull(HeadElement, TEXT("LoadFbxActorQueue"));
+		CheckUObjectIsValid(HeadElement, TEXT("LoadFbxActorQueue"));*/
 		FTransform debug = HeadElement->GetActorTransform();
 		LocalModelingDown(HeadElement->FileName, HeadElement->GetActorTransform(), controllerFbxImportManager, this, HeadElement->CustomCurrentImportID);
 		GEngine->AddOnScreenDebugMessage(-1, 9999, FColor::Purple, FString::Printf(TEXT("%s > %s > Dequeue Import FbxActor"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__)), true, FVector2D(1, 1));
-		GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
-			FString::Printf(TEXT("%s > %s > Deque Trans: %s"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
-				*FString(__FUNCTION__), *HeadElement->GetActorTransform().ToString()), true, FVector2D(1, 1));
 		GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
 			FString::Printf(TEXT("%s > %s > Deque Trans: %d"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
 				*FString(__FUNCTION__), HeadElement->CustomCurrentImportID), true, FVector2D(1, 1));
@@ -199,23 +196,6 @@ void AGenAiPlayerController::Server_InsertObjDataToDB_Implementation(const FStri
 	if (Gs) {
 		Gs->ServerInsertChk(SessionName);
 	}
-	/*auto httpRequestActor = GetWorld()->GetGameState<AGenAiGameState>()->HttpRequestActor;
-	if (httpRequestActor == nullptr) return;
-	
-	TArray<FRoomInfo> roomInfoArr;
-	for (TActorIterator<ACustomFBXMeshActor> it(GetWorld()); it; ++it) {
-		ACustomFBXMeshActor* fbxActor = *it;
-
-		FRoomInfo roomInfo;
-		roomInfo.nickName = SessionName;
-		roomInfo.objIndex = fbxActor->ObjIndex;
-		roomInfo.position = fbxActor->GetActorLocation().ToString();
-		roomInfo.rotation = fbxActor->GetActorRotation().ToString();
-		roomInfo.scale = fbxActor->GetActorScale3D().ToString();
-		roomInfoArr.Add(roomInfo);
-	}
-	
-	httpRequestActor->InsertObjDataToDB(roomInfoArr);*/
 }
 
 void AGenAiPlayerController::SpawnFbxImporter_Implementation()

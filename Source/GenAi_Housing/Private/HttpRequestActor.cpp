@@ -31,8 +31,8 @@ AHttpRequestActor::AHttpRequestActor()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	ConstructorHelpers::FClassFinder<URoomSlot> RoomSlotBPClass(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprints/Widget/Menu/WB_RoomSlot.WB_RoomSlot_C'"));
-	if (RoomSlotBPClass.Succeeded()) {
+	static ConstructorHelpers::FClassFinder<URoomSlot> RoomSlotBPClass(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprints/Widget/Menu/WB_RoomSlot.WB_RoomSlot_C'"));
+	if (ensure(RoomSlotBPClass.Class != nullptr)) {
 		RoomSlotFactory = RoomSlotBPClass.Class;
 	}
 }

@@ -12,26 +12,26 @@ struct FRoomInfo {
 	GENERATED_BODY()
 
 	UPROPERTY()
-	FString nickName;
+		FString nickName = TEXT("");
 	UPROPERTY()
-	int32 objIndex;
+		int32 objIndex = -1;
 	UPROPERTY()
-	FString position;
+		FString position = TEXT("");
 	UPROPERTY()
-	FString rotation;
+		FString rotation = TEXT("");
 	UPROPERTY()
-	FString scale;
+		FString scale = TEXT("");
 	UPROPERTY()
-	FString fileName;
+		FString fileName = TEXT("");
 	UPROPERTY()
-	int32 roomObjIndex;
+		int32 roomObjIndex = -1;
 
-	bool operator==(const FRoomInfo& InRoomInfo) const 
+	bool operator==(const FRoomInfo& InRoomInfo) const
 	{
 		return roomObjIndex == InRoomInfo.roomObjIndex;
 	}
 
-	friend FORCEINLINE uint32 GetTypeHash(const FRoomInfo& InRoomInfoData) 
+	friend FORCEINLINE uint32 GetTypeHash(const FRoomInfo& InRoomInfoData)
 	{
 		return GetTypeHash(InRoomInfoData.roomObjIndex);
 	}
@@ -41,8 +41,8 @@ UCLASS()
 class GENAI_HOUSING_API AHttpRequestActor : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	AHttpRequestActor();
 
@@ -50,7 +50,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	FString AI_IP = TEXT("192.168.219.105");
@@ -58,54 +58,54 @@ public:
 	FString AI_FBX_PATH = TEXT("/static/output/text3d/fbx/");
 	FString AI_TEXTURE_PATH = TEXT("/static/output/text3d/texture/");
 	UPROPERTY(BlueprintReadOnly)
-	FString AI_FBX_FULL_PATH = AI_IP + ":" + AI_PORT + AI_FBX_PATH;
+		FString AI_FBX_FULL_PATH = AI_IP + ":" + AI_PORT + AI_FBX_PATH;
 	UPROPERTY(BlueprintReadOnly)
-	FString AI_TEXTURE_FULL_PATH = AI_IP + ":" + AI_PORT + AI_TEXTURE_PATH;
-	
+		FString AI_TEXTURE_FULL_PATH = AI_IP + ":" + AI_PORT + AI_TEXTURE_PATH;
+
 	FString DB_IP = AI_IP;
 	FString DB_USER = TEXT("root");
 	FString DB_PWD = TEXT("1234");
 	FString DB_NAME = TEXT("housingdb");
 	UPROPERTY(EditAnywhere)
-	int ConnectionTimeout = 15;
+		int ConnectionTimeout = 15;
 	UPROPERTY(EditAnywhere)
-	int ReadTimeout = 15;
+		int ReadTimeout = 15;
 	UPROPERTY(EditAnywhere)
-	int WriteTimeout = 15;
+		int WriteTimeout = 15;
 
 	UPROPERTY(BlueprintReadWrite)
-	class UMySQLDatabase* MySqlDB;
+		class UMySQLDatabase* MySqlDB;
 
 	UPROPERTY(BlueprintReadWrite)
-	class UMySQLConnection* Conn;
+		class UMySQLConnection* Conn;
 
 	void OnMySQLInitConnection();
-	
+
 	UFUNCTION(BlueprintCallable)
-	class UMainMenu* GetMainMenuWidget();
-	
+		class UMainMenu* GetMainMenuWidget();
+
 	UFUNCTION()
-	void SignUp();
-	
+		void SignUp();
+
 	void Login();
 
 	UPROPERTY()
-	class UGenAiGameInstance* gi;
+		class UGenAiGameInstance* gi;
 
 	UFUNCTION()
-	void OnSlotCreated(FString roomName, int32 currentPlayers, int32 maxPlayers, int32 sessionIdx);
+		void OnSlotCreated(FString roomName, int32 currentPlayers, int32 maxPlayers, int32 sessionIdx);
 
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<class UObjSlot> objSlotFactory;
+		TSubclassOf<class UObjSlot> objSlotFactory;
 
 	UFUNCTION(BlueprintCallable)
-	void GetObjDataFromDB();
+		void GetObjDataFromDB();
 	void GetObjThumbRequest(class UObjSlot* ObjSlot, const FString& ObjPrompt, const FString& MakeTimeStamp);
 	void OnGetThumbData(TSharedPtr<IHttpRequest> Request, TSharedPtr<IHttpResponse> Response, bool bConnectedSuccessfully);
 	void SetThumbTexture(class UTexture2D* tex, FString fileName);
 
 	UPROPERTY()
-	TMap<FString, class UObjSlot*> spawnGenerateAiIconMap;
+		TMap<FString, class UObjSlot*> spawnGenerateAiIconMap;
 public:
 	TSubclassOf<class URoomSlot> RoomSlotFactory;
 
@@ -117,10 +117,10 @@ public:
 	class FHttpModule& httpModule = FHttpModule::Get();
 
 	UPROPERTY(EditAnywhere)
-	FString PostURL;
+		FString PostURL;
 
 	UFUNCTION(BlueprintCallable)
-	void PostRequest();
+		void PostRequest();
 	void OnPostData(TSharedPtr<IHttpRequest> Request, TSharedPtr<IHttpResponse> Response, bool bConnectedSuccessfully);
 
 	FString RuntimeGenereateAIstartTime;

@@ -28,6 +28,6 @@ public:
 
 	UFUNCTION()
 	void EnterRoom();
-
+	UFUNCTION()
 	void SetSessionInfo(const FString roomName, const int32 currPlayer, const int32 maxPlayer, const int32 idx);
 };
