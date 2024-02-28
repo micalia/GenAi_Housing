@@ -11,9 +11,9 @@ struct FObjDataInfo
 {
 	GENERATED_USTRUCT_BODY()
 public:
-	FObjDataInfo() : objIndex(-1), objName(""), objPrompt(""), makeTimeStamp(""), maker(""), owner("") {};
-	FObjDataInfo(int32 _objIndex, FString& _objName, FString& _objPrompt, FString& _makeTimeStamp, FString& _maker, FString& _owner) : 
-		objIndex(_objIndex), objName(_objName), objPrompt(_objPrompt), makeTimeStamp(_makeTimeStamp), maker(_maker), owner(_owner) {};
+	FObjDataInfo() : objIndex(-1), objName(""), objPrompt(""), makeTimeStamp(""), maker("") {};
+	FObjDataInfo(int32 _objIndex, FString& _objName, FString& _objPrompt, FString& _makeTimeStamp, FString& _maker) : 
+		objIndex(_objIndex), objName(_objName), objPrompt(_objPrompt), makeTimeStamp(_makeTimeStamp), maker(_maker){};
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int32 objIndex = -1;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -24,8 +24,6 @@ public:
 		FString makeTimeStamp = "";
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FString maker = "";
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		FString owner = "";
 };
 
 UCLASS()

@@ -53,7 +53,8 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	FString AI_IP = TEXT("192.168.219.105");
+	FString AI_IP = TEXT("122.45.102.22");
+	//FString AI_IP = TEXT("192.168.219.103");
 	FString AI_PORT = TEXT("5001");
 	FString AI_FBX_PATH = TEXT("/static/output/text3d/fbx/");
 	FString AI_TEXTURE_PATH = TEXT("/static/output/text3d/texture/");

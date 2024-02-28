@@ -159,12 +159,11 @@ void AHttpRequestActor::GetObjDataFromDB()
 				row.objPrompt = QueryResult.ResultRows[i].Fields[2].Value;
 				row.makeTimeStamp = QueryResult.ResultRows[i].Fields[3].Value;
 				row.maker = QueryResult.ResultRows[i].Fields[4].Value;
-				row.owner = QueryResult.ResultRows[i].Fields[5].Value;
 
 				UObjSlot* objSlot = CreateWidget<UObjSlot>(GetWorld(), objSlotFactory);
 
 				if (objSlot) {
-					objSlot->objDataInfo = FObjDataInfo(row.objIndex, row.objName, row.objPrompt, row.makeTimeStamp, row.maker, row.owner);
+					objSlot->objDataInfo = FObjDataInfo(row.objIndex, row.objName, row.objPrompt, row.makeTimeStamp, row.maker);
 					objSlot->objNameTxt->SetText(FText::FromString("Name : " + row.objName));
 					objSlot->makerNameTxt->SetText(FText::FromString("Maker : " + row.maker));
 					GetObjThumbRequest(objSlot, objSlot->objDataInfo.objPrompt, objSlot->objDataInfo.makeTimeStamp);
@@ -328,10 +327,13 @@ void AHttpRequestActor::UpdateObjDataToDB(TArray<class ACustomFBXMeshActor*> InR
 	if (Conn) {
 		for (const ACustomFBXMeshActor* InRoomInfo : InRoomInfoArr)
 		{
+			FString UpdateObjTransformQuery = L"UPDATE objTransform SET position =  '" + InRoomInfo->GetActorLocation().ToString() + "', rotation = '" +
+				InRoomInfo->GetActorRotation().ToString() + "', scale = '" + InRoomInfo->GetActorScale3D().ToString() + 
+				"' WHERE roomObjIndex = " + FString::FromInt(InRoomInfo->RoomObjIndex);/*
 			FString UpdateQuery = L"UPDATE roomInfo SET position =  '" + InRoomInfo->GetActorLocation().ToString() + "', rotation = '" +
 				InRoomInfo->GetActorRotation().ToString() + "', scale = '" + InRoomInfo->GetActorScale3D().ToString() + 
-				"' WHERE idx = " + FString::FromInt(InRoomInfo->RoomObjIndex);
-			if (MySqlDB->MySQLConnectorExecuteQuery(UpdateQuery, Conn)) {
+				"' WHERE idx = " + FString::FromInt(InRoomInfo->RoomObjIndex);*/
+			if (MySqlDB->MySQLConnectorExecuteQuery(UpdateObjTransformQuery, Conn)) {
 				GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
 					FString::Printf(TEXT("%s > %s > Success Update"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
 						*FString(__FUNCTION__)), true, FVector2D(1, 1));
@@ -361,22 +363,28 @@ void AHttpRequestActor::InsertObjDataToDB(TArray<class ACustomFBXMeshActor*> InA
 		roomInfo.rotation = InAddFbxActor->GetActorRotation().ToString();
 		roomInfo.scale = InAddFbxActor->GetActorScale3D().ToString();
 
-		FString InsertQuery = L"INSERT INTO roomInfo VALUES(null, '" + roomInfo.nickName +
+		/*FString InsertRoomInfoQuery = L"INSERT INTO roomInfo VALUES(null, '" + roomInfo.nickName +
 		"', " + FString::FromInt(roomInfo.objIndex) + ", '" + roomInfo.position + "',  '" +
-			roomInfo.rotation + "', '" + roomInfo.scale + "')";
-		if (MySqlDB->MySQLConnectorExecuteQuery(InsertQuery, Conn)) {
+			roomInfo.rotation + "', '" + roomInfo.scale + "')";*/
+
+		FString InsertObjTransformQuery = L"INSERT INTO objTransform VALUES(null, '" +
+			roomInfo.position + "',  '" + roomInfo.rotation + "', '" + roomInfo.scale + "')";
+		if (MySqlDB->MySQLConnectorExecuteQuery(InsertObjTransformQuery, Conn)) {
 			FString GetLastInsertID = "SELECT LAST_INSERT_ID()";
 			FMySQLConnectoreQueryResult GetLastInsertIDResult = MySqlDB->MySQLConnectorGetData(GetLastInsertID, Conn);
 
-			for (const auto& ResultRow : GetLastInsertIDResult.ResultRows)
-			{
-				GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
-					FString::Printf(TEXT("%s > %s > Insert Sucess"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
-						*FString(__FUNCTION__)), true, FVector2D(1, 1));
-				int32 idx = FCString::Atoi(*ResultRow.Fields[0].Value);
-				InAddFbxActor->RoomObjIndex = idx;
-				roomInfo.roomObjIndex = idx;
-				InRoomObjIndexArr.Add(roomInfo);
+			if (GetLastInsertIDResult.ResultRows.Num() > 0) {
+				int32 idx = FCString::Atoi(*GetLastInsertIDResult.ResultRows[0].Fields[0].Value);
+				FString InsertRoomInfoQuery = L"INSERT INTO roomInfo VALUES("+ FString::FromInt(idx) +", " + FString::FromInt(roomInfo.objIndex) +
+					", '" + roomInfo.nickName + "')";
+				if (MySqlDB->MySQLConnectorExecuteQuery(InsertRoomInfoQuery, Conn)) {
+					InAddFbxActor->RoomObjIndex = idx;
+					roomInfo.roomObjIndex = idx;
+					InRoomObjIndexArr.Add(roomInfo);
+					GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
+						FString::Printf(TEXT("%s > %s > Insert Sucess"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
+							*FString(__FUNCTION__)), true, FVector2D(1, 1));
+				}
 			}
 		}
 	}
@@ -391,7 +399,7 @@ TArray<FRoomInfo>& AHttpRequestActor::GetRoomObjDataFromDB()
 	if (Conn) {
 		RoomObjArr.Empty();
 		if (Conn && gi) {
-			FString query = L"SELECT * FROM `roomInfo` A INNER JOIN `objInfo` B ON A.objIndex = B.objIndex where nickName = '" + gi->GetSessionName() + "'";
+			FString query = L"SELECT * FROM `roomInfo` A INNER JOIN `objTransform` B ON A.roomObjIndex = B.roomObjIndex INNER JOIN `objInfo` C ON C.objIndex = A.objIndex where nickName = '" + gi->GetSessionName() + "'";
 			UE_LOG(LogTemp, Warning, TEXT("Query: %s"), *query)
 			FMySQLConnectoreQueryResult QueryResult = MySqlDB->MySQLConnectorGetData(query, Conn);
 		
@@ -399,12 +407,12 @@ TArray<FRoomInfo>& AHttpRequestActor::GetRoomObjDataFromDB()
 			{
 				FRoomInfo RoomObj;
 				RoomObj.roomObjIndex = FCString::Atoi(*Result.Fields[0].Value);
-				RoomObj.nickName = Result.Fields[1].Value;
-				RoomObj.objIndex = FCString::Atoi(*Result.Fields[2].Value);
-				RoomObj.position = Result.Fields[3].Value;
-				RoomObj.rotation = Result.Fields[4].Value;
-				RoomObj.scale = Result.Fields[5].Value;
-				RoomObj.fileName = Result.Fields[9].Value + "_" + Result.Fields[8].Value;
+				RoomObj.nickName = Result.Fields[2].Value;
+				RoomObj.objIndex = FCString::Atoi(*Result.Fields[7].Value);
+				RoomObj.position = Result.Fields[4].Value;
+				RoomObj.rotation = Result.Fields[5].Value;
+				RoomObj.scale = Result.Fields[6].Value;
+				RoomObj.fileName = Result.Fields[10].Value + "_" + Result.Fields[9].Value;
 
 				RoomObjArr.Add(RoomObj);
 			}
@@ -421,11 +429,14 @@ void AHttpRequestActor::DeleteRoomObjInfo(TArray<int32>& InDeleteArr)
 	if (Conn) {
 		for (const int32& DeleteObjIdx : InDeleteArr)
 		{
-			FString DeleteQuery = L"DELETE FROM roomInfo WHERE idx = "+ FString::FromInt(DeleteObjIdx);
-			if (MySqlDB->MySQLConnectorExecuteQuery(DeleteQuery, Conn)) {
-				GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
-					FString::Printf(TEXT("%s > %s > Success Delete"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
-						*FString(__FUNCTION__)), true, FVector2D(1, 1));
+			FString DeleteRoomInfoQuery = L"DELETE FROM roomInfo WHERE roomObjIndex = "+ FString::FromInt(DeleteObjIdx);
+			if (MySqlDB->MySQLConnectorExecuteQuery(DeleteRoomInfoQuery, Conn)) {
+				FString DeleteObjTransformQuery = L"DELETE FROM objTransform WHERE roomObjIndex = "+ FString::FromInt(DeleteObjIdx);
+				if (MySqlDB->MySQLConnectorExecuteQuery(DeleteObjTransformQuery, Conn)) {
+					GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
+						FString::Printf(TEXT("%s > %s > Success Delete"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
+							*FString(__FUNCTION__)), true, FVector2D(1, 1));
+				}
 			}
 			else {
 				GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,

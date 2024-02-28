@@ -18,7 +18,7 @@
 
 AGenAiPlayerController::AGenAiPlayerController()
 {
-	static ConstructorHelpers::FClassFinder<UInGameWidget> InGameWBClass(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprints/Widget/InGame/WB_InGameWidget.WB_InGameWidget_C'"));
+	ConstructorHelpers::FClassFinder<UInGameWidget> InGameWBClass(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprints/Widget/InGame/WB_InGameWidget.WB_InGameWidget_C'"));
 	if (ensure(InGameWBClass.Class != nullptr)) {
 		InGameWidgetFactory = InGameWBClass.Class;
 	}
