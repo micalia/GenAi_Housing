@@ -337,6 +337,23 @@ void ACustomFBXImportManager::CustomHandleImportCompleted(UCustomFBXSceneImporte
 	}
 }
 
+FString ACustomFBXImportManager::BytesToString(const TArray<uint8>& InBytes)
+{
+	FString Result = FString::FromHexBlob(InBytes.GetData(), InBytes.Num());
+	return Result;
+}
+
+TArray<uint8> ACustomFBXImportManager::FStringToByteArray(const FString& String)
+{
+	FTCHARToUTF8 Convert(*String); 
+
+	const uint8* UTF8Data = (uint8*)Convert.Get(); 
+
+	TArray<uint8> ByteArray(UTF8Data, Convert.Length() + 1);
+
+	return ByteArray;
+}
+
 void ACustomFBXImportManager::Server_IncreaseCustomCurrentImportID_Implementation()
 {
 	CustomCurrentImportID++;

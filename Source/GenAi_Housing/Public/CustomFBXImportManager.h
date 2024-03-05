@@ -120,4 +120,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	UProceduralMeshComponent* RecalculateNormal(class UProceduralMeshComponent* mesh);
 */
+	UFUNCTION(BlueprintCallable)
+	FString BytesToString(const TArray<uint8>& InBytes);
+	UFUNCTION(BlueprintCallable)
+	TArray<uint8> FStringToByteArray(const FString& String);
 };
