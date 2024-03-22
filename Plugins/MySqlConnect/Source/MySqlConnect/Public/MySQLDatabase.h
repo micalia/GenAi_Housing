@@ -124,6 +124,7 @@ class MYSQLCONNECT_API UMySQLDatabase : public UObject
 	GENERATED_UCLASS_BODY()
 
 public:
+
 	UFUNCTION(BlueprintCallable, Category = "MySQLConnector")
 	static UMySQLConnection* MySQLInitConnection(FString Host, FString UserName, FString UserPassword, FString DatabaseName, int ConnectionTimeout, int ReadTimeout, int WriteTimeout);
 
