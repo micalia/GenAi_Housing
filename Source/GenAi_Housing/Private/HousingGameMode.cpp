@@ -23,9 +23,6 @@ void AHousingGameMode::PostLogin(APlayerController* NewPlayer)
 			TArray<FRoomInfo>& RoomObjArr = HttpActor->GetRoomObjDataFromDB();
 			auto Pc = Cast<AGenAiPlayerController>(GetWorld()->GetFirstPlayerController());
 			if (Pc) {
-				GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
-					FString::Printf(TEXT("%s > %s > PC Init"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
-						*FString(__FUNCTION__)), true, FVector2D(1, 1));
 				if (HasAuthority()) {
 					FbxImporter->ServerCreateFBXActor_Implementation(RoomObjArr, FbxImporter, Pc);
 				}
@@ -36,12 +33,6 @@ void AHousingGameMode::PostLogin(APlayerController* NewPlayer)
 			for (const FRoomInfo& RoomObjInfo : RoomObjArr)
 			{
 				CurrRoomObjArr.Add(RoomObjInfo);
-			}
-			for (auto& it : CurrRoomObjArr)
-			{
-				GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
-					FString::Printf(TEXT("%s > %s > it: %d"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
-						*FString(__FUNCTION__), it.roomObjIndex), true, FVector2D(1, 1));
 			}
 		}
 

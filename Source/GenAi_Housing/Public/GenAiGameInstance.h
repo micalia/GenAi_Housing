@@ -22,6 +22,7 @@ public:
 	UGenAiGameInstance(const FObjectInitializer& ObjectInitializer);
 
 	virtual void Init();
+	//virtual void Shutdown() override;
 
 	UFUNCTION(BlueprintCallable)
 	void LoadMenuWidget();
@@ -36,6 +37,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintAssignable, Category = "MySettings")
 	FSearchSessionDele onCreateSlot;
 	
+	UFUNCTION(BlueprintCallable)
 	void FindSession();
 	void CreateSession(FString SessionName);
 
@@ -54,15 +56,23 @@ public:
 	class UMainMenu* Menu;
 
 	TMap<FString, int32> FindSessionArr;
+
+	UFUNCTION(BlueprintCallable)
+	void LoadLobbyMap();
+
 private:
 	FName CurrSessionName;
 	FString PlayerName = "None";
 	TSubclassOf<class UMainMenu> MenuClass;
 	
-
+	bool bDestorySessionToJoin;
+	FString JoinSessionName;
+	int32 JoinRoomNum;
 	void OnCreateSessionComplete(FName SessionName, bool Success);
 	void OnDestorySessionComplete(FName SessionName, bool Success);
 
 	TSharedPtr<FOnlineSessionSearch> sessionSearch;
 	void OnFoundExistSession(bool bWasSuccessful);
+
+	void OnNetworkFailure(UWorld* World, UNetDriver* NetDriver, ENetworkFailure::Type FailureType, const FString& ErrorString);
 };

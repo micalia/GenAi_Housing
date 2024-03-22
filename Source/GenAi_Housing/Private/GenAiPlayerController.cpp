@@ -129,8 +129,8 @@ void AGenAiPlayerController::ChkFbxActorQueue()
 void AGenAiPlayerController::LoadFbxFilesToFbxActor()
 {
 	AGenAiGameState* gs = GetWorld()->GetGameState<AGenAiGameState>();
-	if (ensure(gs)) {
-		if (ensure(controllerFbxImportManager)) {
+	if (gs) {
+		if (controllerFbxImportManager) {
 			TArray<AActor*> fbxActorArr;
 			UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACustomFBXMeshActor::StaticClass(), fbxActorArr);
 			if (fbxActorArr.Num() > 0) {
@@ -138,8 +138,6 @@ void AGenAiPlayerController::LoadFbxFilesToFbxActor()
 				{
 					ACustomFBXMeshActor* fbxActor = Cast<ACustomFBXMeshActor>(fbxActorArr[i]);
 					LoadFbxActorQueue.Enqueue(fbxActor);
-					GEngine->AddOnScreenDebugMessage(-1, 20, FColor::Purple, FString::Printf(TEXT("Load FBX Transform: %s"), *fbxActor->GetActorTransform().ToString()), true, FVector2D(1, 1));
-					
 				}
 
 				ChkFbxActorQueue();

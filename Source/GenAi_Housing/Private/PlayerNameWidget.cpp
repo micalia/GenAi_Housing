@@ -42,7 +42,7 @@ void UPlayerNameWidget::NativeConstruct()
 void UPlayerNameWidget::UpdateName()
 {
 	if (ATP_ThirdPersonCharacter* player = Cast<ATP_ThirdPersonCharacter>(OwningActor)) {
-		GEngine->AddOnScreenDebugMessage(-1, 9999, FColor::Purple, FString::Printf(TEXT("%s > %s > UpdateName"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__)), true, FVector2D(1, 1));
+		//GEngine->AddOnScreenDebugMessage(-1, 9999, FColor::Purple, FString::Printf(TEXT("%s > %s > UpdateName"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__)), true, FVector2D(1, 1));
 		PlayerNameTxt->SetText(FText::FromString(player->CustomPlayerName));
 	}
 }

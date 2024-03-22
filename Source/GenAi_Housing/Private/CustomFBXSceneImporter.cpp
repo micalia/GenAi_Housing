@@ -10,7 +10,7 @@ void UCustomFBXSceneImporter::ProcessNode(UMeshNode* CurrentNode, FbxAMatrix Par
 		return;
 	}
 
-	if (CurrentNode)
+	if (FBXImportSettings.IsValid() && FBXImportSettings != nullptr && CurrentNode)
 	{
 		if (FbxNode* Node = CurrentNode->Node)
 		{

@@ -67,6 +67,7 @@ void AHttpRequestActor::SignUp()
 {
 	UMainMenu* MainMenuPtr = GetMainMenuWidget();
 	if (MainMenuPtr) {
+		OnMySQLInitConnection();
 		FString SelectQuery = L"SELECT nickName FROM userInfo WHERE nickName= '" +
 			MainMenuPtr->signUpNickTxt->GetText().ToString() + "'";
 		FMySQLConnectoreQueryResult SelectResult = MySqlDB->MySQLConnectorGetData(SelectQuery, Conn);

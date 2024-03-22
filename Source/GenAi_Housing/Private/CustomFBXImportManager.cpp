@@ -195,9 +195,6 @@ void ACustomFBXImportManager::ServerCreateFBXActor_Implementation(const TArray<F
 		};
 
 		FTransform SpawnTransform = FTransform(FQuat(SpawnRotator), SpawnLocation, SpawnScale);
-		GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
-			FString::Printf(TEXT("%s > %s > spawnscale: %s"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
-				*FString(__FUNCTION__), *SpawnScale.ToString()), true, FVector2D(1, 1));
 		spawnConfig.CustomPreSpawnInitalization = doFunc;
 		ACustomFBXMeshActor* FBXActor = GetWorld()->SpawnActor<ACustomFBXMeshActor>(CurrentActorClass, SpawnTransform, spawnConfig);
 		customImportActorMap.Add(CustomCurrentImportID, FBXActor);
@@ -264,7 +261,7 @@ void ACustomFBXImportManager::CustomImportFBXFile(const FString& FbxDownPath, FT
 	ImportSettings->MaterialImportSettings = CustomMaterialImportSettings;
 	ImportSettings->bTransformVertexToAbsolute = CustomTransformVertexToAbsolute;
 
-	UCustomFBXSceneImporter* FBXSceneImporter = NewObject<UCustomFBXSceneImporter>();
+	FBXSceneImporter = NewObject<UCustomFBXSceneImporter>();
 	FBXSceneImporter->CustomSetImportSettings(ImportSettings);
 
 	FBXSceneImporter->CustomOnMeshNodeCreated.AddDynamic(fbxImportManager, &ACustomFBXImportManager::CustomHandleMeshNodeCreated);
@@ -307,10 +304,11 @@ void ACustomFBXImportManager::CustomHandleMeshNodeCreated(int32 ImportID, UMeshN
 	// Check if the mesh node is not null
 	if (NewMeshNode != nullptr)
 	{
-		if (ACustomFBXMeshActor** ImportActor = customImportActorMap.Find(ImportID))
+		ImportActorPtr = customImportActorMap.Find(ImportID);
+		if (ImportActorPtr)
 		{
 			TArray<FMaterialRuntimeInfo> MaterialInfoArray;
-			(*ImportActor)->AddMesh(NewMeshNode, SpawnTransform, MaterialInfoArray);
+			(*ImportActorPtr)->AddMesh(NewMeshNode, SpawnTransform, MaterialInfoArray);
 		}
 	}
 }
@@ -349,7 +347,7 @@ TArray<uint8> ACustomFBXImportManager::FStringToByteArray(const FString& String)
 
 	const uint8* UTF8Data = (uint8*)Convert.Get(); 
 
-	TArray<uint8> ByteArray(UTF8Data, Convert.Length() + 1);
+	TArray<uint8> ByteArray(UTF8Data, Convert.Length());
 
 	return ByteArray;
 }

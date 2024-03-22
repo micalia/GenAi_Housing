@@ -13,6 +13,11 @@
 #include "../Public/RoomSlot.h"
 #include "EngineUtils.h"
 #include "../Public/HttpRequestActor.h"
+#include "../Public/CustomFBXImportManager.h"
+#include "../Public/AsyncTasks/CustomFBXAsyncTasks.h"
+#include "../Public/GenAiPlayerController.h"
+#include "../Public/CustomFBXSceneImporter.h"
+#include "../Public/CustomFBXMeshActor.h"
 
 UGenAiGameInstance::UGenAiGameInstance(const FObjectInitializer& ObjectInitializer)
 {
@@ -40,7 +45,22 @@ void UGenAiGameInstance::Init()
 	else {
 		GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Purple, FString::Printf(TEXT("Not Found Subsystem")), true, FVector2D(1, 1));
 	}
+
+	if (GEngine) {
+		GEngine->OnNetworkFailure().AddUObject(this, &UGenAiGameInstance::OnNetworkFailure);
+	}
 }
+
+//void UGenAiGameInstance::Shutdown() {
+//	Super::Shutdown();
+//
+//	/*for (TActorIterator<ACustomFBXImportManager> it(GetWorld()); it; ++it) {
+//		ACustomFBXImportManager* ImportManager = *it;
+//		if (ImportManager) {
+//			ImportManager->customImportFBXTask->IsDone();
+//		}
+//	}*/
+//}
 
 void UGenAiGameInstance::LoadMenuWidget()
 {
@@ -87,8 +107,15 @@ void UGenAiGameInstance::OnCreateSessionComplete(FName SessionName, bool Success
 void UGenAiGameInstance::OnDestorySessionComplete(FName SessionName, bool Success)
 {
 	if (Success) {
-		CreateSession(SessionName.ToString());
+		if (bDestorySessionToJoin) {
+			SessionInterface->JoinSession(0, FName(*JoinSessionName), sessionSearch->SearchResults[JoinRoomNum]);
+			SetSessionName(JoinSessionName);
+		}
+		else {
+			CreateSession(SessionName.ToString());
+		}
 	}
+	bDestorySessionToJoin = false;
 }
 
 void UGenAiGameInstance::CreateSession(FString SessionName)
@@ -109,6 +136,7 @@ void UGenAiGameInstance::CreateSession(FString SessionName)
 			SessionSettings.bUsesPresence = true;
 			SessionSettings.bUseLobbiesIfAvailable = true;
 			SessionSettings.NumPublicConnections = PlayerMaxCount;
+			SessionSettings.BuildUniqueId = 1;
 			
 			SessionSettings.Set(FName("RoomName"), SessionName, EOnlineDataAdvertisementType::Type::ViaOnlineServiceAndPing);
 			SetSessionName(SessionName);
@@ -123,8 +151,18 @@ void UGenAiGameInstance::CreateSession(FString SessionName)
 void UGenAiGameInstance::MyJoinSession(int32 roomNum, FString roomName)
 {
 	UE_LOG(LogTemp, Warning, TEXT("JoinSession RoomNum : %d / RoomName : %s"), roomNum, *roomName)
+		auto ExistingSession = SessionInterface->GetNamedSession(FName(*roomName));
+	if (ExistingSession) {
+		UE_LOG(LogTemp, Warning, TEXT("Exsist!!!"))
+		JoinSessionName = roomName;
+		JoinRoomNum = roomNum;
+		bDestorySessionToJoin = true;
+		SessionInterface->DestroySession(FName(roomName));
+	}
+	else {
 		SessionInterface->JoinSession(0, FName(*roomName), sessionSearch->SearchResults[roomNum]);
-	SetSessionName(roomName);
+		SetSessionName(roomName);
+	}
 }
 
 void UGenAiGameInstance::OnJoinedSession(FName sessionName, EOnJoinSessionCompleteResult::Type result)
@@ -192,6 +230,28 @@ void UGenAiGameInstance::SetPlayerName(FString name)
 	PlayerName = name;
 }
 
+void UGenAiGameInstance::LoadLobbyMap()
+{
+	AGenAiPlayerController* PC = Cast<AGenAiPlayerController>(GetFirstLocalPlayerController());
+	if (!ensure(PC != nullptr)) return;
+	if (!PC->LoadFbxActorQueue.IsEmpty()) {
+		GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
+			FString::Printf(TEXT("%s > %s > Loading FBX Actor... You Can't go to the lobby.."), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
+				*FString(__FUNCTION__)), true, FVector2D(1, 1));
+		return;
+	}
+	ACustomFBXImportManager* ImportManager = nullptr;
+	for (TActorIterator<ACustomFBXImportManager> it(GetWorld()); it; ++it) {
+		ImportManager = *it;
+	}
+
+	if (ImportManager) { 
+		if (ImportManager->customImportFBXTask.IsValid() && ImportManager->customImportFBXTask != nullptr && ImportManager->customImportFBXTask->IsDone()) {
+			PC->ClientTravel("/Game/Levels/Title", ETravelType::TRAVEL_Absolute);
+		}
+	}
+}
+
 void UGenAiGameInstance::OnFoundExistSession(bool bWasSuccessful)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
@@ -211,6 +271,9 @@ void UGenAiGameInstance::OnFoundExistSession(bool bWasSuccessful)
 		if (httpActor == nullptr) return;
 		
 		UE_LOG(LogTemp, Warning, TEXT("Session Count: %d"), FoundSessions.Num());
+		GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
+			FString::Printf(TEXT("%s > %s > Session Count : %d"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
+				*FString(__FUNCTION__), FoundSessions.Num()), true, FVector2D(1, 1));
 		DeleteSessionSlots();
 
 		TSet<FString>& SelectUserArrRef = httpActor->DBLoadUserRooms();
@@ -235,6 +298,29 @@ void UGenAiGameInstance::OnFoundExistSession(bool bWasSuccessful)
 
 	}
 
+}
+
+void UGenAiGameInstance::OnNetworkFailure(UWorld* World, UNetDriver* NetDriver, ENetworkFailure::Type FailureType, const FString& ErrorString)
+{
+	if (APlayerController* pc = World->GetFirstPlayerController()) {
+		//SetSessionName(SessionName.ToString());
+		UE_LOG(LogTemp, Warning, TEXT("ClientTravel"))
+			pc->ClientTravel("/Game/Levels/InGame?listen", ETravelType::TRAVEL_Absolute);
+
+	}
+
+	ACustomFBXImportManager* ImportManager = nullptr;
+	for (TActorIterator<ACustomFBXImportManager> it(GetWorld()); it; ++it) {
+		ImportManager = *it;
+	}
+
+	APlayerController* PC = World->GetFirstPlayerController();
+	/*if (ImportManager) {
+		if (ImportManager->customImportFBXTask.IsValid() && ImportManager->customImportFBXTask != nullptr && ImportManager->customImportFBXTask->IsDone()) {
+		}
+	}*/
+	ImportManager->customImportFBXTask->IsDone();
+	PC->ClientTravel("/Game/Levels/Title", ETravelType::TRAVEL_Absolute);
 }
 
 void UGenAiGameInstance::FindSession()

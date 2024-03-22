@@ -30,7 +30,13 @@ public:
 
 	virtual void BeginPlay() override;
 
-public: //Download
+public: 
+	UPROPERTY()
+	class UCustomFBXSceneImporter* FBXSceneImporter = nullptr;
+
+	ACustomFBXMeshActor** ImportActorPtr = nullptr;
+	
+	//Download
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void Server_ModelingDown(const FString& fileName, FTransform SpawnTransform, class ACustomFBXImportManager* fbxImporter, class AGenAiPlayerController* PlayerController, int32 InCustomCurrImportID);
 
