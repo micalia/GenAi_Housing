@@ -81,11 +81,12 @@ void AHttpRequestActor::SignUp()
 			"', '" +
 			MainMenuPtr->signUpPwdTxt->GetText().ToString() + "')";
 		if (MySqlDB->MySQLConnectorExecuteQuery(InsertQuery, Conn)) {
-			GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Purple, FString::Printf(TEXT("Join Success!!")), true, FVector2D(2, 2));
+			GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Purple, FString::Printf(TEXT("Join Success!")), true, FVector2D(2, 2));
+			// 로그인 페이지로 전환한다
 			MainMenuPtr->WidgetSwitcher->SetActiveWidgetIndex(0);
 		}
 		else {
-			GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Purple, FString::Printf(TEXT("Join Fail.........")), true, FVector2D(2, 2));
+			GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Purple, FString::Printf(TEXT("Join Fail...")), true, FVector2D(2, 2));
 		}
 	}
 }
@@ -101,7 +102,7 @@ void AHttpRequestActor::Login()
 			"pwd='" + inputPwd + "'";
 		OnMySQLInitConnection();
 		FMySQLConnectoreQueryResult SelectResult = MySqlDB->MySQLConnectorGetData(SelectQuery, Conn);
-		 
+		
 		if (SelectResult.ResultRows.Num() == 0) {
 			GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Purple, FString::Printf(TEXT("Not Found User")), true, FVector2D(2, 2));
 			return;
@@ -109,11 +110,10 @@ void AHttpRequestActor::Login()
 		else {
 			GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Purple, FString::Printf(TEXT("Login Complete")), true, FVector2D(2, 2));
 		}
-		//DBLoadUserRooms();
+		
 		gi->SetPlayerName(inputName);
-		//auto ps = GetWorld()->GetFirstPlayerController()->GetPlayerState<ANetPlayerState>();
-		//ps->SetPlayerName(inputName);
 		gi->FindSession();
+		// 방 목록 페이지로 전환 한다
 		MainMenuPtr->WidgetSwitcher->SetActiveWidgetIndex(2);
 	}
 }
@@ -223,7 +223,7 @@ void AHttpRequestActor::SetThumbTexture(class UTexture2D* tex, FString fileName)
 	}
 }
 
-TSet<FString>& AHttpRequestActor::DBLoadUserRooms()
+TSet<FString>& AHttpRequestActor::GetAllUserNameFromDB()
 {
 	SelectUsersArr.Empty();
 	
@@ -250,29 +250,25 @@ TSet<FString>& AHttpRequestActor::DBLoadUserRooms()
 	return SelectUsersArr;
 }
 
-void AHttpRequestActor::PostRequest()
+void AHttpRequestActor::CreateGenAiObj()
 {
 	if (AGenAiPlayerController* pc = Cast<AGenAiPlayerController>(GetWorld()->GetFirstPlayerController())) {
 		TMap<FString, FString> promptTextData;
-
+		// 현재 시간
 		FString TimeString = FDateTime::UtcNow().ToString(TEXT("%Y-%m-%d-%H-%M-%S"));
-
-		//TimeString = "2023-11-20-10-35-55";
 		RuntimeGenereateAIstartTime = TimeString;
-		UE_LOG(LogTemp, Warning, TEXT("Text To 3D_TimeString -  : %s"), *RuntimeGenereateAIstartTime)
-			promptTextData.Add("MakeTimeStamp", TimeString);
-
+		promptTextData.Add("MakeTimeStamp", TimeString);
+		// 만들고자 하는 명령 프롬프트
 		FString prompt = pc->InGameWidgetPtr->WB_HousingWidget->prompt_txt->GetText().ToString();
 		promptTextData.Add("Prompt", prompt);
-		GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Purple, FString::Printf(TEXT("prompt: %s"), *prompt), true, FVector2D(2, 2));
 
 		APawn* pawn = pc->GetPawn();
+		// 만든이
 		FString Maker = pawn->GetPlayerState()->GetPlayerName();
-		GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Purple, FString::Printf(TEXT("MakerName: %s"), *Maker), true, FVector2D(2, 2));
 		promptTextData.Add("Maker", Maker);
 
 		FString jsonData = UJsonParseLibrary::MakeJson(promptTextData);
-		GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Purple, FString::Printf(TEXT("Send: %s"), *jsonData), true, FVector2D(2, 2));
+		// 생성형 AI 구동 서버(Flask 웹서버)로 JSON 데이터를 전송함
 		TSharedRef<IHttpRequest> req = httpModule.CreateRequest();
 		req->SetURL(PostURL);
 		req->SetVerb(TEXT("POST"));
@@ -282,12 +278,11 @@ void AHttpRequestActor::PostRequest()
 		req->ProcessRequest();
 		
 		bRuntimeGenerateAI = true;
-
 		RequestObjName = prompt;
 		RequestMakeTime = TimeString;
+		// 1초에 한번씩 오브젝트가 생성됐는지 DB에 요청하여 확인함
 		ChkGenerateResult();
 	}
-
 }
 
 void AHttpRequestActor::OnPostData(TSharedPtr<IHttpRequest> Request, TSharedPtr<IHttpResponse> Response, bool bConnectedSuccessfully)
@@ -328,13 +323,13 @@ void AHttpRequestActor::UpdateObjDataToDB(TArray<class ACustomFBXMeshActor*> InR
 	if (Conn) {
 		for (const ACustomFBXMeshActor* InRoomInfo : InRoomInfoArr)
 		{
-			FString UpdateObjTransformQuery = L"UPDATE objTransform SET position =  '" + InRoomInfo->GetActorLocation().ToString() + "', rotation = '" +
+			FString UpdateRoomObjInfoQuery = L"UPDATE roomObjInfo SET position =  '" + InRoomInfo->GetActorLocation().ToString() + "', rotation = '" +
+				InRoomInfo->GetActorRotation().ToString() + "', scale = '" + InRoomInfo->GetActorScale3D().ToString() +
+				"' WHERE roomObjIndex = " + FString::FromInt(InRoomInfo->RoomObjIndex);
+			/*FString UpdateObjTransformQuery = L"UPDATE objTransform SET position =  '" + InRoomInfo->GetActorLocation().ToString() + "', rotation = '" +
 				InRoomInfo->GetActorRotation().ToString() + "', scale = '" + InRoomInfo->GetActorScale3D().ToString() + 
-				"' WHERE roomObjIndex = " + FString::FromInt(InRoomInfo->RoomObjIndex);/*
-			FString UpdateQuery = L"UPDATE roomInfo SET position =  '" + InRoomInfo->GetActorLocation().ToString() + "', rotation = '" +
-				InRoomInfo->GetActorRotation().ToString() + "', scale = '" + InRoomInfo->GetActorScale3D().ToString() + 
-				"' WHERE idx = " + FString::FromInt(InRoomInfo->RoomObjIndex);*/
-			if (MySqlDB->MySQLConnectorExecuteQuery(UpdateObjTransformQuery, Conn)) {
+				"' WHERE roomObjIndex = " + FString::FromInt(InRoomInfo->RoomObjIndex);*/
+			if (MySqlDB->MySQLConnectorExecuteQuery(UpdateRoomObjInfoQuery, Conn)) {
 				GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
 					FString::Printf(TEXT("%s > %s > Success Update"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
 						*FString(__FUNCTION__)), true, FVector2D(1, 1));
@@ -364,10 +359,30 @@ void AHttpRequestActor::InsertObjDataToDB(TArray<class ACustomFBXMeshActor*> InA
 		roomInfo.rotation = InAddFbxActor->GetActorRotation().ToString();
 		roomInfo.scale = InAddFbxActor->GetActorScale3D().ToString();
 
-		/*FString InsertRoomInfoQuery = L"INSERT INTO roomInfo VALUES(null, '" + roomInfo.nickName +
-		"', " + FString::FromInt(roomInfo.objIndex) + ", '" + roomInfo.position + "',  '" +
-			roomInfo.rotation + "', '" + roomInfo.scale + "')";*/
+		FString InsertRoomObjInfoQuery = L"INSERT INTO roomObjInfo VALUES(null, " 
+										+ FString::FromInt(roomInfo.objIndex) + ", '" + roomInfo.nickName
+										+ "', '" + roomInfo.position + "',  '" + roomInfo.rotation + "', '" 
+										+ roomInfo.scale + "')";
+		if (MySqlDB->MySQLConnectorExecuteQuery(InsertRoomObjInfoQuery, Conn)) {
+			FString GetLastInsertID = "SELECT LAST_INSERT_ID()";
+			FMySQLConnectoreQueryResult GetLastInsertIDResult = MySqlDB->MySQLConnectorGetData(GetLastInsertID, Conn);
 
+			if (GetLastInsertIDResult.ResultRows.Num() > 0) {
+				int32 idx = FCString::Atoi(*GetLastInsertIDResult.ResultRows[0].Fields[0].Value);
+				//FString InsertRoomInfoQuery = L"INSERT INTO roomInfo VALUES(" + FString::FromInt(idx) + ", " + FString::FromInt(roomInfo.objIndex) +
+					//", '" + roomInfo.nickName + "')";
+				//if (MySqlDB->MySQLConnectorExecuteQuery(InsertRoomInfoQuery, Conn)) {
+					InAddFbxActor->RoomObjIndex = idx;
+					roomInfo.roomObjIndex = idx;
+					InRoomObjIndexArr.Add(roomInfo);
+					GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
+						FString::Printf(TEXT("%s > %s > Insert Sucess"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
+							*FString(__FUNCTION__)), true, FVector2D(1, 1));
+				//}
+			}
+		}
+
+		/* roomInfo objtranform 테이블 분리버전
 		FString InsertObjTransformQuery = L"INSERT INTO objTransform VALUES(null, '" +
 			roomInfo.position + "',  '" + roomInfo.rotation + "', '" + roomInfo.scale + "')";
 		if (MySqlDB->MySQLConnectorExecuteQuery(InsertObjTransformQuery, Conn)) {
@@ -387,7 +402,7 @@ void AHttpRequestActor::InsertObjDataToDB(TArray<class ACustomFBXMeshActor*> InA
 							*FString(__FUNCTION__)), true, FVector2D(1, 1));
 				}
 			}
-		}
+		}*/
 	}
 }
 
@@ -400,7 +415,8 @@ TArray<FRoomInfo>& AHttpRequestActor::GetRoomObjDataFromDB()
 	if (Conn) {
 		RoomObjArr.Empty();
 		if (Conn && gi) {
-			FString query = L"SELECT * FROM `roomInfo` A INNER JOIN `objTransform` B ON A.roomObjIndex = B.roomObjIndex INNER JOIN `objInfo` C ON C.objIndex = A.objIndex where nickName = '" + gi->GetSessionName() + "'";
+			FString query = L"SELECT * FROM `roomObjInfo` A INNER JOIN `objInfo` B ON A.objIndex = B.objIndex where nickName = '" + gi->GetSessionName() + "'";
+			//FString query = L"SELECT * FROM `roomInfo` A INNER JOIN `objTransform` B ON A.roomObjIndex = B.roomObjIndex INNER JOIN `objInfo` C ON C.objIndex = A.objIndex where nickName = '" + gi->GetSessionName() + "'";
 			UE_LOG(LogTemp, Warning, TEXT("Query: %s"), *query)
 			FMySQLConnectoreQueryResult QueryResult = MySqlDB->MySQLConnectorGetData(query, Conn);
 		
@@ -408,12 +424,21 @@ TArray<FRoomInfo>& AHttpRequestActor::GetRoomObjDataFromDB()
 			{
 				FRoomInfo RoomObj;
 				RoomObj.roomObjIndex = FCString::Atoi(*Result.Fields[0].Value);
+				RoomObj.objIndex = FCString::Atoi(*Result.Fields[1].Value);
+				RoomObj.nickName = Result.Fields[2].Value;
+				RoomObj.position = Result.Fields[3].Value;
+				RoomObj.rotation = Result.Fields[4].Value;
+				RoomObj.scale = Result.Fields[5].Value;
+				RoomObj.fileName = Result.Fields[9].Value + "_" + Result.Fields[8].Value;
+				/*roominfo objTransofmr seperate ver
+				FRoomInfo RoomObj;
+				RoomObj.roomObjIndex = FCString::Atoi(*Result.Fields[0].Value);
 				RoomObj.nickName = Result.Fields[2].Value;
 				RoomObj.objIndex = FCString::Atoi(*Result.Fields[7].Value);
 				RoomObj.position = Result.Fields[4].Value;
 				RoomObj.rotation = Result.Fields[5].Value;
 				RoomObj.scale = Result.Fields[6].Value;
-				RoomObj.fileName = Result.Fields[10].Value + "_" + Result.Fields[9].Value;
+				RoomObj.fileName = Result.Fields[10].Value + "_" + Result.Fields[9].Value;*/
 
 				RoomObjArr.Add(RoomObj);
 			}
@@ -430,6 +455,7 @@ void AHttpRequestActor::DeleteRoomObjInfo(TArray<int32>& InDeleteArr)
 	if (Conn) {
 		for (const int32& DeleteObjIdx : InDeleteArr)
 		{
+			/*roomInfo objTransform 분리버전
 			FString DeleteRoomInfoQuery = L"DELETE FROM roomInfo WHERE roomObjIndex = "+ FString::FromInt(DeleteObjIdx);
 			if (MySqlDB->MySQLConnectorExecuteQuery(DeleteRoomInfoQuery, Conn)) {
 				FString DeleteObjTransformQuery = L"DELETE FROM objTransform WHERE roomObjIndex = "+ FString::FromInt(DeleteObjIdx);
@@ -438,6 +464,15 @@ void AHttpRequestActor::DeleteRoomObjInfo(TArray<int32>& InDeleteArr)
 						FString::Printf(TEXT("%s > %s > Success Delete"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
 							*FString(__FUNCTION__)), true, FVector2D(1, 1));
 				}
+			}*/
+			FString DeleteRoomObjInfoQuery = L"DELETE FROM roomObjInfo WHERE roomObjIndex = " + FString::FromInt(DeleteObjIdx);
+			if (MySqlDB->MySQLConnectorExecuteQuery(DeleteRoomObjInfoQuery, Conn)) {
+				//FString DeleteObjTransformQuery = L"DELETE FROM objTransform WHERE roomObjIndex = " + FString::FromInt(DeleteObjIdx);
+				//if (MySqlDB->MySQLConnectorExecuteQuery(DeleteObjTransformQuery, Conn)) {
+					GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
+						FString::Printf(TEXT("%s > %s > Success Delete"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
+							*FString(__FUNCTION__)), true, FVector2D(1, 1));
+				//}
 			}
 			else {
 				GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
@@ -482,10 +517,13 @@ void AHttpRequestActor::ChkGenerateResult()
 
 void AHttpRequestActor::OnMySQLInitConnection()
 {
-	if (MySqlDB == nullptr) {
-		MySqlDB = NewObject<UMySQLDatabase>();
+	if (Conn && Conn->MySQLCheckConnection()) {
+		GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Purple,
+			FString::Printf(TEXT("%s > %s > Success Conn"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
+		*FString(__FUNCTION__)), true, FVector2D(1, 1));
 	}
-	if (Conn == nullptr) {
+	else {
+		MySqlDB = NewObject<UMySQLDatabase>();
 		Conn = MySqlDB->MySQLInitConnection(
 			DB_IP,
 			DB_USER,
@@ -494,13 +532,6 @@ void AHttpRequestActor::OnMySQLInitConnection()
 			ConnectionTimeout,
 			ReadTimeout,
 			WriteTimeout);
-	}
-	if (Conn && Conn->MySQLCheckConnection()) {
-		GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Purple,
-			FString::Printf(TEXT("%s > %s > Success Conn"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
-		*FString(__FUNCTION__)), true, FVector2D(1, 1));
-	}
-	else {
 GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
 	FString::Printf(TEXT("%s > %s > Fail Conn"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
 		*FString(__FUNCTION__)), true, FVector2D(1, 1));

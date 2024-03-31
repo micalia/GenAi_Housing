@@ -10,9 +10,18 @@
 #include "AsyncTasks/CustomFBXAsyncTasks.h"
 #include "Net/UnrealNetwork.h"
 #include "../Public/HttpRequestActor.h"
+#include "../Public/GenAiGameState.h"
+#include "../../../Plugins/RealTimeImport/Source/RealTimeImport/Public/RealTimeImportAsyncNodes.h"
+#include <Materials/MaterialInterface.h>
 
 ACustomFBXImportManager::ACustomFBXImportManager() {
 	bReplicates = true;
+
+	static ConstructorHelpers::FObjectFinder<UMaterialInterface> tempBaseMaterialInst(TEXT("/Script/Engine.MaterialInstanceConstant'/Game/Materials/M_BaseMaterial_Inst.M_BaseMaterial_Inst'"));
+	if (tempBaseMaterialInst.Succeeded())
+	{
+		BaseMat = tempBaseMaterialInst.Object;
+	}
 }
 
 void ACustomFBXImportManager::BeginPlay()
@@ -23,10 +32,24 @@ void ACustomFBXImportManager::BeginPlay()
 	onDownCompleteDel.BindDynamic(this, &ACustomFBXImportManager::OnFbxStorageComplete);
 	onTextureProgressDel.BindDynamic(this, &ACustomFBXImportManager::OnTextureStorageProgress);
 	onTextureDownCompleteDel.BindDynamic(this, &ACustomFBXImportManager::OnTextureStorageComplete);
-
 }
 
-void ACustomFBXImportManager::DownFbxFileCPP(FString fbxUrl, FString saveUrl, FString fbxFileName, FTransform spawnTrans, int32 InRealImportID)
+void ACustomFBXImportManager::ModelingDown(const FString& fileName, FTransform SpawnTransform, class ACustomFBXImportManager* fbxImporter, class AGenAiPlayerController* PlayerController, int32 InCurrImportID)
+{
+	auto Gs = Cast<AGenAiGameState>(GetWorld()->GetGameState());
+	if (Gs) {
+		Gs->ServerModelingDown(fileName, SpawnTransform, fbxImporter, PlayerController, InCurrImportID);
+	}
+}
+
+void ACustomFBXImportManager::SkipDown(const FString& FbxDownPath, FTransform SpawnTrans, class ACustomFBXImportManager* FbxImporter, int32 ImportId)
+{
+	if (FbxImporter) {
+		FbxImporter->CustomImportFBXFile(FbxDownPath, SpawnTrans, FbxImporter, ImportId);
+	}
+}
+
+void ACustomFBXImportManager::DownFbxFileCPP(FString fbxUrl, FString saveUrl, FTransform spawnTrans, int32 InRealImportID)
 {
 	FString contentType = "application/octet-stream";
 	UFileToStorageDownloader::DownloadFileToStorage(fbxUrl, saveUrl, 400.0f, contentType, false, onProgressDel, onDownCompleteDel);
@@ -56,7 +79,7 @@ void ACustomFBXImportManager::OnFbxStorageProgress(int64 BytesReceived, int64 Co
 
 void ACustomFBXImportManager::OnFbxStorageComplete(EDownloadToStorageResult Result)
 {
-	onDownComplete(currSaveFbxPath, currSpawnTrans, CurrRealImportID);
+	OnDownComplete(currSaveFbxPath, currSpawnTrans, CurrRealImportID);
 }
 
 void ACustomFBXImportManager::OnTextureStorageProgress(int64 BytesReceived, int64 ContentLength, float ProgressRatio)
@@ -67,6 +90,11 @@ void ACustomFBXImportManager::OnTextureStorageProgress(int64 BytesReceived, int6
 void ACustomFBXImportManager::OnTextureStorageComplete(EDownloadToStorageResult Result)
 {
 
+}
+
+void ACustomFBXImportManager::OnDownComplete(const FString& SavedFbxPath, FTransform SpawnTrans, int32 currImportID)
+{
+	CustomImportFBXFile(SavedFbxPath, SpawnTrans, this, currImportID);
 }
 
 void ACustomFBXImportManager::CreateFBXActorInServer(FString fileName, FVector SpawnLoc, class ACustomFBXImportManager* fbxImporter, class AGenAiPlayerController* PlayerController, int32 objIndex)
@@ -104,7 +132,8 @@ void ACustomFBXImportManager::CreateFBXActorInServer(FString fileName, FVector S
 	customImportActorMap.Add(CustomCurrentImportID, FBXActor);
 	ReplicatedActorMapWork();
 	
-	Server_ModelingDown(fileName, FBXActor->GetActorTransform(), fbxImporter, PlayerController, CustomCurrentImportID);
+	//Server_ModelingDown(fileName, FBXActor->GetActorTransform(), fbxImporter, PlayerController, CustomCurrentImportID);
+	ModelingDown(fileName, FBXActor->GetActorTransform(), fbxImporter, PlayerController, CustomCurrentImportID);
 }
 
 void ACustomFBXImportManager::ServerCreateFBXActor_Implementation(const TArray<FRoomInfo>& InRoomInfoArr, class ACustomFBXImportManager* fbxImporter, class AGenAiPlayerController* PlayerController)
@@ -230,27 +259,14 @@ void ACustomFBXImportManager::OnRep_ImportActorMap()
 void ACustomFBXImportManager::CustomImportFBXFile(const FString& FbxDownPath, FTransform SpawnTrans, class ACustomFBXImportManager* fbxImportManager, int32 InLoadQueueElementId)
 {
 	ACustomFBXImportManager* customImporter = Cast<ACustomFBXImportManager>(fbxImportManager);
-	UE_LOG(LogTemp, Warning, TEXT("fbxdownPath: %s / SpawnTrans: %s"), *FbxDownPath, *SpawnTrans.ToString())
-		if(fbxImportManager){
-			UE_LOG(LogTemp, Warning, TEXT("fbx importer exist"))
-		}
-		else {
-			UE_LOG(LogTemp, Warning, TEXT("fbx importer null"))
-
-		}
+	
 	GEngine->AddOnScreenDebugMessage(-1, 29990, FColor::Purple, FString::Printf(TEXT("Custom CUrrId : %d"), CustomCurrentImportID), true, FVector2D(1, 1));
 	auto MyClientPc = Cast<AGenAiPlayerController>(GetWorld()->GetFirstPlayerController());
 
 	TSharedPtr<FFBXImportSettings> ImportSettings = MakeShareable(new FFBXImportSettings());
-	//if (MyClientPc && MyClientPc->LoadFbxActorQueue.IsEmpty() || ) {
-	/*if (HasAuthority()) {
-		ImportSettings->ImportID = CustomCurrentImportID;
-	}
-	else {
-	}*/
-		ImportSettings->ImportID = InLoadQueueElementId;
+	
+	ImportSettings->ImportID = InLoadQueueElementId;
 	GEngine->AddOnScreenDebugMessage(-1, 9999, FColor::Purple, FString::Printf(TEXT("%s > %s > CustomFBX Import() ID : %d"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__), ImportSettings->ImportID), true, FVector2D(1, 1));
-	//ImportSettings->SpawnTransform = FTransform(FRotator(), SpawnTrans, CustomCurrentScale);
 
 	FTransform importTrans = FTransform(FRotator(0), FVector(0), FVector(8));
 	ImportSettings->SpawnTransform = FTransform(importTrans);
@@ -330,9 +346,57 @@ void ACustomFBXImportManager::CustomHandleImportCompleted(UCustomFBXSceneImporte
 		{
 			(*ImportActor)->FinishImport(RootNodes);
 			(*ImportActor)->MeshPath = ImportSettings->Filepath;
-			CustomOnImportCompleted(*ImportActor, SceneImporter);
+			//CustomOnImportCompleted(*ImportActor, SceneImporter);
+			OnFbxImportCompleted(*ImportActor, SceneImporter);
 		}
 	}
+}
+
+void ACustomFBXImportManager::OnFbxImportCompleted(class ACustomFBXMeshActor* MeshActor, UCustomFBXSceneImporter* SceneImporter)
+{
+	SpawnMeshActor = MeshActor;
+	PMC = MeshActor->GetComponentByClass<UProceduralMeshComponent>();
+	if (PMC && IsValid(PMC)) {
+		UMaterialInstanceDynamic* MI = PMC->CreateDynamicMaterialInstance(0, BaseMat, FName(TEXT("None")));
+		if (MI) {
+			SelectActor(SpawnMeshActor, PMC);
+			SelectActor(SpawnMeshActor, PMC);
+			auto Pc = Cast<AGenAiPlayerController>(GetWorld()->GetFirstPlayerController());
+			if (Pc) {
+				FString EncodeFileName = Pc->UrlEncode(SpawnMeshActor->FileName);
+				FString SavedTexturePath = TEXT("Saved/Download/") + EncodeFileName + TEXT("_mesh_albedo.png");
+				auto LoadImageASyncNode = URealTimeImportAsyncNodeLoadImageFile::LoadImageFileAsyncNode(ERTIDirectoryType::E_gd, SavedTexturePath, TextureCompressionSettings::TC_Default, false, true, false);
+				LoadImageASyncNode->Activate();
+				if (LoadImageASyncNode) {
+					LoadImageASyncNode->OnSuccess.AddDynamic(this, &ACustomFBXImportManager::OnLoadImageCompleted);
+					LoadImageASyncNode->OnFail.AddDynamic(this, &ACustomFBXImportManager::OnLoadImageFail);
+				}
+			}
+		}
+	}
+	else {
+		CustomHandleImportCompleted(SceneImporter);
+	}
+}
+
+void ACustomFBXImportManager::OnLoadImageCompleted(UTexture2D* texture, const FString fileName, const int32 errorCode, const FString errorMessage, const FString eventID)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
+		FString::Printf(TEXT("%s > %s > LoadIMageSuccess!!"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
+			*FString(__FUNCTION__)), true, FVector2D(1, 1));
+	
+	SpawnMeshActor->UpdateTextureParameter(0, TEXT("DiffuseTexture"), texture, PMC);
+	auto Pc = Cast<AGenAiPlayerController>(GetWorld()->GetFirstPlayerController());
+	if (Pc && Pc->IsLocalController()) {
+		Pc->ChkFbxActorQueue();
+	}
+}
+
+void ACustomFBXImportManager::OnLoadImageFail(UTexture2D* texture, const FString fileName, const int32 errorCode, const FString errorMessage, const FString eventID)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
+		FString::Printf(TEXT("%s > %s > Load IMage Fail!!"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
+			*FString(__FUNCTION__)), true, FVector2D(1, 1));
 }
 
 FString ACustomFBXImportManager::BytesToString(const TArray<uint8>& InBytes)
@@ -362,4 +426,5 @@ void ACustomFBXImportManager::GetLifetimeReplicatedProps(TArray<FLifetimePropert
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(ACustomFBXImportManager, customImportActorArray);
 	DOREPLIFETIME(ACustomFBXImportManager, CustomCurrentImportID);
+	DOREPLIFETIME(ACustomFBXImportManager, SpawnMeshActor);
 }

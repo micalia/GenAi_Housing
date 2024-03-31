@@ -56,9 +56,16 @@ public:
 	
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void LocalModelingDown(const FString& FileName, FTransform SpawnTrans, class ACustomFBXImportManager* FbxImportManager, class AGenAiPlayerController* PlayerController, int32 CurrentImportID);
+	void ModelingDown(const FString& FileName, FTransform SpawnTrans, class ACustomFBXImportManager* FbxImportManager, class AGenAiPlayerController* PlayerController, int32 CurrImportID);	
+	void FileDown(const FString& FileName, FTransform SpawnTrans, class ACustomFBXImportManager* FbxImporter, class AGenAiPlayerController* PlayerController, int32 ImportId);
+
+	void FileExistCheck(const FString& FileName, FTransform SpawnTrans, class ACustomFBXImportManager* FbxImportManager, class AGenAiPlayerController* PlayerController, int32 ImportId);
 
 	TArray<int32> DeleteObjArr;
 	UFUNCTION(BlueprintCallable)
 	void DeleteRoomObjInfoToDB();
+
+	UFUNCTION(Server, Reliable)
+	void ServerCreateFbxActor(const FString& ObjPrompt, const FString& MakeTimeStamp, FVector SpawnLoc, class ACustomFBXImportManager* FbxImporter, class AGenAiPlayerController* PlayerController, int32 ObjIndex);
 
 };

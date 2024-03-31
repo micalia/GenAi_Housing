@@ -39,4 +39,9 @@ public:
 	class UTextBlock* objNameTxt;
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* makerNameTxt;
+public:
+	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
+
+	FVector SetSpawnLocation();
+	FVector SpawnLocation;
 };

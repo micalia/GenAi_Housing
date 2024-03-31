@@ -37,7 +37,7 @@ void UGenAiGameInstance::Init()
 			GEngine->AddOnScreenDebugMessage(-1, 4, FColor::Purple, FString::Printf(TEXT("Found Session INterface!!")), true, FVector2D(1, 1));
 
 			SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UGenAiGameInstance::OnCreateSessionComplete);
-			SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UGenAiGameInstance::OnFoundExistSession);
+			SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UGenAiGameInstance::OnGetRoomList);
 			SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UGenAiGameInstance::OnDestorySessionComplete);
 			SessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this, &UGenAiGameInstance::OnJoinedSession);
 		}
@@ -252,31 +252,26 @@ void UGenAiGameInstance::LoadLobbyMap()
 	}
 }
 
-void UGenAiGameInstance::OnFoundExistSession(bool bWasSuccessful)
+void UGenAiGameInstance::OnGetRoomList(bool bWasSuccessful)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
-		FString::Printf(TEXT("%s > %s > FoundExistSession"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
-			*FString(__FUNCTION__)), true, FVector2D(1, 1));
-	if (sessionSearch == nullptr) return;
-	TArray<FOnlineSessionSearchResult> FoundSessions = sessionSearch->SearchResults;
-
-	UE_LOG(LogTemp, Warning, TEXT("Find Results: %s"), bWasSuccessful ? *FString("Success!") : *FString("Failed..."));
-
-	if (bWasSuccessful)
+	if (sessionSearch != nullptr && bWasSuccessful)
 	{
+		// 현재 존재하는 세션을 모두 찾는다
+		TArray<FOnlineSessionSearchResult> FoundSessions = sessionSearch->SearchResults;
+
 		AHttpRequestActor* httpActor = nullptr;
 		for (TActorIterator<AHttpRequestActor> it(GetWorld()); it; ++it) {
 			httpActor = *it;
 		}
 		if (httpActor == nullptr) return;
 		
-		UE_LOG(LogTemp, Warning, TEXT("Session Count: %d"), FoundSessions.Num());
-		GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
-			FString::Printf(TEXT("%s > %s > Session Count : %d"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
-				*FString(__FUNCTION__), FoundSessions.Num()), true, FVector2D(1, 1));
+		// 기존에 생성된 슬롯 위젯이 존재한다면 전부 삭제
 		DeleteSessionSlots();
 
-		TSet<FString>& SelectUserArrRef = httpActor->DBLoadUserRooms();
+		// 모든 유저의 방을 표시하기 위해 모든 유저의 닉네임을 가져옴
+		TSet<FString>& SelectUserArrRef = httpActor->GetAllUserNameFromDB();
+
+#pragma region Create Room List Slot Widget
 		for (int i = 0; i < FoundSessions.Num(); i++)
 		{
 			FString FoundRoomName;
@@ -295,9 +290,8 @@ void UGenAiGameInstance::OnFoundExistSession(bool bWasSuccessful)
 		{
 			onCreateSlot.Broadcast(UserRoom, 0, PlayerMaxCount, -1);
 		}
-
+#pragma  endregion
 	}
-
 }
 
 void UGenAiGameInstance::OnNetworkFailure(UWorld* World, UNetDriver* NetDriver, ENetworkFailure::Type FailureType, const FString& ErrorString)

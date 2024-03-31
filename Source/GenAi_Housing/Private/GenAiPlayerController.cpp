@@ -15,6 +15,9 @@
 #include "../Public/CustomFBXMeshActor.h"
 #include <Kismet/GameplayStatics.h>
 #include <../Plugins/Runtime/ProceduralMeshComponent/Source/ProceduralMeshComponent/Public/ProceduralMeshComponent.h>
+#include <Kismet/KismetStringLibrary.h>
+#include "../Public/HousingWidget.h"
+#include "../Public/TaskItem.h"
 
 AGenAiPlayerController::AGenAiPlayerController()
 {
@@ -180,11 +183,58 @@ void AGenAiPlayerController::TestQueue()
 	}*/
 }
 
+void AGenAiPlayerController::ModelingDown(const FString& FileName, FTransform SpawnTrans, class ACustomFBXImportManager* FbxImportManager, class AGenAiPlayerController* PlayerController, int32 CurrImportID)
+{
+	FString EncodeFileName = UKismetStringLibrary::Replace(FileName, TEXT("'"), UrlEncode(TEXT("'")));
+	FileExistCheck(EncodeFileName, SpawnTrans, FbxImportManager, PlayerController, CurrImportID);
+}
+
+void AGenAiPlayerController::FileDown(const FString& FileName, FTransform SpawnTrans, class ACustomFBXImportManager* FbxImporter, class AGenAiPlayerController* PlayerController, int32 ImportId)
+{
+	FString EncodeFileName = UrlEncode(FileName);
+	auto Gs = Cast<AGenAiGameState>(GetWorld()->GetGameState());
+	if (Gs && FbxImporter) {
+		FString FbxDownURL = Gs->HttpRequestActor->AI_FBX_FULL_PATH + EncodeFileName + TEXT("_mesh.fbx");
+		FString FbxSavePath = FPaths::ProjectSavedDir() + TEXT("Download/") + EncodeFileName + TEXT("_mesh.fbx");
+		FbxImporter->DownFbxFileCPP(FbxDownURL, FbxSavePath, SpawnTrans, ImportId);
+
+		FString TextureDownURL = Gs->HttpRequestActor->AI_TEXTURE_FULL_PATH + EncodeFileName + TEXT("_mesh_albedo.png");
+		FString TextureSavePath = FPaths::ProjectSavedDir() + TEXT("Download/") + EncodeFileName + TEXT("_mesh_albedo.png");
+		FbxImporter->DownTextureFileCPP(TextureDownURL, TextureSavePath);
+	}
+}
+
+void AGenAiPlayerController::FileExistCheck(const FString& FileName, FTransform SpawnTrans, class ACustomFBXImportManager* FbxImportManager, class AGenAiPlayerController* PlayerController, int32 ImportId)
+{
+	FString SaveDir = FPaths::ProjectSavedDir();
+	FString SavedFbxPath = SaveDir + TEXT("Download/") + FileName + TEXT("_mesh.fbx");
+	bool bFileExists = FPaths::FileExists(SavedFbxPath);
+	if (bFileExists) {
+		if (FbxImportManager) {
+			FbxImportManager->SkipDown(SavedFbxPath, SpawnTrans, FbxImportManager, ImportId);
+		}
+	}
+	else {
+		FileDown(FileName, SpawnTrans, FbxImportManager, PlayerController, ImportId);
+		if (InGameWidgetPtr) { 
+			InGameWidgetPtr->WB_HousingWidget->WB_TaskItem->SetVisibility(ESlateVisibility::Visible);
+		}
+	}
+}
+
 void AGenAiPlayerController::DeleteRoomObjInfoToDB()
 {
 	auto Gs = GetWorld()->GetGameState<AGenAiGameState>();
 	if (Gs) {
 		Gs->HttpRequestActor->DeleteRoomObjInfo(DeleteObjArr);
+	}
+}
+
+void AGenAiPlayerController::ServerCreateFbxActor_Implementation(const FString& ObjPrompt, const FString& MakeTimeStamp, FVector SpawnLoc, class ACustomFBXImportManager* FbxImporter, class AGenAiPlayerController* PlayerController, int32 ObjIndex)
+{
+	FString FileName = MakeTimeStamp + "_" + ObjPrompt;
+	if (FbxImporter) {
+		FbxImporter->CreateFBXActorInServer(FileName, SpawnLoc, FbxImporter, PlayerController, ObjIndex);
 	}
 }
 

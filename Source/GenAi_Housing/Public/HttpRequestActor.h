@@ -111,7 +111,7 @@ public:
 	TSubclassOf<class URoomSlot> RoomSlotFactory;
 
 	TSet<FString> SelectUsersArr;
-	TSet<FString>& DBLoadUserRooms();
+	TSet<FString>& GetAllUserNameFromDB();
 
 public:
 	//Text to 3d
@@ -121,7 +121,7 @@ public:
 		FString PostURL;
 
 	UFUNCTION(BlueprintCallable)
-		void PostRequest();
+		void CreateGenAiObj();
 	void OnPostData(TSharedPtr<IHttpRequest> Request, TSharedPtr<IHttpResponse> Response, bool bConnectedSuccessfully);
 
 	FString RuntimeGenereateAIstartTime;

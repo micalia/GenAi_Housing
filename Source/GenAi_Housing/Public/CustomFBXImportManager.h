@@ -38,10 +38,13 @@ public:
 	
 	//Download
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void Server_ModelingDown(const FString& fileName, FTransform SpawnTransform, class ACustomFBXImportManager* fbxImporter, class AGenAiPlayerController* PlayerController, int32 InCustomCurrImportID);
+	void Server_ModelingDown(const FString& fileName, FTransform SpawnTransform, class ACustomFBXImportManager* fbxImporter, class AGenAiPlayerController* PlayerController, int32 InCurrImportID);
+	void ModelingDown(const FString& fileName, FTransform SpawnTransform, class ACustomFBXImportManager* fbxImporter, class AGenAiPlayerController* PlayerController, int32 InCurrImportID);
+	
+	void SkipDown(const FString& FbxDownPath, FTransform SpawnTrans, class ACustomFBXImportManager* FbxImporter, int32 ImportId);
 
 	UFUNCTION(BlueprintCallable)
-	void DownFbxFileCPP(FString fbxUrl, FString saveUrl, FString fbxFileName, FTransform spawnTrans, int32 InCurrImportID);
+	void DownFbxFileCPP(FString fbxUrl, FString saveUrl, FTransform spawnTrans, int32 InCurrImportID);
 	UFUNCTION(BlueprintCallable)
 	void DownTextureFileCPP(FString textureUrl, FString saveUrl);
 
@@ -67,6 +70,7 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void onDownComplete(const FString& downFbxName, FTransform spawnTrans, int32 currImportID);
+	void OnDownComplete(const FString& SavedFbxPath, FTransform SpawnTrans, int32 currImportID);
 
 	UFUNCTION(BlueprintCallable)
 	void CreateFBXActorInServer(FString fileName, FVector SpawnLoc, class ACustomFBXImportManager* fbxImporter, class AGenAiPlayerController* PlayerController, int32 objIndex);
@@ -113,9 +117,25 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void CustomOnImportCompleted(class ACustomFBXMeshActor* MeshActor, UCustomFBXSceneImporter* SceneImporter);
+	void OnFbxImportCompleted(class ACustomFBXMeshActor* MeshActor, UCustomFBXSceneImporter* SceneImporter);
+
+	UFUNCTION()
+	void OnLoadImageCompleted(UTexture2D* texture, const FString fileName, const int32 errorCode, const FString errorMessage, const FString eventID);
+	UFUNCTION()
+	void OnLoadImageFail(UTexture2D* texture, const FString fileName, const int32 errorCode, const FString errorMessage, const FString eventID);
+
+	UPROPERTY()
+	class UProceduralMeshComponent* PMC;
+	//UPROPERTY()
+	//class URealTimeImportAsyncNodeLoadImageFile* LoadImageASyncNode;
+
+	UPROPERTY(BlueprintReadWrite, Replicated)
+	class ACustomFBXMeshActor* SpawnMeshActor;
 
 	UFUNCTION(Server, Reliable)
 	void Server_IncreaseCustomCurrentImportID();
+	UPROPERTY()
+	class UMaterialInterface* BaseMat;
 
 	//FTimerHandle LoadObjDelay;
 	/*

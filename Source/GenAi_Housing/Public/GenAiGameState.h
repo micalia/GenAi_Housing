@@ -14,6 +14,7 @@ class GENAI_HOUSING_API AGenAiGameState : public AGameState
 {
 	GENERATED_BODY()
 public:
+	AGenAiGameState();
 	virtual void BeginPlay() override;
 
 	UPROPERTY(BlueprintReadWrite)
@@ -24,4 +25,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	class UInGameWidget* GetInGameWidget();
+
+	UFUNCTION(Server, Reliable)
+	void ServerModelingDown(const FString& FileName, FTransform SpawnTransform, class ACustomFBXImportManager* FbxImporter, class AGenAiPlayerController* PlayerController, int32 InCurrId);
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastModelingDown(const FString& FileName, FTransform SpawnTransform, class ACustomFBXImportManager* FbxImporter, class AGenAiPlayerController* PlayerController, int32 InCurrId);
 };

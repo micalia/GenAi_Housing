@@ -241,7 +241,7 @@ class REALTIMEIMPORT_API URealTimeImportAsyncNodeLoadImageFile : public UBluepri
 	GENERATED_BODY()
 
 public:
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FLoadImageFromFileCompleteDelegate, const UTexture2D*, texture,
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FLoadImageFromFileCompleteDelegate, UTexture2D*, texture,
 		const FString, fileName, const int32, errorCode, const FString, errorMessage,const FString, eventID);
 
 	UPROPERTY(BlueprintAssignable)

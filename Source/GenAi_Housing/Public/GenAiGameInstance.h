@@ -72,7 +72,7 @@ private:
 	void OnDestorySessionComplete(FName SessionName, bool Success);
 
 	TSharedPtr<FOnlineSessionSearch> sessionSearch;
-	void OnFoundExistSession(bool bWasSuccessful);
+	void OnGetRoomList(bool bWasSuccessful);
 
 	void OnNetworkFailure(UWorld* World, UNetDriver* NetDriver, ENetworkFailure::Type FailureType, const FString& ErrorString);
 };

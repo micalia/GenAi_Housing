@@ -8,6 +8,13 @@
 #include "..\Public\CustomFBXMeshActor.h"
 #include <UMG\Public\Blueprint\WidgetBlueprintLibrary.h>
 #include "..\Public\InGameWidget.h"
+#include "..\Public\GenAiPlayerController.h"
+#include "Net/UnrealNetwork.h"
+
+AGenAiGameState::AGenAiGameState()
+{
+	bReplicates = true;
+}
 
 void AGenAiGameState::BeginPlay()
 {
@@ -33,6 +40,19 @@ class UInGameWidget* AGenAiGameState::GetInGameWidget()
 		}
 	}
 	return nullptr;
+}
+
+void AGenAiGameState::MulticastModelingDown_Implementation(const FString& FileName, FTransform SpawnTransform, class ACustomFBXImportManager* FbxImporter, class AGenAiPlayerController* PlayerController, int32 InCurrId)
+{
+	auto Pc = Cast<AGenAiPlayerController>(GetWorld()->GetFirstPlayerController());
+	if (Pc) {
+		Pc->ModelingDown(FileName, SpawnTransform, FbxImporter, PlayerController, InCurrId);
+	}
+}
+
+void AGenAiGameState::ServerModelingDown_Implementation(const FString& FileName, FTransform SpawnTransform, class ACustomFBXImportManager* FbxImporter, class AGenAiPlayerController* PlayerController, int32 InCurrId)
+{
+	MulticastModelingDown(FileName, SpawnTransform, FbxImporter, PlayerController, InCurrId);
 }
 
 void AGenAiGameState::ServerInsertChk_Implementation(const FString& SessionName)
