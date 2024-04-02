@@ -48,7 +48,7 @@ void AHttpRequestActor::BeginPlay()
 	gi->onCreateSlot.AddDynamic(this, &AHttpRequestActor::OnSlotCreated);
 
 	httpModule = FHttpModule::Get();
-	PostURL = AI_IP + ":" + AI_PORT + TEXT("/text2obj");
+	PostURL = AI_IP + ":" + AI_PORT + TEXT("/TextTo3D");
 
 	FString LoadObjSlotClass = TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprints/Widget/InGame/WB_ObjSlot.WB_ObjSlot_C'");
 	UClass* loadedObject = StaticLoadClass(UObject::StaticClass(), nullptr, *LoadObjSlotClass);
@@ -241,10 +241,6 @@ TSet<FString>& AHttpRequestActor::GetAllUserNameFromDB()
 			FString UserName = ResultRow.Fields[0].Value;
 			SelectUsersArr.Add(UserName);
 		}
-		 
-	}
-	else {
-		UE_LOG(LogTemp, Warning, TEXT("Not Init Sql Conn"))
 	}
 
 	return SelectUsersArr;

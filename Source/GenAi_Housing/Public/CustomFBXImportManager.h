@@ -55,7 +55,6 @@ public:
 
 	UFUNCTION()
 	void OnFbxStorageProgress(int64 BytesReceived, int64 ContentLength, float ProgressRatio);
-
 	UFUNCTION()
 	void OnFbxStorageComplete(EDownloadToStorageResult Result);
 	FString currSaveFbxPath;

@@ -40,6 +40,7 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void HousingSystem();
+	void HousingSystemCPP();
 
 	UFUNCTION(BlueprintCallable, Server, Reliable)
 	void Server_InsertObjDataToDB(const FString& SessionName);
@@ -68,4 +69,14 @@ public:
 	UFUNCTION(Server, Reliable)
 	void ServerCreateFbxActor(const FString& ObjPrompt, const FString& MakeTimeStamp, FVector SpawnLoc, class ACustomFBXImportManager* FbxImporter, class AGenAiPlayerController* PlayerController, int32 ObjIndex);
 
+	UFUNCTION(Server, Reliable)
+	void ServerHousingPossess(APawn* InPlayer, FVector CameraPos);
+
+	UPROPERTY()
+	class ATP_ThirdPersonCharacter* CachePrevCharacter;
+
+	UFUNCTION(Server, Reliable)
+	void ServerSetActorTransform(class ACustomFBXMeshActor* FbxMeshActor, FTransform Transform);
+	UFUNCTION(Server, Reliable)
+	void ServerDestroyActor(class ACustomFBXMeshActor* FbxMeshActor);
 };

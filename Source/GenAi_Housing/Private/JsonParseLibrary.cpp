@@ -29,18 +29,16 @@ FString UJsonParseLibrary::JsonParse(const FString& originData)
 
 FString UJsonParseLibrary::MakeJson(const TMap<FString, FString> source)
 {
-	TSharedPtr<FJsonObject> jsonObj = MakeShareable(new FJsonObject());
+	TSharedPtr<FJsonObject> JsonObj = MakeShareable(new FJsonObject());
 
 	for (TPair<FString, FString> kv : source)
 	{
-		jsonObj->SetStringField(kv.Key, kv.Value);
+		JsonObj->SetStringField(kv.Key, kv.Value);
 	}
 
-	// Writer를 생성하고, json Object를 인코딩한다.
-	FString jsonData;
+	FString JsonData;
+	TSharedRef<TJsonWriter<TCHAR>> writer = TJsonWriterFactory<TCHAR>::Create(&JsonData);
+	FJsonSerializer::Serialize(JsonObj.ToSharedRef(), writer);
 
-	TSharedRef<TJsonWriter<TCHAR>> writer = TJsonWriterFactory<TCHAR>::Create(&jsonData);
-	FJsonSerializer::Serialize(jsonObj.ToSharedRef(), writer);
-
-	return jsonData;
+	return JsonData;
 }

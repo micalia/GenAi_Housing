@@ -18,6 +18,10 @@
 #include <Kismet/KismetStringLibrary.h>
 #include "../Public/HousingWidget.h"
 #include "../Public/TaskItem.h"
+#include "../TP_ThirdPerson/TP_ThirdPersonCharacter.h"
+#include <UMG/Public/Components/WidgetComponent.h>
+#include "../Public/PlayerNameWidget.h"
+#include "../Public/HousingPawn.h"
 
 AGenAiPlayerController::AGenAiPlayerController()
 {
@@ -97,22 +101,40 @@ void AGenAiPlayerController::OnPossess(APawn* InPawn)
 	}
 }
 
+void AGenAiPlayerController::HousingSystemCPP()
+{
+	if (IsLocalController()) {
+		APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+		auto MyPlayer = Cast<ATP_ThirdPersonCharacter>(PlayerPawn);
+		if (MyPlayer) {
+			GetWorld()->GetFirstPlayerController()->SetShowMouseCursor(true);
+		}
+		else {
+			auto Gi = Cast<UGenAiGameInstance>(GetGameInstance());
+			if (Gi) {
+				DeleteRoomObjInfoToDB();
+				if (HasAuthority()) {
+					Server_InsertObjDataToDB_Implementation(Gi->GetSessionName());
+				}
+				else {
+					Server_InsertObjDataToDB(Gi->GetSessionName());
+				}
+			}
+			GetWorld()->GetFirstPlayerController()->SetShowMouseCursor(false);
+		}
+		FVector CameraPos = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetCameraLocation();
+		ServerHousingPossess(PlayerPawn, CameraPos);
+	}
+}
+
 void AGenAiPlayerController::ChkFbxActorQueue()
 {
 	if (!LoadFbxActorQueue.IsEmpty()) {
 		ACustomFBXMeshActor* HeadElement = nullptr;
 		LoadFbxActorQueue.Peek(HeadElement);
-		/*CheckUObjectIsNull(HeadElement, TEXT("LoadFbxActorQueue"));
-		CheckUObjectIsValid(HeadElement, TEXT("LoadFbxActorQueue"));*/
-		FTransform debug = HeadElement->GetActorTransform();
-		LocalModelingDown(HeadElement->FileName, HeadElement->GetActorTransform(), controllerFbxImportManager, this, HeadElement->CustomCurrentImportID);
-		GEngine->AddOnScreenDebugMessage(-1, 9999, FColor::Purple, FString::Printf(TEXT("%s > %s > Dequeue Import FbxActor"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__)), true, FVector2D(1, 1));
-		GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
-			FString::Printf(TEXT("%s > %s > Deque Trans: %d"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
-				*FString(__FUNCTION__), HeadElement->CustomCurrentImportID), true, FVector2D(1, 1));
+		ModelingDown(HeadElement->FileName, HeadElement->GetActorTransform(), controllerFbxImportManager, this, HeadElement->CustomCurrentImportID);
 	}
 	else {
-		GEngine->AddOnScreenDebugMessage(-1, 9999, FColor::Purple, FString::Printf(TEXT("%s > %s > Not exisit data in ActorQueue"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__)), true, FVector2D(1, 1));
 		TArray<AActor*> fbxActorArr;
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACustomFBXMeshActor::StaticClass(), fbxActorArr);
 		for (int i = 0; i < fbxActorArr.Num(); i++)
@@ -120,7 +142,7 @@ void AGenAiPlayerController::ChkFbxActorQueue()
 			auto FbxActor = Cast<ACustomFBXMeshActor>(fbxActorArr[i]);
 			auto mesh = fbxActorArr[i]->GetComponentByClass<UProceduralMeshComponent>();
 			if  (mesh == nullptr) {
-				DrawDebugSphere(GetWorld(), fbxActorArr[i]->GetActorLocation(), 20.0f, 32, FColor::Red, false, 999.0f);
+				//DrawDebugSphere(GetWorld(), fbxActorArr[i]->GetActorLocation(), 20.0f, 32, FColor::Red, false, 999.0f);
 				LoadFbxActorQueue.Enqueue(FbxActor);
 				ChkFbxActorQueue();
 			}
@@ -227,6 +249,49 @@ void AGenAiPlayerController::DeleteRoomObjInfoToDB()
 	auto Gs = GetWorld()->GetGameState<AGenAiGameState>();
 	if (Gs) {
 		Gs->HttpRequestActor->DeleteRoomObjInfo(DeleteObjArr);
+	}
+}
+
+void AGenAiPlayerController::ServerDestroyActor_Implementation(class ACustomFBXMeshActor* FbxMeshActor)
+{
+	FbxMeshActor->Destroy();
+}
+
+void AGenAiPlayerController::ServerSetActorTransform_Implementation(class ACustomFBXMeshActor* FbxMeshActor, FTransform Transform)
+{
+	auto Gs = Cast<AGenAiGameState>(GetWorld()->GetGameState());
+	if (Gs) {
+		Gs->MulticastSetActorTransform(FbxMeshActor, Transform);
+	}
+}
+
+void AGenAiPlayerController::ServerHousingPossess_Implementation(APawn* InPlayer, FVector CameraPos)
+{
+	auto HousingPlayer = Cast<ATP_ThirdPersonCharacter>(InPlayer);
+	if (HousingPlayer) {
+		CachePrevCharacter = HousingPlayer;
+		auto PlayerNameWidget = Cast<UPlayerNameWidget>(CachePrevCharacter->GetComponentByClass<UWidgetComponent>()->GetWidget());
+		if (PlayerNameWidget) {
+			//auto MyHousingPawn = Cast<AHousingPawn>(HousingPlayer->ChildActorComp->GetChildActor());
+			/*AHousingPawn* HousingPawnInWorld = nullptr;
+			for (TActorIterator<AHousingPawn> it(GetWorld()); it; ++it) {
+				HousingPawnInWorld = *it;
+			}*/
+			if (HousingPlayer->MyHousingPawn) {
+				HousingPlayer->MyHousingPawn->CurrUserName = PlayerNameWidget->PlayerNameTxt->GetText().ToString();
+				HousingPlayer->MyHousingPawn->SetActorLocation(CameraPos);
+				Possess(HousingPlayer->MyHousingPawn);
+			}
+		}
+	}
+	else {
+		auto HousingPawn = Cast<AHousingPawn>(InPlayer);
+		if (HousingPawn) {
+			HousingPawn->ServerDeselectAll(false);
+			if (HousingPawn->MyHousingPlayer) {
+				Possess(HousingPawn->MyHousingPlayer);
+			}
+		}
 	}
 }
 

@@ -834,7 +834,7 @@ TArray<USceneComponent*> ATransformerPawn::DeselectAll(bool bDestroyDeselected)
 					auto Pc = Cast<AGenAiPlayerController>(GetWorld()->GetFirstPlayerController());
 					if (FbxActor && Pc) {
 						Pc->DeleteObjArr.Add(FbxActor->RoomObjIndex);
-						actor->Destroy();
+						Pc->ServerDestroyActor(FbxActor);
 					}
 				}
 			}
@@ -978,26 +978,26 @@ void ATransformerPawn::ReplicatedMouseTraceByObjectTypes(float TraceDistance
 			, CollisionChannels
 			, TArray<AActor*>(), bAppendToList);
 
-		//Server
-		if (GetLocalRole() == ROLE_Authority)
-			ReplicateServerTraceResults(bTraceSuccessful, bAppendToList);
-		//Client
-		else
-		{
-			if (!bTraceSuccessful && !bAppendToList)
-				ServerDeselectAll(false);
-			else
-			{
-				// If a Local Trace was on a Gizmo, just tell the Server that we 
-				// have hit our Gizmo and just change the Domain there.
-				// Else, do the Server Trace
-				if (CurrentDomain == ETransformationDomain::TD_None)
-					ServerTraceByObjectTypes(start, end, CollisionChannels, bAppendToList);
-				else
-					ServerSetDomain(CurrentDomain);
-			}
-			
-		}
+		////Server
+		//if (GetLocalRole() == ROLE_Authority)
+		//	ReplicateServerTraceResults(bTraceSuccessful, bAppendToList);
+		////Client
+		//else
+		//{
+		//	if (!bTraceSuccessful && !bAppendToList)
+		//		ServerDeselectAll(false);
+		//	else
+		//	{
+		//		// If a Local Trace was on a Gizmo, just tell the Server that we 
+		//		// have hit our Gizmo and just change the Domain there.
+		//		// Else, do the Server Trace
+		//		if (CurrentDomain == ETransformationDomain::TD_None)
+		//			ServerTraceByObjectTypes(start, end, CollisionChannels, bAppendToList);
+		//		else
+		//			ServerSetDomain(CurrentDomain);
+		//	}
+		//	
+		//}
 
 		
 	}

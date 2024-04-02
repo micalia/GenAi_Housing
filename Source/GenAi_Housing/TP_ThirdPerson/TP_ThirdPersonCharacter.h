@@ -42,8 +42,15 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* LookAction;
 
-
 public:
+	virtual void PostInitializeComponents() override;
+
+	UPROPERTY(EditAnywhere)
+	class UChildActorComponent* ChildActorComp;
+
+	UPROPERTY()
+	class AHousingPawn* MyHousingPawn;
+
 	FOnPlayerNameDelegate OnPlayerName;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		class UNameWidgetComponent* widgetComp;

@@ -18,4 +18,16 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, Replicated)
 	FString CurrUserName = TEXT("");
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	UPROPERTY(EditAnywhere)
+	float TraceDistance = 5000000;
+	void SelectPressed();
+	void SelectReleased();
+	void MouseTraceByObjectTypes(float InTraceDistance, TArray<TEnumAsByte<ECollisionChannel>> CollisionChannels, bool bAppendToList);
+
+	void DestroyActor();
+
+	UPROPERTY(BlueprintReadOnly)
+	class ATP_ThirdPersonCharacter* MyHousingPlayer;
 };

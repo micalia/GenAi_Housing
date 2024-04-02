@@ -42,6 +42,13 @@ class UInGameWidget* AGenAiGameState::GetInGameWidget()
 	return nullptr;
 }
 
+void AGenAiGameState::MulticastSetActorTransform_Implementation(class ACustomFBXMeshActor* FbxMeshActor, FTransform Transform)
+{
+	if (FbxMeshActor) {
+		FbxMeshActor->SetActorTransform(Transform);
+	}
+}
+
 void AGenAiGameState::MulticastModelingDown_Implementation(const FString& FileName, FTransform SpawnTransform, class ACustomFBXImportManager* FbxImporter, class AGenAiPlayerController* PlayerController, int32 InCurrId)
 {
 	auto Pc = Cast<AGenAiPlayerController>(GetWorld()->GetFirstPlayerController());

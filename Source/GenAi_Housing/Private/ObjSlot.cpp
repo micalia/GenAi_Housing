@@ -11,9 +11,6 @@ FReply UObjSlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPoi
 	Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
 
 	if (InMouseEvent.IsMouseButtonDown(EKeys::LeftMouseButton)) {
-		GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
-			FString::Printf(TEXT("%s > %s > Hi_MouseCLick"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
-				*FString(__FUNCTION__)), true, FVector2D(1, 1));
 		auto Pc = Cast<AGenAiPlayerController>(GetWorld()->GetFirstPlayerController());
 		if (Pc && Pc->InGameWidgetPtr) { 
 			Pc->InGameWidgetPtr->SetVisibility(ESlateVisibility::SelfHitTestInvisible);

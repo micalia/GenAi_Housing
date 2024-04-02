@@ -77,6 +77,7 @@ void ACustomFBXImportManager::OnFbxStorageProgress(int64 BytesReceived, int64 Co
 	}
 }
 
+
 void ACustomFBXImportManager::OnFbxStorageComplete(EDownloadToStorageResult Result)
 {
 	OnDownComplete(currSaveFbxPath, currSpawnTrans, CurrRealImportID);
@@ -115,6 +116,7 @@ void ACustomFBXImportManager::CreateFBXActorInServer(FString fileName, FVector S
 	FVector inputSpawnLoc = SpawnLoc;
 	int32 inputObjIndex = objIndex;
 	int32 inputCurrentImportID = CustomCurrentImportID;
+	// ACustomFBXMeshActor의 속성값 초기화
 	auto doFunc = [inputFileName, inputSpawnLoc, inputObjIndex, inputCurrentImportID](AActor* ObjectToModify)
 	{
 		ACustomFBXMeshActor* fbxMeshActorModify = Cast<ACustomFBXMeshActor>(ObjectToModify);
@@ -354,37 +356,38 @@ void ACustomFBXImportManager::CustomHandleImportCompleted(UCustomFBXSceneImporte
 
 void ACustomFBXImportManager::OnFbxImportCompleted(class ACustomFBXMeshActor* MeshActor, UCustomFBXSceneImporter* SceneImporter)
 {
-	SpawnMeshActor = MeshActor;
-	PMC = MeshActor->GetComponentByClass<UProceduralMeshComponent>();
-	if (PMC && IsValid(PMC)) {
-		UMaterialInstanceDynamic* MI = PMC->CreateDynamicMaterialInstance(0, BaseMat, FName(TEXT("None")));
-		if (MI) {
-			SelectActor(SpawnMeshActor, PMC);
-			SelectActor(SpawnMeshActor, PMC);
-			auto Pc = Cast<AGenAiPlayerController>(GetWorld()->GetFirstPlayerController());
-			if (Pc) {
-				FString EncodeFileName = Pc->UrlEncode(SpawnMeshActor->FileName);
-				FString SavedTexturePath = TEXT("Saved/Download/") + EncodeFileName + TEXT("_mesh_albedo.png");
-				auto LoadImageASyncNode = URealTimeImportAsyncNodeLoadImageFile::LoadImageFileAsyncNode(ERTIDirectoryType::E_gd, SavedTexturePath, TextureCompressionSettings::TC_Default, false, true, false);
-				LoadImageASyncNode->Activate();
-				if (LoadImageASyncNode) {
-					LoadImageASyncNode->OnSuccess.AddDynamic(this, &ACustomFBXImportManager::OnLoadImageCompleted);
-					LoadImageASyncNode->OnFail.AddDynamic(this, &ACustomFBXImportManager::OnLoadImageFail);
+	FTimerHandle DelayHandle;
+	GetWorld()->GetTimerManager().SetTimer(DelayHandle, FTimerDelegate::CreateLambda([&, MeshActor, SceneImporter]() {
+		SpawnMeshActor = MeshActor;
+		PMC = MeshActor->FindComponentByClass<UProceduralMeshComponent>();
+		if (PMC == nullptr) return;
+		if (PMC && IsValid(PMC)) {
+			UMaterialInstanceDynamic* MI = PMC->CreateDynamicMaterialInstance(0, BaseMat, FName(TEXT("None")));
+			if (MI) {
+				// 새로 스폰한 액터를 선택하려면 SelectActor를 두번 호출해야 함
+				SelectActor(SpawnMeshActor, PMC);
+				SelectActor(SpawnMeshActor, PMC);
+				auto Pc = Cast<AGenAiPlayerController>(GetWorld()->GetFirstPlayerController());
+				if (Pc) {
+					FString EncodeFileName = Pc->UrlEncode(SpawnMeshActor->FileName);
+					FString SavedTexturePath = TEXT("Saved/Download/") + EncodeFileName + TEXT("_mesh_albedo.png");
+					auto LoadImageASyncNode = URealTimeImportAsyncNodeLoadImageFile::LoadImageFileAsyncNode(ERTIDirectoryType::E_gd, SavedTexturePath, TextureCompressionSettings::TC_Default, false, true, false);
+					LoadImageASyncNode->Activate();
+					if (LoadImageASyncNode) {
+						LoadImageASyncNode->OnSuccess.AddDynamic(this, &ACustomFBXImportManager::OnLoadImageCompleted);
+						LoadImageASyncNode->OnFail.AddDynamic(this, &ACustomFBXImportManager::OnLoadImageFail);
+					}
 				}
 			}
 		}
-	}
-	else {
-		CustomHandleImportCompleted(SceneImporter);
-	}
+		else {
+			CustomHandleImportCompleted(SceneImporter);
+		}
+	}), 0.1f, false);
 }
 
 void ACustomFBXImportManager::OnLoadImageCompleted(UTexture2D* texture, const FString fileName, const int32 errorCode, const FString errorMessage, const FString eventID)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 999, FColor::Purple,
-		FString::Printf(TEXT("%s > %s > LoadIMageSuccess!!"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
-			*FString(__FUNCTION__)), true, FVector2D(1, 1));
-	
 	SpawnMeshActor->UpdateTextureParameter(0, TEXT("DiffuseTexture"), texture, PMC);
 	auto Pc = Cast<AGenAiPlayerController>(GetWorld()->GetFirstPlayerController());
 	if (Pc && Pc->IsLocalController()) {

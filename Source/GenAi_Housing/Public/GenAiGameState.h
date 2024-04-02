@@ -30,4 +30,7 @@ public:
 	void ServerModelingDown(const FString& FileName, FTransform SpawnTransform, class ACustomFBXImportManager* FbxImporter, class AGenAiPlayerController* PlayerController, int32 InCurrId);
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastModelingDown(const FString& FileName, FTransform SpawnTransform, class ACustomFBXImportManager* FbxImporter, class AGenAiPlayerController* PlayerController, int32 InCurrId);
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastSetActorTransform(class ACustomFBXMeshActor* FbxMeshActor, FTransform Transform);
 };

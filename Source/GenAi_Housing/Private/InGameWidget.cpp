@@ -28,6 +28,6 @@ void UInGameWidget::OnClickHousingSystem()
 		else {
 			HousingModeTxt->SetText(FText::FromString(TEXT("HousingMode ON")));
 		}
-		pc->HousingSystem();
+		pc->HousingSystemCPP();
 	}
 }

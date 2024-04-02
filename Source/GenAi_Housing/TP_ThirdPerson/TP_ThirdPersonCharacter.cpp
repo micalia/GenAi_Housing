@@ -16,6 +16,8 @@
 #include "EngineUtils.h"
 #include "Net/UnrealNetwork.h"
 #include "../Public/NameWidgetComponent.h"
+#include <Components/ChildActorComponent.h>
+#include "../Public/HousingPawn.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -65,8 +67,22 @@ ATP_ThirdPersonCharacter::ATP_ThirdPersonCharacter()
 	ConstructorHelpers::FClassFinder<UPlayerNameWidget> tempPlayerNameWB(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprints/Widget/InGame/WB_PlayerName.WB_PlayerName_C'"));
 	if (tempPlayerNameWB.Succeeded()) {
 		PlayerNameWBFactory = tempPlayerNameWB.Class;
+		widgetComp->SetWidgetClass(PlayerNameWBFactory);
 	}
-	widgetComp->SetWidgetClass(PlayerNameWBFactory);
+
+	ChildActorComp = CreateDefaultSubobject<UChildActorComponent>(TEXT("ChilcActorComp"));
+	ChildActorComp->SetupAttachment(RootComponent);
+	ChildActorComp->SetRelativeLocation(FVector(-80, 0, 120));
+}
+
+void ATP_ThirdPersonCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	FString TempHousingPawn = TEXT("/Script/Engine.Blueprint'/Game/Blueprints/BP_HousingPawn.BP_HousingPawn_C'");
+	UClass* HousingPawn = StaticLoadClass(UObject::StaticClass(), nullptr, *TempHousingPawn);
+	TSubclassOf<AActor> HousingPawnActor = HousingPawn;
+	ChildActorComp->SetChildActorClass(HousingPawnActor);
 }
 
 void ATP_ThirdPersonCharacter::TestWorld()
@@ -124,6 +140,12 @@ void ATP_ThirdPersonCharacter::BeginPlay()
 		{
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
+	}
+
+	AActor* ChildActor = ChildActorComp->GetChildActor();
+	if (ChildActor) {
+		MyHousingPawn = Cast<AHousingPawn>(ChildActor);
+		MyHousingPawn->MyHousingPlayer = this;
 	}
 }
 
