@@ -44,6 +44,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, Server, Reliable)
 	void Server_InsertObjDataToDB(const FString& SessionName);
+	UFUNCTION(Server, Reliable)
+	void ServerUpdateAndInsertToDB(const FString& SessionName);
+
+	class AHttpRequestActor* HttpRequestActor;
 
 	TQueue<class ACustomFBXMeshActor*> LoadFbxActorQueue;
 

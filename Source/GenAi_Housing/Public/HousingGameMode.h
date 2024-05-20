@@ -21,6 +21,6 @@ public:
 
 	uint32 NumberOfPlayers = 0;
 
-	TSet<FRoomInfo> CurrRoomObjArr;
-	TSet<FRoomInfo>& GetRoomObjIndexArr();
+	//TSet<FRoomInfo> CurrRoomObjArr;
+	//TSet<FRoomInfo>& GetRoomObjIndexArr();
 };

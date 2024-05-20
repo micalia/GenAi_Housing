@@ -65,7 +65,7 @@ public:
 
 	FString DB_IP = AI_IP;
 	FString DB_USER = TEXT("root");
-	FString DB_PWD = TEXT("1234");
+	FString DB_PWD = TEXT("rhkddnseo"); // ±¤¿î´ë
 	FString DB_NAME = TEXT("housingdb");
 	UPROPERTY(EditAnywhere)
 		int ConnectionTimeout = 230;
@@ -128,6 +128,7 @@ public:
 	bool bRuntimeGenerateAI;
 
 	void UpdateObjDataToDB(TArray<class ACustomFBXMeshActor*> InRoomInfoArr);
+	void InsertObjDataToDB(TArray<class ACustomFBXMeshActor*> InAddFbxInfoActorArr);
 	void InsertObjDataToDB(TArray<class ACustomFBXMeshActor*> InAddFbxInfoActorArr, TSet<FRoomInfo>& InRoomObjIndexArr);
 
 public:

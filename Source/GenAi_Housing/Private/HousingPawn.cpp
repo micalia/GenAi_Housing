@@ -23,8 +23,8 @@ void AHousingPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputC
 void AHousingPawn::SelectPressed()
 {
 	TArray<TEnumAsByte<ECollisionChannel>> CheckCollisionChannels;
+	// CollisionChannel : HousingObj
 	CheckCollisionChannels.Add(ECollisionChannel::ECC_GameTraceChannel1);
-	CheckCollisionChannels.Add(ECollisionChannel::ECC_WorldDynamic);
 	MouseTraceByObjectTypes(TraceDistance, CheckCollisionChannels, false);
 }
 

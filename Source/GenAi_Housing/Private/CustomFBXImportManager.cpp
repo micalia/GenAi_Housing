@@ -109,28 +109,28 @@ void ACustomFBXImportManager::CreateFBXActorInServer(FString fileName, FVector S
 		CurrentActorClass = ACustomFBXMeshActor::StaticClass();
 	}
 
-	FActorSpawnParameters spawnConfig;
-	spawnConfig.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	spawnConfig.TransformScaleMethod = ESpawnActorScaleMethod::MultiplyWithRoot;
-	FString inputFileName = fileName;
-	FVector inputSpawnLoc = SpawnLoc;
-	int32 inputObjIndex = objIndex;
-	int32 inputCurrentImportID = CustomCurrentImportID;
+	FActorSpawnParameters SpawnConfig;
+	SpawnConfig.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	SpawnConfig.TransformScaleMethod = ESpawnActorScaleMethod::MultiplyWithRoot;
+	FString InputFileName = fileName;
+	FVector InputSpawnLoc = SpawnLoc;
+	int32 InputObjIndex = objIndex;
+	int32 InputCurrentImportID = CustomCurrentImportID;
 	// ACustomFBXMeshActor의 속성값 초기화
-	auto doFunc = [inputFileName, inputSpawnLoc, inputObjIndex, inputCurrentImportID](AActor* ObjectToModify)
+	auto DoFunc = [InputFileName, InputSpawnLoc, InputObjIndex, InputCurrentImportID](AActor* ObjectToModify)
 	{
-		ACustomFBXMeshActor* fbxMeshActorModify = Cast<ACustomFBXMeshActor>(ObjectToModify);
-		if (fbxMeshActorModify)
+		ACustomFBXMeshActor* FbxMeshActorModify = Cast<ACustomFBXMeshActor>(ObjectToModify);
+		if (FbxMeshActorModify)
 		{
-			fbxMeshActorModify->FileName = inputFileName;
-			fbxMeshActorModify->SpawnLoc = inputSpawnLoc;
-			fbxMeshActorModify->ObjIndex = inputObjIndex;
-			fbxMeshActorModify->CustomCurrentImportID = inputCurrentImportID;
+			FbxMeshActorModify->FileName = InputFileName;
+			FbxMeshActorModify->SpawnLoc = InputSpawnLoc;
+			FbxMeshActorModify->ObjIndex = InputObjIndex;
+			FbxMeshActorModify->CustomCurrentImportID = InputCurrentImportID;
 		}
 	};
 
-	spawnConfig.CustomPreSpawnInitalization = doFunc;
-	ACustomFBXMeshActor* FBXActor = GetWorld()->SpawnActor<ACustomFBXMeshActor>(CurrentActorClass, SpawnLoc, FRotator::ZeroRotator, spawnConfig);
+	SpawnConfig.CustomPreSpawnInitalization = DoFunc;
+	ACustomFBXMeshActor* FBXActor = GetWorld()->SpawnActor<ACustomFBXMeshActor>(CurrentActorClass, SpawnLoc, FRotator::ZeroRotator, SpawnConfig);
 	customImportActorMap.Add(CustomCurrentImportID, FBXActor);
 	ReplicatedActorMapWork();
 	
@@ -151,10 +151,10 @@ void ACustomFBXImportManager::ServerCreateFBXActor_Implementation(const TArray<F
 
 	for (int32 i = 0; i < InRoomInfoArr.Num();i++)
 	{
-		FActorSpawnParameters spawnConfig;
-		spawnConfig.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-		spawnConfig.TransformScaleMethod = ESpawnActorScaleMethod::MultiplyWithRoot;
-		FString inputFileName = InRoomInfoArr[i].fileName;
+		FActorSpawnParameters SpawnConfig;
+		SpawnConfig.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		SpawnConfig.TransformScaleMethod = ESpawnActorScaleMethod::MultiplyWithRoot;
+		FString InputFileName = InRoomInfoArr[i].fileName;
 		
 #pragma region SpawnTransform
 		FVector SpawnLocation;
@@ -206,28 +206,28 @@ void ACustomFBXImportManager::ServerCreateFBXActor_Implementation(const TArray<F
 		}
 #pragma endregion
 
-		FVector inputSpawnLoc = SpawnLocation;
-		int32 inputObjIndex = InRoomInfoArr[i].objIndex;
-		int32 inputCurrentImportID = CustomCurrentImportID;
-		FVector inputSpawnScale = SpawnScale;
-		int32 inputRoomObjIndex = InRoomInfoArr[i].roomObjIndex;
-		auto doFunc = [inputFileName, inputSpawnLoc, inputObjIndex, inputCurrentImportID, inputSpawnScale, inputRoomObjIndex](AActor* ObjectToModify)
+		FVector InputSpawnLoc = SpawnLocation;
+		int32 InputObjIndex = InRoomInfoArr[i].objIndex;
+		int32 InputCurrentImportID = CustomCurrentImportID;
+		FVector InputSpawnScale = SpawnScale;
+		int32 InputRoomObjIndex = InRoomInfoArr[i].roomObjIndex;
+		auto DoFunc = [InputFileName, InputSpawnLoc, InputObjIndex, InputCurrentImportID, InputSpawnScale, InputRoomObjIndex](AActor* ObjectToModify)
 		{
-			ACustomFBXMeshActor* fbxMeshActorModify = Cast<ACustomFBXMeshActor>(ObjectToModify);
-			if (fbxMeshActorModify)
+			ACustomFBXMeshActor* FbxMeshActorModify = Cast<ACustomFBXMeshActor>(ObjectToModify);
+			if (FbxMeshActorModify)
 			{
-				fbxMeshActorModify->FileName = inputFileName;
-				fbxMeshActorModify->SpawnLoc = inputSpawnLoc;
-				fbxMeshActorModify->ObjIndex = inputObjIndex;
-				fbxMeshActorModify->CustomCurrentImportID = inputCurrentImportID;
-				fbxMeshActorModify->SpawnScale = inputSpawnScale;
-				fbxMeshActorModify->RoomObjIndex = inputRoomObjIndex;
+				FbxMeshActorModify->FileName = InputFileName;
+				FbxMeshActorModify->SpawnLoc = InputSpawnLoc;
+				FbxMeshActorModify->ObjIndex = InputObjIndex;
+				FbxMeshActorModify->CustomCurrentImportID = InputCurrentImportID;
+				FbxMeshActorModify->SpawnScale = InputSpawnScale;
+				FbxMeshActorModify->RoomObjIndex = InputRoomObjIndex;
 			}
 		};
 
 		FTransform SpawnTransform = FTransform(FQuat(SpawnRotator), SpawnLocation, SpawnScale);
-		spawnConfig.CustomPreSpawnInitalization = doFunc;
-		ACustomFBXMeshActor* FBXActor = GetWorld()->SpawnActor<ACustomFBXMeshActor>(CurrentActorClass, SpawnTransform, spawnConfig);
+		SpawnConfig.CustomPreSpawnInitalization = DoFunc;
+		ACustomFBXMeshActor* FBXActor = GetWorld()->SpawnActor<ACustomFBXMeshActor>(CurrentActorClass, SpawnTransform, SpawnConfig);
 		customImportActorMap.Add(CustomCurrentImportID, FBXActor);
 		CustomCurrentImportID++;
 		ReplicatedActorMapWork();
@@ -356,34 +356,34 @@ void ACustomFBXImportManager::CustomHandleImportCompleted(UCustomFBXSceneImporte
 
 void ACustomFBXImportManager::OnFbxImportCompleted(class ACustomFBXMeshActor* MeshActor, UCustomFBXSceneImporter* SceneImporter)
 {
-	FTimerHandle DelayHandle;
-	GetWorld()->GetTimerManager().SetTimer(DelayHandle, FTimerDelegate::CreateLambda([&, MeshActor, SceneImporter]() {
-		SpawnMeshActor = MeshActor;
-		PMC = MeshActor->FindComponentByClass<UProceduralMeshComponent>();
-		if (PMC == nullptr) return;
-		if (PMC && IsValid(PMC)) {
-			UMaterialInstanceDynamic* MI = PMC->CreateDynamicMaterialInstance(0, BaseMat, FName(TEXT("None")));
-			if (MI) {
-				// 새로 스폰한 액터를 선택하려면 SelectActor를 두번 호출해야 함
-				SelectActor(SpawnMeshActor, PMC);
-				SelectActor(SpawnMeshActor, PMC);
-				auto Pc = Cast<AGenAiPlayerController>(GetWorld()->GetFirstPlayerController());
-				if (Pc) {
-					FString EncodeFileName = Pc->UrlEncode(SpawnMeshActor->FileName);
-					FString SavedTexturePath = TEXT("Saved/Download/") + EncodeFileName + TEXT("_mesh_albedo.png");
-					auto LoadImageASyncNode = URealTimeImportAsyncNodeLoadImageFile::LoadImageFileAsyncNode(ERTIDirectoryType::E_gd, SavedTexturePath, TextureCompressionSettings::TC_Default, false, true, false);
-					LoadImageASyncNode->Activate();
-					if (LoadImageASyncNode) {
-						LoadImageASyncNode->OnSuccess.AddDynamic(this, &ACustomFBXImportManager::OnLoadImageCompleted);
-						LoadImageASyncNode->OnFail.AddDynamic(this, &ACustomFBXImportManager::OnLoadImageFail);
-					}
+	/*FTimerHandle DelayHandle;
+	GetWorld()->GetTimerManager().SetTimer(DelayHandle, FTimerDelegate::CreateLambda([&, MeshActor, SceneImporter]() {*/
+	SpawnMeshActor = MeshActor;
+	PMC = MeshActor->FindComponentByClass<UProceduralMeshComponent>();
+	if (PMC == nullptr) return;
+	if (PMC && IsValid(PMC)) {
+		UMaterialInstanceDynamic* MI = PMC->CreateDynamicMaterialInstance(0, BaseMat, FName(TEXT("None")));
+		if (MI) {
+			// 새로 스폰한 액터를 선택하려면 SelectActor를 두번 호출해야 함
+			SelectActor(SpawnMeshActor, PMC);
+			SelectActor(SpawnMeshActor, PMC);
+			auto Pc = Cast<AGenAiPlayerController>(GetWorld()->GetFirstPlayerController());
+			if (Pc) {
+				FString EncodeFileName = Pc->UrlEncode(SpawnMeshActor->FileName);
+				FString SavedTexturePath = TEXT("Saved/Download/") + EncodeFileName + TEXT("_mesh_albedo.png");
+				auto LoadImageASyncNode = URealTimeImportAsyncNodeLoadImageFile::LoadImageFileAsyncNode(ERTIDirectoryType::E_gd, SavedTexturePath, TextureCompressionSettings::TC_Default, false, true, false);
+				LoadImageASyncNode->Activate();
+				if (LoadImageASyncNode) {
+					LoadImageASyncNode->OnSuccess.AddDynamic(this, &ACustomFBXImportManager::OnLoadImageCompleted);
+					LoadImageASyncNode->OnFail.AddDynamic(this, &ACustomFBXImportManager::OnLoadImageFail);
 				}
 			}
 		}
-		else {
+	}
+		/*else {
 			CustomHandleImportCompleted(SceneImporter);
 		}
-	}), 0.1f, false);
+	}), 0.1f, false);*/
 }
 
 void ACustomFBXImportManager::OnLoadImageCompleted(UTexture2D* texture, const FString fileName, const int32 errorCode, const FString errorMessage, const FString eventID)

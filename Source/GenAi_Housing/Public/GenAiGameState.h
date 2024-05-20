@@ -21,7 +21,7 @@ public:
 	class AHttpRequestActor* HttpRequestActor;
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
-	void ServerInsertChk(const FString& SessionName);
+	void ServerUpdateAndInsertToDB(const FString& SessionName);
 
 	UFUNCTION(BlueprintCallable)
 	class UInGameWidget* GetInGameWidget();
