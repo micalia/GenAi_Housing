@@ -14,7 +14,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #endif
 #define RUNTIMEFBXIMPORT_MeshNodeStyle_generated_h
 
-#define FID_ProgramingWorks_Unreal_GenAi_Housing_Plugins_RuntimeFBXImport_Source_RuntimeFBXImport_Public_Widgets_MeshNodeStyle_h_17_GENERATED_BODY \
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RuntimeFBXImport_Source_RuntimeFBXImport_Public_Widgets_MeshNodeStyle_h_17_GENERATED_BODY \
 	friend struct Z_Construct_UScriptStruct_FMeshNodeStyle_Statics; \
 	static class UScriptStruct* StaticStruct(); \
 	typedef FSlateWidgetStyle Super;
@@ -23,7 +23,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 template<> RUNTIMEFBXIMPORT_API UScriptStruct* StaticStruct<struct FMeshNodeStyle>();
 
 #undef CURRENT_FILE_ID
-#define CURRENT_FILE_ID FID_ProgramingWorks_Unreal_GenAi_Housing_Plugins_RuntimeFBXImport_Source_RuntimeFBXImport_Public_Widgets_MeshNodeStyle_h
+#define CURRENT_FILE_ID FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RuntimeFBXImport_Source_RuntimeFBXImport_Public_Widgets_MeshNodeStyle_h
 
 
 PRAGMA_ENABLE_DEPRECATION_WARNINGS

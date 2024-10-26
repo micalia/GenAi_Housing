@@ -1,9 +1,9 @@
-C:\ProgramingWorks\Unreal\GenAi_Housing\Plugins\RuntimeFilesDownloader\Intermediate\Build\Win64\x64\UnrealEditor\Development\RuntimeFilesDownloader\Module.RuntimeFilesDownloader.cpp
+C:\ProgrammingWorks\GenAi_Git\GenAi_Housing\Plugins\RuntimeFilesDownloader\Intermediate\Build\Win64\x64\UnrealEditor\Development\RuntimeFilesDownloader\Module.RuntimeFilesDownloader.cpp
 /I .
-/I C:\ProgramingWorks\Unreal\GenAi_Housing\Plugins\RuntimeFilesDownloader\Source\RuntimeFilesDownloader\Private
-/I C:\ProgramingWorks\Unreal\GenAi_Housing\Plugins\RuntimeFilesDownloader\Intermediate\Build\Win64\UnrealEditor\Inc\RuntimeFilesDownloader\UHT
-/I C:\ProgramingWorks\Unreal\GenAi_Housing\Plugins\RuntimeFilesDownloader\Source
-/I C:\ProgramingWorks\Unreal\GenAi_Housing\Plugins\RuntimeFilesDownloader\Source\RuntimeFilesDownloader\Public
+/I C:\ProgrammingWorks\GenAi_Git\GenAi_Housing\Plugins\RuntimeFilesDownloader\Source\RuntimeFilesDownloader\Private
+/I C:\ProgrammingWorks\GenAi_Git\GenAi_Housing\Plugins\RuntimeFilesDownloader\Intermediate\Build\Win64\UnrealEditor\Inc\RuntimeFilesDownloader\UHT
+/I C:\ProgrammingWorks\GenAi_Git\GenAi_Housing\Plugins\RuntimeFilesDownloader\Source
+/I C:\ProgrammingWorks\GenAi_Git\GenAi_Housing\Plugins\RuntimeFilesDownloader\Source\RuntimeFilesDownloader\Public
 /I ..\Intermediate\Build\Win64\UnrealEditor\Inc\CoreUObject\UHT
 /I Runtime\CoreUObject\Public
 /I Runtime
@@ -276,20 +276,21 @@ C:\ProgramingWorks\Unreal\GenAi_Housing\Plugins\RuntimeFilesDownloader\Intermedi
 /I Runtime\MovieSceneCapture\Public
 /I ..\Intermediate\Build\Win64\UnrealEditor\Inc\AnimationDataController\UHT
 /I Developer\AnimationDataController\Public
-/I ThirdParty\mimalloc\include
-/I ThirdParty\LibTiff\Source\Win64
-/I ThirdParty\LibTiff\Source
-/I "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\INCLUDE"
-/I "C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\ucrt"
-/I "C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\shared"
-/I "C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\um"
-/I "C:\Program Files (x86)\Windows Kits\10\include\10.0.18362.0\winrt"
-/FI"C:\ProgramingWorks\Unreal\GenAi_Housing\Intermediate\Build\Win64\x64\GenAi_HousingEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.InclOrderUnreal5_1.h"
-/FI"C:\ProgramingWorks\Unreal\GenAi_Housing\Plugins\RuntimeFilesDownloader\Intermediate\Build\Win64\x64\UnrealEditor\Development\RuntimeFilesDownloader\Definitions.RuntimeFilesDownloader.h"
-/Yu"C:\ProgramingWorks\Unreal\GenAi_Housing\Intermediate\Build\Win64\x64\GenAi_HousingEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.InclOrderUnreal5_1.h"
-/Fp"C:\ProgramingWorks\Unreal\GenAi_Housing\Intermediate\Build\Win64\x64\GenAi_HousingEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.InclOrderUnreal5_1.h.pch"
-/Fo"C:\ProgramingWorks\Unreal\GenAi_Housing\Plugins\RuntimeFilesDownloader\Intermediate\Build\Win64\x64\UnrealEditor\Development\RuntimeFilesDownloader\Module.RuntimeFilesDownloader.cpp.obj"
-/sourceDependencies C:\ProgramingWorks\Unreal\GenAi_Housing\Plugins\RuntimeFilesDownloader\Intermediate\Build\Win64\x64\UnrealEditor\Development\RuntimeFilesDownloader\Module.RuntimeFilesDownloader.cpp.dep.json
+/external:W0
+/external:I ThirdParty\mimalloc\include
+/external:I ThirdParty\LibTiff\Source\Win64
+/external:I ThirdParty\LibTiff\Source
+/external:I "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.34.31933\INCLUDE"
+/external:I "C:\Program Files (x86)\Windows Kits\10\include\10.0.22621.0\ucrt"
+/external:I "C:\Program Files (x86)\Windows Kits\10\include\10.0.22621.0\shared"
+/external:I "C:\Program Files (x86)\Windows Kits\10\include\10.0.22621.0\um"
+/external:I "C:\Program Files (x86)\Windows Kits\10\include\10.0.22621.0\winrt"
+/FI"C:\ProgrammingWorks\GenAi_Git\GenAi_Housing\Intermediate\Build\Win64\x64\GenAi_HousingEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.InclOrderUnreal5_1.h"
+/FI"C:\ProgrammingWorks\GenAi_Git\GenAi_Housing\Plugins\RuntimeFilesDownloader\Intermediate\Build\Win64\x64\UnrealEditor\Development\RuntimeFilesDownloader\Definitions.RuntimeFilesDownloader.h"
+/Yu"C:\ProgrammingWorks\GenAi_Git\GenAi_Housing\Intermediate\Build\Win64\x64\GenAi_HousingEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.InclOrderUnreal5_1.h"
+/Fp"C:\ProgrammingWorks\GenAi_Git\GenAi_Housing\Intermediate\Build\Win64\x64\GenAi_HousingEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.InclOrderUnreal5_1.h.pch"
+/Fo"C:\ProgrammingWorks\GenAi_Git\GenAi_Housing\Plugins\RuntimeFilesDownloader\Intermediate\Build\Win64\x64\UnrealEditor\Development\RuntimeFilesDownloader\Module.RuntimeFilesDownloader.cpp.obj"
+/sourceDependencies C:\ProgrammingWorks\GenAi_Git\GenAi_Housing\Plugins\RuntimeFilesDownloader\Intermediate\Build\Win64\x64\UnrealEditor\Development\RuntimeFilesDownloader\Module.RuntimeFilesDownloader.cpp.dep.json
 /Zc:inline
 /nologo
 /Oi

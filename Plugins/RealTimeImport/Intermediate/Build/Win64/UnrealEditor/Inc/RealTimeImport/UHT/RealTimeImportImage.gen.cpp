@@ -5,7 +5,7 @@
 ===========================================================================*/
 
 #include "UObject/GeneratedCppIncludes.h"
-#include "../../../../../../../../ProgramingWorks/Unreal/GenAi_Housing/Plugins/RealTimeImport/Source/RealTimeImport/Public/RealTimeImportImage.h"
+#include "../../../../../../../../ProgrammingWorks/GenAi_Git/GenAi_Housing/Plugins/RealTimeImport/Source/RealTimeImport/Public/RealTimeImportImage.h"
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
 void EmptyLinkFunctionForGeneratedCodeRealTimeImportImage() {}
 // Cross Module References
@@ -231,19 +231,19 @@ template<> REALTIMEIMPORT_API UScriptStruct* StaticStruct<FRTITextureToDeleteStr
 	}
 	DEFINE_VTABLE_PTR_HELPER_CTOR(URealTimeImportImage);
 	URealTimeImportImage::~URealTimeImportImage() {}
-	struct Z_CompiledInDeferFile_FID_ProgramingWorks_Unreal_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportImage_h_Statics
+	struct Z_CompiledInDeferFile_FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportImage_h_Statics
 	{
 		static const FStructRegisterCompiledInInfo ScriptStructInfo[];
 		static const FClassRegisterCompiledInInfo ClassInfo[];
 	};
-	const FStructRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ProgramingWorks_Unreal_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportImage_h_Statics::ScriptStructInfo[] = {
+	const FStructRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportImage_h_Statics::ScriptStructInfo[] = {
 		{ FRTITextureToDeleteStruct::StaticStruct, Z_Construct_UScriptStruct_FRTITextureToDeleteStruct_Statics::NewStructOps, TEXT("RTITextureToDeleteStruct"), &Z_Registration_Info_UScriptStruct_RTITextureToDeleteStruct, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FRTITextureToDeleteStruct), 1649865725U) },
 	};
-	const FClassRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ProgramingWorks_Unreal_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportImage_h_Statics::ClassInfo[] = {
+	const FClassRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportImage_h_Statics::ClassInfo[] = {
 		{ Z_Construct_UClass_URealTimeImportImage, URealTimeImportImage::StaticClass, TEXT("URealTimeImportImage"), &Z_Registration_Info_UClass_URealTimeImportImage, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(URealTimeImportImage), 1286052790U) },
 	};
-	static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ProgramingWorks_Unreal_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportImage_h_2574511429(TEXT("/Script/RealTimeImport"),
-		Z_CompiledInDeferFile_FID_ProgramingWorks_Unreal_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportImage_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_ProgramingWorks_Unreal_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportImage_h_Statics::ClassInfo),
-		Z_CompiledInDeferFile_FID_ProgramingWorks_Unreal_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportImage_h_Statics::ScriptStructInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_ProgramingWorks_Unreal_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportImage_h_Statics::ScriptStructInfo),
+	static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportImage_h_2574511429(TEXT("/Script/RealTimeImport"),
+		Z_CompiledInDeferFile_FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportImage_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportImage_h_Statics::ClassInfo),
+		Z_CompiledInDeferFile_FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportImage_h_Statics::ScriptStructInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportImage_h_Statics::ScriptStructInfo),
 		nullptr, 0);
 PRAGMA_ENABLE_DEPRECATION_WARNINGS

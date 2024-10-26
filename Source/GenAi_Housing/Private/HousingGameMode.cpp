@@ -30,10 +30,6 @@ void AHousingGameMode::PostLogin(APlayerController* NewPlayer)
 					FbxImporter->ServerCreateFBXActor(RoomObjArr, FbxImporter, Pc);
 				}
 			}
-			/*for (const FRoomInfo& RoomObjInfo : RoomObjArr)
-			{
-				CurrRoomObjArr.Add(RoomObjInfo);
-			}*/
 		}
 	}
 	++NumberOfPlayers;
@@ -47,8 +43,3 @@ void AHousingGameMode::Logout(AController* Exiting)
 		FString::Printf(TEXT("%s > %s > NuberOfPlayers: %d"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
 			*FString(__FUNCTION__), NumberOfPlayers), true, FVector2D(1, 1));
 }
-
-//TSet<FRoomInfo>& AHousingGameMode::GetRoomObjIndexArr()
-//{
-//	return CurrRoomObjArr;
-//}

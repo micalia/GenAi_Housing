@@ -5,7 +5,7 @@
 ===========================================================================*/
 
 #include "UObject/GeneratedCppIncludes.h"
-#include "../../../../../../../../ProgramingWorks/Unreal/GenAi_Housing/Plugins/RealTimeImport/Source/RealTimeImport/Public/RealTimeImport.h"
+#include "../../../../../../../../ProgrammingWorks/GenAi_Git/GenAi_Housing/Plugins/RealTimeImport/Source/RealTimeImport/Public/RealTimeImport.h"
 #include "ProceduralMeshComponent.h"
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
 void EmptyLinkFunctionForGeneratedCodeRealTimeImport() {}
@@ -1525,12 +1525,12 @@ template<> REALTIMEIMPORT_API UScriptStruct* StaticStruct<FSRealtimeImportThread
 		}
 		return Z_Registration_Info_UScriptStruct_SRealtimeImportThreadJobData.InnerSingleton;
 	}
-	struct Z_CompiledInDeferFile_FID_ProgramingWorks_Unreal_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImport_h_Statics
+	struct Z_CompiledInDeferFile_FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImport_h_Statics
 	{
 		static const FEnumRegisterCompiledInInfo EnumInfo[];
 		static const FStructRegisterCompiledInInfo ScriptStructInfo[];
 	};
-	const FEnumRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ProgramingWorks_Unreal_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImport_h_Statics::EnumInfo[] = {
+	const FEnumRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImport_h_Statics::EnumInfo[] = {
 		{ ERTIDirectoryType_StaticEnum, TEXT("ERTIDirectoryType"), &Z_Registration_Info_UEnum_ERTIDirectoryType, CONSTRUCT_RELOAD_VERSION_INFO(FEnumReloadVersionInfo, 2496365233U) },
 		{ ERTISoundFileType_StaticEnum, TEXT("ERTISoundFileType"), &Z_Registration_Info_UEnum_ERTISoundFileType, CONSTRUCT_RELOAD_VERSION_INFO(FEnumReloadVersionInfo, 1472880048U) },
 		{ ERTIExportImageType_StaticEnum, TEXT("ERTIExportImageType"), &Z_Registration_Info_UEnum_ERTIExportImageType, CONSTRUCT_RELOAD_VERSION_INFO(FEnumReloadVersionInfo, 2510432228U) },
@@ -1541,7 +1541,7 @@ template<> REALTIMEIMPORT_API UScriptStruct* StaticStruct<FSRealtimeImportThread
 		{ ERTICoordinateSystem_StaticEnum, TEXT("ERTICoordinateSystem"), &Z_Registration_Info_UEnum_ERTICoordinateSystem, CONSTRUCT_RELOAD_VERSION_INFO(FEnumReloadVersionInfo, 3212256354U) },
 		{ ERTIERGBFormat_StaticEnum, TEXT("ERTIERGBFormat"), &Z_Registration_Info_UEnum_ERTIERGBFormat, CONSTRUCT_RELOAD_VERSION_INFO(FEnumReloadVersionInfo, 178463377U) },
 	};
-	const FStructRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ProgramingWorks_Unreal_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImport_h_Statics::ScriptStructInfo[] = {
+	const FStructRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImport_h_Statics::ScriptStructInfo[] = {
 		{ FRTITextureStruct::StaticStruct, Z_Construct_UScriptStruct_FRTITextureStruct_Statics::NewStructOps, TEXT("RTITextureStruct"), &Z_Registration_Info_UScriptStruct_RTITextureStruct, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FRTITextureStruct), 145284957U) },
 		{ FRTIMaterialStruct::StaticStruct, Z_Construct_UScriptStruct_FRTIMaterialStruct_Statics::NewStructOps, TEXT("RTIMaterialStruct"), &Z_Registration_Info_UScriptStruct_RTIMaterialStruct, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FRTIMaterialStruct), 1116262568U) },
 		{ FRTIMeshStruct::StaticStruct, Z_Construct_UScriptStruct_FRTIMeshStruct_Statics::NewStructOps, TEXT("RTIMeshStruct"), &Z_Registration_Info_UScriptStruct_RTIMeshStruct, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FRTIMeshStruct), 3672742129U) },
@@ -1550,8 +1550,8 @@ template<> REALTIMEIMPORT_API UScriptStruct* StaticStruct<FSRealtimeImportThread
 		{ FRTISoundDataStruct::StaticStruct, Z_Construct_UScriptStruct_FRTISoundDataStruct_Statics::NewStructOps, TEXT("RTISoundDataStruct"), &Z_Registration_Info_UScriptStruct_RTISoundDataStruct, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FRTISoundDataStruct), 4111946736U) },
 		{ FSRealtimeImportThreadJobData::StaticStruct, Z_Construct_UScriptStruct_FSRealtimeImportThreadJobData_Statics::NewStructOps, TEXT("SRealtimeImportThreadJobData"), &Z_Registration_Info_UScriptStruct_SRealtimeImportThreadJobData, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FSRealtimeImportThreadJobData), 2926770002U) },
 	};
-	static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ProgramingWorks_Unreal_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImport_h_620074177(TEXT("/Script/RealTimeImport"),
+	static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImport_h_620074177(TEXT("/Script/RealTimeImport"),
 		nullptr, 0,
-		Z_CompiledInDeferFile_FID_ProgramingWorks_Unreal_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImport_h_Statics::ScriptStructInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_ProgramingWorks_Unreal_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImport_h_Statics::ScriptStructInfo),
-		Z_CompiledInDeferFile_FID_ProgramingWorks_Unreal_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImport_h_Statics::EnumInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_ProgramingWorks_Unreal_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImport_h_Statics::EnumInfo));
+		Z_CompiledInDeferFile_FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImport_h_Statics::ScriptStructInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImport_h_Statics::ScriptStructInfo),
+		Z_CompiledInDeferFile_FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImport_h_Statics::EnumInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImport_h_Statics::EnumInfo));
 PRAGMA_ENABLE_DEPRECATION_WARNINGS

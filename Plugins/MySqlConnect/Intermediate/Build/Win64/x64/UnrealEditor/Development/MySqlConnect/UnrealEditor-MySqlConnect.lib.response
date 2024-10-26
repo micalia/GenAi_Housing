@@ -6,7 +6,11 @@
 /NAME:"UnrealEditor-MySqlConnect.dll"
 /IGNORE:4221
 /NODEFAULTLIB
-"C:\ProgramingWorks\Unreal\GenAi_Housing\Intermediate\Build\Win64\x64\GenAi_HousingEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.InclOrderUnreal5_1.h.obj"
-"C:\ProgramingWorks\Unreal\GenAi_Housing\Plugins\MySqlConnect\Intermediate\Build\Win64\x64\UnrealEditor\Development\MySqlConnect\Module.MySqlConnect.cpp.obj"
-"C:\ProgramingWorks\Unreal\GenAi_Housing\Plugins\MySqlConnect\Intermediate\Build\Win64\x64\UnrealEditor\Development\MySqlConnect\Default.rc2.res"
-/OUT:"C:\ProgramingWorks\Unreal\GenAi_Housing\Plugins\MySqlConnect\Intermediate\Build\Win64\x64\UnrealEditor\Development\MySqlConnect\UnrealEditor-MySqlConnect.lib"
+"C:\ProgrammingWorks\GenAi_Git\GenAi_Housing\Intermediate\Build\Win64\x64\GenAi_HousingEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.InclOrderUnreal5_1.h.obj"
+"C:\ProgrammingWorks\GenAi_Git\GenAi_Housing\Plugins\MySqlConnect\Intermediate\Build\Win64\x64\UnrealEditor\Development\MySqlConnect\Module.MySqlConnect.cpp.obj"
+"C:\ProgrammingWorks\GenAi_Git\GenAi_Housing\Plugins\MySqlConnect\Intermediate\Build\Win64\x64\UnrealEditor\Development\MySqlConnect\MySqlConnect.init.gen.cpp.obj"
+"C:\ProgrammingWorks\GenAi_Git\GenAi_Housing\Plugins\MySqlConnect\Intermediate\Build\Win64\x64\UnrealEditor\Development\MySqlConnect\MySQLConnection.gen.cpp.obj"
+"C:\ProgrammingWorks\GenAi_Git\GenAi_Housing\Plugins\MySqlConnect\Intermediate\Build\Win64\x64\UnrealEditor\Development\MySqlConnect\MySQLConnectorStructs.gen.cpp.obj"
+"C:\ProgrammingWorks\GenAi_Git\GenAi_Housing\Plugins\MySqlConnect\Intermediate\Build\Win64\x64\UnrealEditor\Development\MySqlConnect\MySQLDatabase.gen.cpp.obj"
+"C:\ProgrammingWorks\GenAi_Git\GenAi_Housing\Plugins\MySqlConnect\Intermediate\Build\Win64\x64\UnrealEditor\Development\MySqlConnect\Default.rc2.res"
+/OUT:"C:\ProgrammingWorks\GenAi_Git\GenAi_Housing\Plugins\MySqlConnect\Intermediate\Build\Win64\x64\UnrealEditor\Development\MySqlConnect\UnrealEditor-MySqlConnect.lib"

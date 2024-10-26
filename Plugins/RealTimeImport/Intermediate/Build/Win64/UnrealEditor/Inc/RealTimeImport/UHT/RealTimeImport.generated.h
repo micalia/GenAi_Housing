@@ -14,49 +14,49 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #endif
 #define REALTIMEIMPORT_RealTimeImport_generated_h
 
-#define FID_ProgramingWorks_Unreal_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImport_h_182_GENERATED_BODY \
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImport_h_182_GENERATED_BODY \
 	friend struct Z_Construct_UScriptStruct_FRTITextureStruct_Statics; \
 	REALTIMEIMPORT_API static class UScriptStruct* StaticStruct();
 
 
 template<> REALTIMEIMPORT_API UScriptStruct* StaticStruct<struct FRTITextureStruct>();
 
-#define FID_ProgramingWorks_Unreal_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImport_h_200_GENERATED_BODY \
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImport_h_200_GENERATED_BODY \
 	friend struct Z_Construct_UScriptStruct_FRTIMaterialStruct_Statics; \
 	REALTIMEIMPORT_API static class UScriptStruct* StaticStruct();
 
 
 template<> REALTIMEIMPORT_API UScriptStruct* StaticStruct<struct FRTIMaterialStruct>();
 
-#define FID_ProgramingWorks_Unreal_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImport_h_292_GENERATED_BODY \
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImport_h_292_GENERATED_BODY \
 	friend struct Z_Construct_UScriptStruct_FRTIMeshStruct_Statics; \
 	REALTIMEIMPORT_API static class UScriptStruct* StaticStruct();
 
 
 template<> REALTIMEIMPORT_API UScriptStruct* StaticStruct<struct FRTIMeshStruct>();
 
-#define FID_ProgramingWorks_Unreal_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImport_h_328_GENERATED_BODY \
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImport_h_328_GENERATED_BODY \
 	friend struct Z_Construct_UScriptStruct_FRTIModelStruct_Statics; \
 	REALTIMEIMPORT_API static class UScriptStruct* StaticStruct();
 
 
 template<> REALTIMEIMPORT_API UScriptStruct* StaticStruct<struct FRTIModelStruct>();
 
-#define FID_ProgramingWorks_Unreal_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImport_h_345_GENERATED_BODY \
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImport_h_345_GENERATED_BODY \
 	friend struct Z_Construct_UScriptStruct_FRTIWavPlayAsyncStruct_Statics; \
 	REALTIMEIMPORT_API static class UScriptStruct* StaticStruct();
 
 
 template<> REALTIMEIMPORT_API UScriptStruct* StaticStruct<struct FRTIWavPlayAsyncStruct>();
 
-#define FID_ProgramingWorks_Unreal_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImport_h_365_GENERATED_BODY \
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImport_h_365_GENERATED_BODY \
 	friend struct Z_Construct_UScriptStruct_FRTISoundDataStruct_Statics; \
 	REALTIMEIMPORT_API static class UScriptStruct* StaticStruct();
 
 
 template<> REALTIMEIMPORT_API UScriptStruct* StaticStruct<struct FRTISoundDataStruct>();
 
-#define FID_ProgramingWorks_Unreal_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImport_h_378_GENERATED_BODY \
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImport_h_378_GENERATED_BODY \
 	friend struct Z_Construct_UScriptStruct_FSRealtimeImportThreadJobData_Statics; \
 	REALTIMEIMPORT_API static class UScriptStruct* StaticStruct();
 
@@ -64,7 +64,7 @@ template<> REALTIMEIMPORT_API UScriptStruct* StaticStruct<struct FRTISoundDataSt
 template<> REALTIMEIMPORT_API UScriptStruct* StaticStruct<struct FSRealtimeImportThreadJobData>();
 
 #undef CURRENT_FILE_ID
-#define CURRENT_FILE_ID FID_ProgramingWorks_Unreal_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImport_h
+#define CURRENT_FILE_ID FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImport_h
 
 
 #define FOREACH_ENUM_ERTIDIRECTORYTYPE(op) \

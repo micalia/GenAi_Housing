@@ -165,33 +165,6 @@ void AGenAiPlayerController::LoadFbxFilesToFbxActor()
 	}
 }
 
-void AGenAiPlayerController::TestQueue()
-{
-	/*ACustomFBXMeshActor* HeadElement = nullptr;
-	if (!LoadFbxActorQueue.IsEmpty()) {
-		LoadFbxActorQueue.Dequeue(HeadElement);
-		CheckUObjectIsNull(HeadElement, TEXT("LoadFbxActorQueue"));
-		CheckUObjectIsValid(HeadElement, TEXT("LoadFbxActorQueue"));
-	}
-	else {
-		GEngine->AddOnScreenDebugMessage(-1, 9999, FColor::Purple, 
-			FString::Printf(TEXT("%s > %s > LoadFbxActorQueue Empty!"), 
-				*FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")),
-				*FString(__FUNCTION__)), true, FVector2D(1, 1));
-	}*/
-	
-	//GEngine->AddOnScreenDebugMessage(-1, 9999, FColor::Purple,
-	//	FString::Printf(TEXT("%s > %s > --------------------------------------"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__)), true, FVector2D(1, 1));
-	/*if (chk) {
-		GEngine->AddOnScreenDebugMessage(-1, 9999, FColor::Purple, FString::Printf(TEXT("%s > %s > chk false"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__)), true, FVector2D(1, 1));
-		chk = false;
-	}
-	else {
-		GEngine->AddOnScreenDebugMessage(-1, 9999, FColor::Purple, FString::Printf(TEXT("%s > %s > chk true"), *FDateTime::UtcNow().ToString(TEXT("%H:%M:%S")), *FString(__FUNCTION__)), true, FVector2D(1, 1));
-		chk = true;
-	}*/
-}
-
 void AGenAiPlayerController::ModelingDown(const FString& FileName, FTransform SpawnTrans, class ACustomFBXImportManager* FbxImportManager, class AGenAiPlayerController* PlayerController, int32 CurrImportID)
 {
 	FString EncodeFileName = UKismetStringLibrary::Replace(FileName, TEXT("'"), UrlEncode(TEXT("'")));

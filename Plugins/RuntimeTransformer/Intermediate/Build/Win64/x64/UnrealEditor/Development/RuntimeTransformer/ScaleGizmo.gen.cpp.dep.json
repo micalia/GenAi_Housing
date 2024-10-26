@@ -1,0 +1,19 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "c:\\programmingworks\\genai_git\\genai_housing\\plugins\\runtimetransformer\\intermediate\\build\\win64\\unrealeditor\\inc\\runtimetransformer\\uht\\scalegizmo.gen.cpp",
+        "ProvidedModule": "",
+        "PCH": "c:\\programmingworks\\genai_git\\genai_housing\\intermediate\\build\\win64\\x64\\genai_housingeditor\\development\\engine\\sharedpch.engine.shadowerrors.inclorderunreal5_1.h.pch",
+        "Includes": [
+            "c:\\programmingworks\\genai_git\\genai_housing\\plugins\\runtimetransformer\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\runtimetransformer\\definitions.runtimetransformer.h",
+            "c:\\programmingworks\\genai_git\\genai_housing\\plugins\\runtimetransformer\\source\\runtimetransformer\\public\\gizmos\\scalegizmo.h",
+            "c:\\programmingworks\\genai_git\\genai_housing\\plugins\\runtimetransformer\\source\\runtimetransformer\\public\\gizmos\\basegizmo.h",
+            "c:\\programmingworks\\genai_git\\genai_housing\\plugins\\runtimetransformer\\source\\runtimetransformer\\public\\runtimetransformer.h",
+            "c:\\programmingworks\\genai_git\\genai_housing\\plugins\\runtimetransformer\\intermediate\\build\\win64\\unrealeditor\\inc\\runtimetransformer\\uht\\runtimetransformer.generated.h",
+            "c:\\programmingworks\\genai_git\\genai_housing\\plugins\\runtimetransformer\\intermediate\\build\\win64\\unrealeditor\\inc\\runtimetransformer\\uht\\basegizmo.generated.h",
+            "c:\\programmingworks\\genai_git\\genai_housing\\plugins\\runtimetransformer\\intermediate\\build\\win64\\unrealeditor\\inc\\runtimetransformer\\uht\\scalegizmo.generated.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

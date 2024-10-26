@@ -2,6 +2,13 @@
 	"RemapUnityFiles": 
 	{
 		"Module.RuntimeTransformer.cpp.obj": [
+			"FocusableObject.cpp.obj",
+			"BaseGizmo.cpp.obj",
+			"RotationGizmo.cpp.obj",
+			"ScaleGizmo.cpp.obj",
+			"TranslationGizmo.cpp.obj",
+			"RuntimeTransformer.cpp.obj",
+			"TransformerPawn.cpp.obj",
 			"BaseGizmo.gen.cpp.obj",
 			"FocusableObject.gen.cpp.obj",
 			"RotationGizmo.gen.cpp.obj",
@@ -9,14 +16,7 @@
 			"RuntimeTransformer.init.gen.cpp.obj",
 			"ScaleGizmo.gen.cpp.obj",
 			"TransformerPawn.gen.cpp.obj",
-			"TranslationGizmo.gen.cpp.obj",
-			"FocusableObject.cpp.obj",
-			"BaseGizmo.cpp.obj",
-			"RotationGizmo.cpp.obj",
-			"ScaleGizmo.cpp.obj",
-			"TranslationGizmo.cpp.obj",
-			"RuntimeTransformer.cpp.obj",
-			"TransformerPawn.cpp.obj"
+			"TranslationGizmo.gen.cpp.obj"
 		]
 	}
 }

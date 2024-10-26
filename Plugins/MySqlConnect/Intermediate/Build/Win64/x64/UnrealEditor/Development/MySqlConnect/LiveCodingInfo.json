@@ -2,13 +2,13 @@
 	"RemapUnityFiles": 
 	{
 		"Module.MySqlConnect.cpp.obj": [
+			"MySQLConnection.cpp.obj",
+			"MySQLConnector.cpp.obj",
+			"MySQLDatabase.cpp.obj",
 			"MySqlConnect.init.gen.cpp.obj",
 			"MySQLConnection.gen.cpp.obj",
 			"MySQLConnectorStructs.gen.cpp.obj",
-			"MySQLDatabase.gen.cpp.obj",
-			"MySQLConnection.cpp.obj",
-			"MySQLConnector.cpp.obj",
-			"MySQLDatabase.cpp.obj"
+			"MySQLDatabase.gen.cpp.obj"
 		]
 	}
 }

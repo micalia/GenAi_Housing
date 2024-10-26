@@ -125,8 +125,6 @@ public:
 
 	UPROPERTY()
 	class UProceduralMeshComponent* PMC;
-	//UPROPERTY()
-	//class URealTimeImportAsyncNodeLoadImageFile* LoadImageASyncNode;
 
 	UPROPERTY(BlueprintReadWrite, Replicated)
 	class ACustomFBXMeshActor* SpawnMeshActor;
@@ -136,15 +134,6 @@ public:
 	UPROPERTY()
 	class UMaterialInterface* BaseMat;
 
-	//FTimerHandle LoadObjDelay;
-	/*
-
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void ResetSelectionActor();
-
-	UFUNCTION(BlueprintCallable)
-	UProceduralMeshComponent* RecalculateNormal(class UProceduralMeshComponent* mesh);
-*/
 	UFUNCTION(BlueprintCallable)
 	FString BytesToString(const TArray<uint8>& InBytes);
 	UFUNCTION(BlueprintCallable)

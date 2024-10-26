@@ -27,9 +27,7 @@ void UCustomFBXSceneImporter::ProcessNode(UMeshNode* CurrentNode, FbxAMatrix Par
 						{
 							CustomOnMeshNodeCreated.Broadcast(FBXImportSettings->ImportID, NewMeshNode, FBXImportSettings->SpawnTransform);
 						});
-
 				}
-
 			}
 
 			for (UMeshNode* ChildNode : CurrentNode->GetChildren())

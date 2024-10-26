@@ -1,0 +1,13 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "c:\\programmingworks\\genai_git\\genai_housing\\plugins\\mysqlconnect\\intermediate\\build\\win64\\unrealeditor\\inc\\mysqlconnect\\uht\\mysqlconnect.init.gen.cpp",
+        "ProvidedModule": "",
+        "PCH": "c:\\programmingworks\\genai_git\\genai_housing\\intermediate\\build\\win64\\x64\\genai_housingeditor\\development\\engine\\sharedpch.engine.shadowerrors.inclorderunreal5_1.h.pch",
+        "Includes": [
+            "c:\\programmingworks\\genai_git\\genai_housing\\plugins\\mysqlconnect\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\mysqlconnect\\definitions.mysqlconnect.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}
