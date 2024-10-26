@@ -1,0 +1,12 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UnrealEditor-MySqlConnect.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"C:\ProgramingWorks\Unreal\GenAi_Housing\Intermediate\Build\Win64\x64\GenAi_HousingEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.InclOrderUnreal5_1.h.obj"
+"C:\ProgramingWorks\Unreal\GenAi_Housing\Plugins\MySqlConnect\Intermediate\Build\Win64\x64\UnrealEditor\Development\MySqlConnect\Module.MySqlConnect.cpp.obj"
+"C:\ProgramingWorks\Unreal\GenAi_Housing\Plugins\MySqlConnect\Intermediate\Build\Win64\x64\UnrealEditor\Development\MySqlConnect\Default.rc2.res"
+/OUT:"C:\ProgramingWorks\Unreal\GenAi_Housing\Plugins\MySqlConnect\Intermediate\Build\Win64\x64\UnrealEditor\Development\MySqlConnect\UnrealEditor-MySqlConnect.lib"

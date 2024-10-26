@@ -1,0 +1,13 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UnrealEditor-RuntimeTransformer-Win64-DebugGame.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"C:\ProgramingWorks\Unreal\GenAi_Housing\Intermediate\Build\Win64\x64\GenAi_HousingEditor\DebugGame\Engine\SharedPCH.Engine.NonOptimized.ShadowErrors.InclOrderUnreal5_1.h.obj"
+"C:\ProgramingWorks\Unreal\GenAi_Housing\Plugins\RuntimeTransformer\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\RuntimeTransformer\Module.RuntimeTransformer.cpp.obj"
+"C:\ProgramingWorks\Unreal\GenAi_Housing\Plugins\RuntimeTransformer\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\RuntimeTransformer\TransformerPawn.cpp.obj"
+"C:\ProgramingWorks\Unreal\GenAi_Housing\Plugins\RuntimeTransformer\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\RuntimeTransformer\Default.rc2.res"
+/OUT:"C:\ProgramingWorks\Unreal\GenAi_Housing\Plugins\RuntimeTransformer\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\RuntimeTransformer\UnrealEditor-RuntimeTransformer-Win64-DebugGame.lib"

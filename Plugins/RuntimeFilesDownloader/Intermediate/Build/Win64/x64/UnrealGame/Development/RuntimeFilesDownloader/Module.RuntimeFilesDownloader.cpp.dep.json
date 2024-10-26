@@ -1,0 +1,41 @@
+{
+    "Version": "1.1",
+    "Data": {
+        "Source": "c:\\programingworks\\unreal\\genai_housing\\plugins\\runtimefilesdownloader\\intermediate\\build\\win64\\x64\\unrealgame\\development\\runtimefilesdownloader\\module.runtimefilesdownloader.cpp",
+        "ProvidedModule": "",
+        "PCH": "c:\\programingworks\\unreal\\genai_housing\\intermediate\\build\\win64\\x64\\genai_housing\\development\\engine\\sharedpch.engine.shadowerrors.inclorderunreal5_1.h.pch",
+        "Includes": [
+            "c:\\programingworks\\unreal\\genai_housing\\plugins\\runtimefilesdownloader\\intermediate\\build\\win64\\x64\\unrealgame\\development\\runtimefilesdownloader\\definitions.runtimefilesdownloader.h",
+            "c:\\programingworks\\unreal\\genai_housing\\plugins\\runtimefilesdownloader\\intermediate\\build\\win64\\unrealgame\\inc\\runtimefilesdownloader\\uht\\basefilesdownloader.gen.cpp",
+            "c:\\programingworks\\unreal\\genai_housing\\plugins\\runtimefilesdownloader\\source\\runtimefilesdownloader\\public\\basefilesdownloader.h",
+            "c:\\program files\\epic games\\ue_5.2\\engine\\source\\runtime\\online\\http\\public\\http.h",
+            "c:\\program files\\epic games\\ue_5.2\\engine\\source\\runtime\\online\\http\\public\\httpmodule.h",
+            "c:\\program files\\epic games\\ue_5.2\\engine\\source\\runtime\\online\\http\\public\\interfaces\\ihttprequest.h",
+            "c:\\program files\\epic games\\ue_5.2\\engine\\source\\runtime\\online\\http\\public\\interfaces\\ihttpbase.h",
+            "c:\\program files\\epic games\\ue_5.2\\engine\\source\\runtime\\online\\http\\public\\interfaces\\ihttpresponse.h",
+            "c:\\program files\\epic games\\ue_5.2\\engine\\source\\runtime\\online\\http\\public\\platformhttp.h",
+            "c:\\program files\\epic games\\ue_5.2\\engine\\source\\runtime\\online\\http\\public\\windows\\windowsplatformhttp.h",
+            "c:\\program files\\epic games\\ue_5.2\\engine\\source\\runtime\\online\\http\\public\\genericplatform\\genericplatformhttp.h",
+            "c:\\program files\\epic games\\ue_5.2\\engine\\source\\runtime\\core\\public\\misc\\engineversioncomparison.h",
+            "c:\\programingworks\\unreal\\genai_housing\\plugins\\runtimefilesdownloader\\intermediate\\build\\win64\\unrealgame\\inc\\runtimefilesdownloader\\uht\\basefilesdownloader.generated.h",
+            "c:\\programingworks\\unreal\\genai_housing\\plugins\\runtimefilesdownloader\\intermediate\\build\\win64\\unrealgame\\inc\\runtimefilesdownloader\\uht\\filetomemorydownloader.gen.cpp",
+            "c:\\programingworks\\unreal\\genai_housing\\plugins\\runtimefilesdownloader\\source\\runtimefilesdownloader\\public\\filetomemorydownloader.h",
+            "c:\\programingworks\\unreal\\genai_housing\\plugins\\runtimefilesdownloader\\intermediate\\build\\win64\\unrealgame\\inc\\runtimefilesdownloader\\uht\\filetomemorydownloader.generated.h",
+            "c:\\programingworks\\unreal\\genai_housing\\plugins\\runtimefilesdownloader\\intermediate\\build\\win64\\unrealgame\\inc\\runtimefilesdownloader\\uht\\filetostoragedownloader.gen.cpp",
+            "c:\\programingworks\\unreal\\genai_housing\\plugins\\runtimefilesdownloader\\source\\runtimefilesdownloader\\public\\filetostoragedownloader.h",
+            "c:\\programingworks\\unreal\\genai_housing\\plugins\\runtimefilesdownloader\\intermediate\\build\\win64\\unrealgame\\inc\\runtimefilesdownloader\\uht\\filetostoragedownloader.generated.h",
+            "c:\\programingworks\\unreal\\genai_housing\\plugins\\runtimefilesdownloader\\intermediate\\build\\win64\\unrealgame\\inc\\runtimefilesdownloader\\uht\\runtimefilesdownloader.init.gen.cpp",
+            "c:\\programingworks\\unreal\\genai_housing\\plugins\\runtimefilesdownloader\\source\\runtimefilesdownloader\\private\\basefilesdownloader.cpp",
+            "c:\\programingworks\\unreal\\genai_housing\\plugins\\runtimefilesdownloader\\source\\runtimefilesdownloader\\public\\runtimefilesdownloaderdefines.h",
+            "c:\\program files\\epic games\\ue_5.2\\engine\\source\\runtime\\engine\\public\\imageutils.h",
+            "c:\\programingworks\\unreal\\genai_housing\\plugins\\runtimefilesdownloader\\source\\runtimefilesdownloader\\public\\runtimechunkdownloader.h",
+            "c:\\programingworks\\unreal\\genai_housing\\plugins\\runtimefilesdownloader\\source\\runtimefilesdownloader\\private\\filetomemorydownloader.cpp",
+            "c:\\programingworks\\unreal\\genai_housing\\plugins\\runtimefilesdownloader\\source\\runtimefilesdownloader\\private\\filetostoragedownloader.cpp",
+            "c:\\programingworks\\unreal\\genai_housing\\plugins\\runtimefilesdownloader\\source\\runtimefilesdownloader\\private\\runtimechunkdownloader.cpp",
+            "c:\\programingworks\\unreal\\genai_housing\\plugins\\runtimefilesdownloader\\source\\runtimefilesdownloader\\private\\runtimefilesdownloader.cpp",
+            "c:\\programingworks\\unreal\\genai_housing\\plugins\\runtimefilesdownloader\\source\\runtimefilesdownloader\\public\\runtimefilesdownloader.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

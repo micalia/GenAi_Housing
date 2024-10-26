@@ -1,0 +1,12 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UnrealEditor-RuntimeFBXImport-Win64-DebugGame.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"C:\ProgramingWorks\Unreal\GenAi_Housing\Intermediate\Build\Win64\x64\GenAi_HousingEditor\DebugGame\Engine\SharedPCH.Engine.NonOptimized.ShadowErrors.InclOrderUnreal5_1.h.obj"
+"C:\ProgramingWorks\Unreal\GenAi_Housing\Plugins\RuntimeFBXImport\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\RuntimeFBXImport\Module.RuntimeFBXImport.cpp.obj"
+"C:\ProgramingWorks\Unreal\GenAi_Housing\Plugins\RuntimeFBXImport\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\RuntimeFBXImport\Default.rc2.res"
+/OUT:"C:\ProgramingWorks\Unreal\GenAi_Housing\Plugins\RuntimeFBXImport\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\RuntimeFBXImport\UnrealEditor-RuntimeFBXImport-Win64-DebugGame.lib"

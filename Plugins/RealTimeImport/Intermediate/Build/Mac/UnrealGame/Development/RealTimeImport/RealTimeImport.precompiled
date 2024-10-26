@@ -1,0 +1,16 @@
+{
+	"OutputFiles": [
+		"../../../arm64/UnrealGame/Development/RealTimeImport/Module.RealTimeImport.1_of_3.cpp.o",
+		"../../../arm64/UnrealGame/Development/RealTimeImport/Module.RealTimeImport.2_of_3.cpp.o",
+		"../../../arm64/UnrealGame/Development/RealTimeImport/Module.RealTimeImport.3_of_3.cpp.o",
+		"../../../arm64/UnrealGame/Development/RealTimeImport/Module.RealTimeImport.1_of_3.cpp.o",
+		"../../../arm64/UnrealGame/Development/RealTimeImport/Module.RealTimeImport.2_of_3.cpp.o",
+		"../../../arm64/UnrealGame/Development/RealTimeImport/Module.RealTimeImport.3_of_3.cpp.o",
+		"../../../x64/UnrealGame/Development/RealTimeImport/Module.RealTimeImport.1_of_3.cpp.o",
+		"../../../x64/UnrealGame/Development/RealTimeImport/Module.RealTimeImport.2_of_3.cpp.o",
+		"../../../x64/UnrealGame/Development/RealTimeImport/Module.RealTimeImport.3_of_3.cpp.o",
+		"../../../x64/UnrealGame/Development/RealTimeImport/Module.RealTimeImport.1_of_3.cpp.o",
+		"../../../x64/UnrealGame/Development/RealTimeImport/Module.RealTimeImport.2_of_3.cpp.o",
+		"../../../x64/UnrealGame/Development/RealTimeImport/Module.RealTimeImport.3_of_3.cpp.o"
+	]
+}
