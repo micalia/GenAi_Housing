@@ -1,31 +1,5 @@
 {
 	"RemapUnityFiles": 
 	{
-		"Module.RealTimeImport.1_of_2.cpp.obj": [
-			"FileFunctionsRealTimeImport.cpp.obj",
-			"FileFunctionsRealTimeImport.gen.cpp.obj",
-			"RealTimeImport.gen.cpp.obj",
-			"RealTimeImport.init.gen.cpp.obj",
-			"RealTimeImportAsyncNodes.gen.cpp.obj",
-			"RealTimeImportBPLibrary.gen.cpp.obj",
-			"RealTimeImportImage.gen.cpp.obj",
-			"RealTimeImportMesh.gen.cpp.obj",
-			"RealTimeImportMeshFBX.gen.cpp.obj",
-			"RealTimeImportMeshOBJ.gen.cpp.obj",
-			"RealTimeImportMeshSTL.gen.cpp.obj",
-			"RealTimeImportSound.gen.cpp.obj"
-		],
-		"Module.RealTimeImport.2_of_2.cpp.obj": [
-			"RealTimeImport.cpp.obj",
-			"RealTimeImportAsyncNodes.cpp.obj",
-			"RealTimeImportBPLibrary.cpp.obj",
-			"RealTimeImportImage.cpp.obj",
-			"RealTimeImportMesh.cpp.obj",
-			"RealTimeImportMeshFBX.cpp.obj",
-			"RealTimeImportMeshOBJ.cpp.obj",
-			"RealTimeImportMeshSTL.cpp.obj",
-			"RealTimeImportSound.cpp.obj",
-			"RealTimeImportThread.cpp.obj"
-		]
 	}
 }

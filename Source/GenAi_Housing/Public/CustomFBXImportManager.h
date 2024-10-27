@@ -76,11 +76,11 @@ public:
 	UFUNCTION(Server, Reliable)	// 방에 첫번째 사람이 입장했을때 실행되는 함수
 	void ServerCreateFBXActor(const TArray<FRoomInfo>& InRoomInfoArr, class ACustomFBXImportManager* fbxImporter, class AGenAiPlayerController* PlayerController);
 
-	UPROPERTY(BlueprintReadOnly, Category = "Import")
-	TMap<int32, class ACustomFBXMeshActor*> customImportActorMap;
-
 	UPROPERTY(BlueprintReadWrite, Replicated)
 	int32 CustomCurrentImportID;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Import")
+	TMap<int32, class ACustomFBXMeshActor*> customImportActorMap;
 
 	void ReplicatedActorMapWork();
 
