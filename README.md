@@ -3,5 +3,7 @@
 
 # 한국컴퓨터게임학회지 논문
 [Design and Implementation of Metaverse Content Prototype Using Generative AI-based 3D Modeling](https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=ART003093391)
+
+시연 영상 : https://youtu.be/C0XIUy_qUfc
 ------------
 ![Preview](https://github.com/user-attachments/assets/fa2d3dd1-2de2-4cca-bb78-8f093ab61f8f)
