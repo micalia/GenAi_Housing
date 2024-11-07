@@ -12,19 +12,19 @@
 # DB ERD
 ![db 구성](https://github.com/user-attachments/assets/4b3ac833-44b1-4908-b3be-8bdccc70aafe)
 
-# Point 1. 데이터베이스 연동
+## Point 1. 데이터베이스 연동
 [HttpRequestActor.cpp](https://github.com/micalia/GenAi_Housing/blob/main/Source/GenAi_Housing/Private/HttpRequestActor.cpp#L135)
 ![db](https://github.com/user-attachments/assets/210a8ab1-ed7e-48da-a298-be11df67b061)
 
-# Point 2. DB에 저장돼 있던 특정 유저의 방 오브젝트(FBXMeshActor) 정보 파싱
+## Point 2. DB에 저장돼 있던 특정 유저의 방 오브젝트(FBXMeshActor) 정보 파싱
 [CustomFBXImportManager.cpp](https://github.com/micalia/GenAi_Housing/blob/main/Source/GenAi_Housing/Private/CustomFBXImportManager.cpp#L141)
 <br>
 ![roomInfo](https://github.com/user-attachments/assets/9acf9416-c8c9-44b1-94e9-017e5f36f84d)
 
-# Point 3. TQueue자료형을 활용하여 오브젝트(FBXMeshActor)들을 순차적으로 모델링 다운 및 임포트 처리
+## Point 3. TQueue자료형을 활용하여 오브젝트(FBXMeshActor)들을 순차적으로 모델링 다운 및 임포트 처리
 [GenAiPlayerController.cpp](https://github.com/micalia/GenAi_Housing/blob/main/Source/GenAi_Housing/Private/GenAiPlayerController.cpp#L126)
 
-# Point 4. TArray를 활용한 TMap Replicate 구현
+## Point 4. TArray를 활용한 TMap Replicate 구현
 [CustomFBXImportManager.cpp](https://github.com/micalia/GenAi_Housing/blob/main/Source/GenAi_Housing/Private/CustomFBXImportManager.cpp#L237)
 
 ------------
