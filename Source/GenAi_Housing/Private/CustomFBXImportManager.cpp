@@ -237,7 +237,7 @@ void ACustomFBXImportManager::ServerCreateFBXActor_Implementation(const TArray<F
 void ACustomFBXImportManager::ReplicatedActorMapWork()
 {
 	if (HasAuthority()) {
-		customImportActorArray.Reset();
+		customImportActorArray.Reset(); // 서버에서는 월드에 존재하는 액터를 Map형태로 관리함
 		const TArray<TPair<int32, ACustomFBXMeshActor*>>& PairArray = customImportActorMap.Array();
 		for (const TPair<int32, ACustomFBXMeshActor*>& Pair : PairArray)
 		{
