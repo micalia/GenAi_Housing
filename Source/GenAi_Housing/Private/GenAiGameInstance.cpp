@@ -51,17 +51,6 @@ void UGenAiGameInstance::Init()
 	}
 }
 
-//void UGenAiGameInstance::Shutdown() {
-//	Super::Shutdown();
-//
-//	/*for (TActorIterator<ACustomFBXImportManager> it(GetWorld()); it; ++it) {
-//		ACustomFBXImportManager* ImportManager = *it;
-//		if (ImportManager) {
-//			ImportManager->customImportFBXTask->IsDone();
-//		}
-//	}*/
-//}
-
 void UGenAiGameInstance::LoadMenuWidget()
 {
 	if (!ensure(MenuClass != nullptr)) return;

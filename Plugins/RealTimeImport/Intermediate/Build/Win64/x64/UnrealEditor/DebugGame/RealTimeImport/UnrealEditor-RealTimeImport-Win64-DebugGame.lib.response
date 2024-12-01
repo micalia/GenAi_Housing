@@ -1,0 +1,14 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UnrealEditor-RealTimeImport-Win64-DebugGame.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"C:\ProgramingWorks\Unreal\GenAi_Housing\Intermediate\Build\Win64\x64\GenAi_HousingEditor\DebugGame\Engine\SharedPCH.Engine.NonOptimized.ShadowErrors.InclOrderUnreal5_1.h.obj"
+"C:\ProgramingWorks\Unreal\GenAi_Housing\Plugins\RealTimeImport\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\RealTimeImport\Module.RealTimeImport.1_of_3.cpp.obj"
+"C:\ProgramingWorks\Unreal\GenAi_Housing\Plugins\RealTimeImport\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\RealTimeImport\Module.RealTimeImport.2_of_3.cpp.obj"
+"C:\ProgramingWorks\Unreal\GenAi_Housing\Plugins\RealTimeImport\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\RealTimeImport\Module.RealTimeImport.3_of_3.cpp.obj"
+"C:\ProgramingWorks\Unreal\GenAi_Housing\Plugins\RealTimeImport\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\RealTimeImport\Default.rc2.res"
+/OUT:"C:\ProgramingWorks\Unreal\GenAi_Housing\Plugins\RealTimeImport\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\RealTimeImport\UnrealEditor-RealTimeImport-Win64-DebugGame.lib"

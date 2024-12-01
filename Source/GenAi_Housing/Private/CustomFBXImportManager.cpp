@@ -348,7 +348,6 @@ void ACustomFBXImportManager::CustomHandleImportCompleted(UCustomFBXSceneImporte
 		{
 			(*ImportActor)->FinishImport(RootNodes);
 			(*ImportActor)->MeshPath = ImportSettings->Filepath;
-			//CustomOnImportCompleted(*ImportActor, SceneImporter);
 			OnFbxImportCompleted(*ImportActor, SceneImporter);
 		}
 	}

@@ -1,0 +1,15 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "c:\\programmingworks\\genai_git\\genai_housing\\plugins\\runtimetransformer\\intermediate\\build\\win64\\unrealeditor\\inc\\runtimetransformer\\uht\\focusableobject.gen.cpp",
+        "ProvidedModule": "",
+        "PCH": "c:\\programmingworks\\genai_git\\genai_housing\\intermediate\\build\\win64\\x64\\genai_housingeditor\\development\\engine\\sharedpch.engine.shadowerrors.inclorderunreal5_1.h.pch",
+        "Includes": [
+            "c:\\programmingworks\\genai_git\\genai_housing\\plugins\\runtimetransformer\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\runtimetransformer\\definitions.runtimetransformer.h",
+            "c:\\programmingworks\\genai_git\\genai_housing\\plugins\\runtimetransformer\\source\\runtimetransformer\\public\\focusableobject.h",
+            "c:\\programmingworks\\genai_git\\genai_housing\\plugins\\runtimetransformer\\intermediate\\build\\win64\\unrealeditor\\inc\\runtimetransformer\\uht\\focusableobject.generated.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

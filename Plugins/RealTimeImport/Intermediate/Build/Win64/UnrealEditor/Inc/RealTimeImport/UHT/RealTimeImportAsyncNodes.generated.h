@@ -1,0 +1,750 @@
+// Copyright Epic Games, Inc. All Rights Reserved.
+/*===========================================================================
+	Generated code exported from UnrealHeaderTool.
+	DO NOT modify this manually! Edit the corresponding .h files instead!
+===========================================================================*/
+
+// IWYU pragma: private, include "RealTimeImportAsyncNodes.h"
+#include "UObject/ObjectMacros.h"
+#include "UObject/ScriptMacros.h"
+
+PRAGMA_DISABLE_DEPRECATION_WARNINGS
+class URealTimeImportAsyncNodeCreateSoundWaveFromBytes;
+class URealTimeImportAsyncNodeCreateSoundWaveFromFile;
+class URealTimeImportAsyncNodeLoadAllFilesFromDirectory;
+class URealTimeImportAsyncNodeLoadFile;
+class URealTimeImportAsyncNodeLoadImageBytes;
+class URealTimeImportAsyncNodeLoadImageFile;
+class URealTimeImportAsyncNodeLoadMesh;
+class URealTimeImportAsyncNodeSaveFile;
+class USoundWaveProcedural;
+class UTexture2D;
+enum class ERTICoordinateSystem : uint8;
+enum class ERTIDirectoryType : uint8;
+enum class ERTIERGBFormat : uint8;
+enum class ERTIFileType : uint8;
+enum class ERTIMeshType : uint8;
+enum class ERTISoundFileType : uint8;
+struct FRTIModelStruct;
+#ifdef REALTIMEIMPORT_RealTimeImportAsyncNodes_generated_h
+#error "RealTimeImportAsyncNodes.generated.h already included, missing '#pragma once' in RealTimeImportAsyncNodes.h"
+#endif
+#define REALTIMEIMPORT_RealTimeImportAsyncNodes_generated_h
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_20_DELEGATE \
+static void FLoadMeshCompleteDelegate_DelegateWrapper(const FMulticastScriptDelegate& LoadMeshCompleteDelegate, TArray<FRTIModelStruct> const& modelStructs, const FString& errorMessage, const FString& eventID);
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_15_SPARSE_DATA
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_15_RPC_WRAPPERS \
+ \
+	DECLARE_FUNCTION(execLoadMeshFileAsyncNode);
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_15_RPC_WRAPPERS_NO_PURE_DECLS \
+ \
+	DECLARE_FUNCTION(execLoadMeshFileAsyncNode);
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_15_ACCESSORS
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_15_INCLASS_NO_PURE_DECLS \
+private: \
+	static void StaticRegisterNativesURealTimeImportAsyncNodeLoadMesh(); \
+	friend struct Z_Construct_UClass_URealTimeImportAsyncNodeLoadMesh_Statics; \
+public: \
+	DECLARE_CLASS(URealTimeImportAsyncNodeLoadMesh, UBlueprintAsyncActionBase, COMPILED_IN_FLAGS(0), CASTCLASS_None, TEXT("/Script/RealTimeImport"), NO_API) \
+	DECLARE_SERIALIZER(URealTimeImportAsyncNodeLoadMesh)
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_15_INCLASS \
+private: \
+	static void StaticRegisterNativesURealTimeImportAsyncNodeLoadMesh(); \
+	friend struct Z_Construct_UClass_URealTimeImportAsyncNodeLoadMesh_Statics; \
+public: \
+	DECLARE_CLASS(URealTimeImportAsyncNodeLoadMesh, UBlueprintAsyncActionBase, COMPILED_IN_FLAGS(0), CASTCLASS_None, TEXT("/Script/RealTimeImport"), NO_API) \
+	DECLARE_SERIALIZER(URealTimeImportAsyncNodeLoadMesh)
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_15_STANDARD_CONSTRUCTORS \
+	/** Standard constructor, called after all reflected properties have been initialized */ \
+	NO_API URealTimeImportAsyncNodeLoadMesh(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
+	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(URealTimeImportAsyncNodeLoadMesh) \
+	DECLARE_VTABLE_PTR_HELPER_CTOR(NO_API, URealTimeImportAsyncNodeLoadMesh); \
+	DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(URealTimeImportAsyncNodeLoadMesh); \
+private: \
+	/** Private move- and copy-constructors, should never be used */ \
+	NO_API URealTimeImportAsyncNodeLoadMesh(URealTimeImportAsyncNodeLoadMesh&&); \
+	NO_API URealTimeImportAsyncNodeLoadMesh(const URealTimeImportAsyncNodeLoadMesh&); \
+public: \
+	NO_API virtual ~URealTimeImportAsyncNodeLoadMesh();
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_15_ENHANCED_CONSTRUCTORS \
+	/** Standard constructor, called after all reflected properties have been initialized */ \
+	NO_API URealTimeImportAsyncNodeLoadMesh(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
+private: \
+	/** Private move- and copy-constructors, should never be used */ \
+	NO_API URealTimeImportAsyncNodeLoadMesh(URealTimeImportAsyncNodeLoadMesh&&); \
+	NO_API URealTimeImportAsyncNodeLoadMesh(const URealTimeImportAsyncNodeLoadMesh&); \
+public: \
+	DECLARE_VTABLE_PTR_HELPER_CTOR(NO_API, URealTimeImportAsyncNodeLoadMesh); \
+	DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(URealTimeImportAsyncNodeLoadMesh); \
+	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(URealTimeImportAsyncNodeLoadMesh) \
+	NO_API virtual ~URealTimeImportAsyncNodeLoadMesh();
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_12_PROLOG
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_15_GENERATED_BODY_LEGACY \
+PRAGMA_DISABLE_DEPRECATION_WARNINGS \
+public: \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_15_SPARSE_DATA \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_15_RPC_WRAPPERS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_15_ACCESSORS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_15_INCLASS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_15_STANDARD_CONSTRUCTORS \
+public: \
+PRAGMA_ENABLE_DEPRECATION_WARNINGS
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_15_GENERATED_BODY \
+PRAGMA_DISABLE_DEPRECATION_WARNINGS \
+public: \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_15_SPARSE_DATA \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_15_RPC_WRAPPERS_NO_PURE_DECLS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_15_ACCESSORS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_15_INCLASS_NO_PURE_DECLS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_15_ENHANCED_CONSTRUCTORS \
+private: \
+PRAGMA_ENABLE_DEPRECATION_WARNINGS
+
+
+template<> REALTIMEIMPORT_API UClass* StaticClass<class URealTimeImportAsyncNodeLoadMesh>();
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_68_DELEGATE \
+static void FLoadFileCompleteDelegate_DelegateWrapper(const FMulticastScriptDelegate& LoadFileCompleteDelegate, const FString& fileName, TArray<uint8> const& bytes, const int32 errorCode, const FString& errorMessage);
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_64_SPARSE_DATA
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_64_RPC_WRAPPERS \
+ \
+	DECLARE_FUNCTION(execLoadFileAsyncNode);
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_64_RPC_WRAPPERS_NO_PURE_DECLS \
+ \
+	DECLARE_FUNCTION(execLoadFileAsyncNode);
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_64_ACCESSORS
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_64_INCLASS_NO_PURE_DECLS \
+private: \
+	static void StaticRegisterNativesURealTimeImportAsyncNodeLoadFile(); \
+	friend struct Z_Construct_UClass_URealTimeImportAsyncNodeLoadFile_Statics; \
+public: \
+	DECLARE_CLASS(URealTimeImportAsyncNodeLoadFile, UBlueprintAsyncActionBase, COMPILED_IN_FLAGS(0), CASTCLASS_None, TEXT("/Script/RealTimeImport"), NO_API) \
+	DECLARE_SERIALIZER(URealTimeImportAsyncNodeLoadFile)
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_64_INCLASS \
+private: \
+	static void StaticRegisterNativesURealTimeImportAsyncNodeLoadFile(); \
+	friend struct Z_Construct_UClass_URealTimeImportAsyncNodeLoadFile_Statics; \
+public: \
+	DECLARE_CLASS(URealTimeImportAsyncNodeLoadFile, UBlueprintAsyncActionBase, COMPILED_IN_FLAGS(0), CASTCLASS_None, TEXT("/Script/RealTimeImport"), NO_API) \
+	DECLARE_SERIALIZER(URealTimeImportAsyncNodeLoadFile)
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_64_STANDARD_CONSTRUCTORS \
+	/** Standard constructor, called after all reflected properties have been initialized */ \
+	NO_API URealTimeImportAsyncNodeLoadFile(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
+	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(URealTimeImportAsyncNodeLoadFile) \
+	DECLARE_VTABLE_PTR_HELPER_CTOR(NO_API, URealTimeImportAsyncNodeLoadFile); \
+	DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(URealTimeImportAsyncNodeLoadFile); \
+private: \
+	/** Private move- and copy-constructors, should never be used */ \
+	NO_API URealTimeImportAsyncNodeLoadFile(URealTimeImportAsyncNodeLoadFile&&); \
+	NO_API URealTimeImportAsyncNodeLoadFile(const URealTimeImportAsyncNodeLoadFile&); \
+public: \
+	NO_API virtual ~URealTimeImportAsyncNodeLoadFile();
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_64_ENHANCED_CONSTRUCTORS \
+	/** Standard constructor, called after all reflected properties have been initialized */ \
+	NO_API URealTimeImportAsyncNodeLoadFile(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
+private: \
+	/** Private move- and copy-constructors, should never be used */ \
+	NO_API URealTimeImportAsyncNodeLoadFile(URealTimeImportAsyncNodeLoadFile&&); \
+	NO_API URealTimeImportAsyncNodeLoadFile(const URealTimeImportAsyncNodeLoadFile&); \
+public: \
+	DECLARE_VTABLE_PTR_HELPER_CTOR(NO_API, URealTimeImportAsyncNodeLoadFile); \
+	DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(URealTimeImportAsyncNodeLoadFile); \
+	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(URealTimeImportAsyncNodeLoadFile) \
+	NO_API virtual ~URealTimeImportAsyncNodeLoadFile();
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_61_PROLOG
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_64_GENERATED_BODY_LEGACY \
+PRAGMA_DISABLE_DEPRECATION_WARNINGS \
+public: \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_64_SPARSE_DATA \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_64_RPC_WRAPPERS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_64_ACCESSORS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_64_INCLASS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_64_STANDARD_CONSTRUCTORS \
+public: \
+PRAGMA_ENABLE_DEPRECATION_WARNINGS
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_64_GENERATED_BODY \
+PRAGMA_DISABLE_DEPRECATION_WARNINGS \
+public: \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_64_SPARSE_DATA \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_64_RPC_WRAPPERS_NO_PURE_DECLS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_64_ACCESSORS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_64_INCLASS_NO_PURE_DECLS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_64_ENHANCED_CONSTRUCTORS \
+private: \
+PRAGMA_ENABLE_DEPRECATION_WARNINGS
+
+
+template<> REALTIMEIMPORT_API UClass* StaticClass<class URealTimeImportAsyncNodeLoadFile>();
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_100_DELEGATE \
+static void FSaveFileCompleteDelegate_DelegateWrapper(const FMulticastScriptDelegate& SaveFileCompleteDelegate, const FString& fileName, const FString& fullPath, const int32 errorCode, const FString& errorMessage);
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_96_SPARSE_DATA
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_96_RPC_WRAPPERS \
+ \
+	DECLARE_FUNCTION(execSaveFileAsyncNode);
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_96_RPC_WRAPPERS_NO_PURE_DECLS \
+ \
+	DECLARE_FUNCTION(execSaveFileAsyncNode);
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_96_ACCESSORS
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_96_INCLASS_NO_PURE_DECLS \
+private: \
+	static void StaticRegisterNativesURealTimeImportAsyncNodeSaveFile(); \
+	friend struct Z_Construct_UClass_URealTimeImportAsyncNodeSaveFile_Statics; \
+public: \
+	DECLARE_CLASS(URealTimeImportAsyncNodeSaveFile, UBlueprintAsyncActionBase, COMPILED_IN_FLAGS(0), CASTCLASS_None, TEXT("/Script/RealTimeImport"), NO_API) \
+	DECLARE_SERIALIZER(URealTimeImportAsyncNodeSaveFile)
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_96_INCLASS \
+private: \
+	static void StaticRegisterNativesURealTimeImportAsyncNodeSaveFile(); \
+	friend struct Z_Construct_UClass_URealTimeImportAsyncNodeSaveFile_Statics; \
+public: \
+	DECLARE_CLASS(URealTimeImportAsyncNodeSaveFile, UBlueprintAsyncActionBase, COMPILED_IN_FLAGS(0), CASTCLASS_None, TEXT("/Script/RealTimeImport"), NO_API) \
+	DECLARE_SERIALIZER(URealTimeImportAsyncNodeSaveFile)
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_96_STANDARD_CONSTRUCTORS \
+	/** Standard constructor, called after all reflected properties have been initialized */ \
+	NO_API URealTimeImportAsyncNodeSaveFile(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
+	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(URealTimeImportAsyncNodeSaveFile) \
+	DECLARE_VTABLE_PTR_HELPER_CTOR(NO_API, URealTimeImportAsyncNodeSaveFile); \
+	DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(URealTimeImportAsyncNodeSaveFile); \
+private: \
+	/** Private move- and copy-constructors, should never be used */ \
+	NO_API URealTimeImportAsyncNodeSaveFile(URealTimeImportAsyncNodeSaveFile&&); \
+	NO_API URealTimeImportAsyncNodeSaveFile(const URealTimeImportAsyncNodeSaveFile&); \
+public: \
+	NO_API virtual ~URealTimeImportAsyncNodeSaveFile();
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_96_ENHANCED_CONSTRUCTORS \
+	/** Standard constructor, called after all reflected properties have been initialized */ \
+	NO_API URealTimeImportAsyncNodeSaveFile(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
+private: \
+	/** Private move- and copy-constructors, should never be used */ \
+	NO_API URealTimeImportAsyncNodeSaveFile(URealTimeImportAsyncNodeSaveFile&&); \
+	NO_API URealTimeImportAsyncNodeSaveFile(const URealTimeImportAsyncNodeSaveFile&); \
+public: \
+	DECLARE_VTABLE_PTR_HELPER_CTOR(NO_API, URealTimeImportAsyncNodeSaveFile); \
+	DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(URealTimeImportAsyncNodeSaveFile); \
+	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(URealTimeImportAsyncNodeSaveFile) \
+	NO_API virtual ~URealTimeImportAsyncNodeSaveFile();
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_93_PROLOG
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_96_GENERATED_BODY_LEGACY \
+PRAGMA_DISABLE_DEPRECATION_WARNINGS \
+public: \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_96_SPARSE_DATA \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_96_RPC_WRAPPERS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_96_ACCESSORS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_96_INCLASS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_96_STANDARD_CONSTRUCTORS \
+public: \
+PRAGMA_ENABLE_DEPRECATION_WARNINGS
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_96_GENERATED_BODY \
+PRAGMA_DISABLE_DEPRECATION_WARNINGS \
+public: \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_96_SPARSE_DATA \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_96_RPC_WRAPPERS_NO_PURE_DECLS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_96_ACCESSORS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_96_INCLASS_NO_PURE_DECLS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_96_ENHANCED_CONSTRUCTORS \
+private: \
+PRAGMA_ENABLE_DEPRECATION_WARNINGS
+
+
+template<> REALTIMEIMPORT_API UClass* StaticClass<class URealTimeImportAsyncNodeSaveFile>();
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_132_DELEGATE \
+static void FLoadAllFilesFromDirectoryCompleteDelegate_DelegateWrapper(const FMulticastScriptDelegate& LoadAllFilesFromDirectoryCompleteDelegate, int32 const& count, TArray<FString> const& files, TArray<FString> const& filePaths);
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_128_SPARSE_DATA
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_128_RPC_WRAPPERS \
+ \
+	DECLARE_FUNCTION(execLoadAllFilesFromDirectoryAsyncNode);
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_128_RPC_WRAPPERS_NO_PURE_DECLS \
+ \
+	DECLARE_FUNCTION(execLoadAllFilesFromDirectoryAsyncNode);
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_128_ACCESSORS
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_128_INCLASS_NO_PURE_DECLS \
+private: \
+	static void StaticRegisterNativesURealTimeImportAsyncNodeLoadAllFilesFromDirectory(); \
+	friend struct Z_Construct_UClass_URealTimeImportAsyncNodeLoadAllFilesFromDirectory_Statics; \
+public: \
+	DECLARE_CLASS(URealTimeImportAsyncNodeLoadAllFilesFromDirectory, UBlueprintAsyncActionBase, COMPILED_IN_FLAGS(0), CASTCLASS_None, TEXT("/Script/RealTimeImport"), NO_API) \
+	DECLARE_SERIALIZER(URealTimeImportAsyncNodeLoadAllFilesFromDirectory)
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_128_INCLASS \
+private: \
+	static void StaticRegisterNativesURealTimeImportAsyncNodeLoadAllFilesFromDirectory(); \
+	friend struct Z_Construct_UClass_URealTimeImportAsyncNodeLoadAllFilesFromDirectory_Statics; \
+public: \
+	DECLARE_CLASS(URealTimeImportAsyncNodeLoadAllFilesFromDirectory, UBlueprintAsyncActionBase, COMPILED_IN_FLAGS(0), CASTCLASS_None, TEXT("/Script/RealTimeImport"), NO_API) \
+	DECLARE_SERIALIZER(URealTimeImportAsyncNodeLoadAllFilesFromDirectory)
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_128_STANDARD_CONSTRUCTORS \
+	/** Standard constructor, called after all reflected properties have been initialized */ \
+	NO_API URealTimeImportAsyncNodeLoadAllFilesFromDirectory(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
+	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(URealTimeImportAsyncNodeLoadAllFilesFromDirectory) \
+	DECLARE_VTABLE_PTR_HELPER_CTOR(NO_API, URealTimeImportAsyncNodeLoadAllFilesFromDirectory); \
+	DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(URealTimeImportAsyncNodeLoadAllFilesFromDirectory); \
+private: \
+	/** Private move- and copy-constructors, should never be used */ \
+	NO_API URealTimeImportAsyncNodeLoadAllFilesFromDirectory(URealTimeImportAsyncNodeLoadAllFilesFromDirectory&&); \
+	NO_API URealTimeImportAsyncNodeLoadAllFilesFromDirectory(const URealTimeImportAsyncNodeLoadAllFilesFromDirectory&); \
+public: \
+	NO_API virtual ~URealTimeImportAsyncNodeLoadAllFilesFromDirectory();
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_128_ENHANCED_CONSTRUCTORS \
+	/** Standard constructor, called after all reflected properties have been initialized */ \
+	NO_API URealTimeImportAsyncNodeLoadAllFilesFromDirectory(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
+private: \
+	/** Private move- and copy-constructors, should never be used */ \
+	NO_API URealTimeImportAsyncNodeLoadAllFilesFromDirectory(URealTimeImportAsyncNodeLoadAllFilesFromDirectory&&); \
+	NO_API URealTimeImportAsyncNodeLoadAllFilesFromDirectory(const URealTimeImportAsyncNodeLoadAllFilesFromDirectory&); \
+public: \
+	DECLARE_VTABLE_PTR_HELPER_CTOR(NO_API, URealTimeImportAsyncNodeLoadAllFilesFromDirectory); \
+	DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(URealTimeImportAsyncNodeLoadAllFilesFromDirectory); \
+	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(URealTimeImportAsyncNodeLoadAllFilesFromDirectory) \
+	NO_API virtual ~URealTimeImportAsyncNodeLoadAllFilesFromDirectory();
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_125_PROLOG
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_128_GENERATED_BODY_LEGACY \
+PRAGMA_DISABLE_DEPRECATION_WARNINGS \
+public: \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_128_SPARSE_DATA \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_128_RPC_WRAPPERS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_128_ACCESSORS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_128_INCLASS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_128_STANDARD_CONSTRUCTORS \
+public: \
+PRAGMA_ENABLE_DEPRECATION_WARNINGS
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_128_GENERATED_BODY \
+PRAGMA_DISABLE_DEPRECATION_WARNINGS \
+public: \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_128_SPARSE_DATA \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_128_RPC_WRAPPERS_NO_PURE_DECLS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_128_ACCESSORS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_128_INCLASS_NO_PURE_DECLS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_128_ENHANCED_CONSTRUCTORS \
+private: \
+PRAGMA_ENABLE_DEPRECATION_WARNINGS
+
+
+template<> REALTIMEIMPORT_API UClass* StaticClass<class URealTimeImportAsyncNodeLoadAllFilesFromDirectory>();
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_165_DELEGATE \
+static void FCreateSoundWaveFromFileCompleteDelegate_DelegateWrapper(const FMulticastScriptDelegate& CreateSoundWaveFromFileCompleteDelegate, const FString& fileID, const USoundWaveProcedural* soundWave, const FString& fileName, const int32 errorCode, const FString& errorMessage);
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_160_SPARSE_DATA
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_160_RPC_WRAPPERS \
+ \
+	DECLARE_FUNCTION(execCreateSoundWaveFromFileAsyncNode);
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_160_RPC_WRAPPERS_NO_PURE_DECLS \
+ \
+	DECLARE_FUNCTION(execCreateSoundWaveFromFileAsyncNode);
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_160_ACCESSORS
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_160_INCLASS_NO_PURE_DECLS \
+private: \
+	static void StaticRegisterNativesURealTimeImportAsyncNodeCreateSoundWaveFromFile(); \
+	friend struct Z_Construct_UClass_URealTimeImportAsyncNodeCreateSoundWaveFromFile_Statics; \
+public: \
+	DECLARE_CLASS(URealTimeImportAsyncNodeCreateSoundWaveFromFile, UBlueprintAsyncActionBase, COMPILED_IN_FLAGS(0), CASTCLASS_None, TEXT("/Script/RealTimeImport"), NO_API) \
+	DECLARE_SERIALIZER(URealTimeImportAsyncNodeCreateSoundWaveFromFile)
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_160_INCLASS \
+private: \
+	static void StaticRegisterNativesURealTimeImportAsyncNodeCreateSoundWaveFromFile(); \
+	friend struct Z_Construct_UClass_URealTimeImportAsyncNodeCreateSoundWaveFromFile_Statics; \
+public: \
+	DECLARE_CLASS(URealTimeImportAsyncNodeCreateSoundWaveFromFile, UBlueprintAsyncActionBase, COMPILED_IN_FLAGS(0), CASTCLASS_None, TEXT("/Script/RealTimeImport"), NO_API) \
+	DECLARE_SERIALIZER(URealTimeImportAsyncNodeCreateSoundWaveFromFile)
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_160_STANDARD_CONSTRUCTORS \
+	/** Standard constructor, called after all reflected properties have been initialized */ \
+	NO_API URealTimeImportAsyncNodeCreateSoundWaveFromFile(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
+	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(URealTimeImportAsyncNodeCreateSoundWaveFromFile) \
+	DECLARE_VTABLE_PTR_HELPER_CTOR(NO_API, URealTimeImportAsyncNodeCreateSoundWaveFromFile); \
+	DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(URealTimeImportAsyncNodeCreateSoundWaveFromFile); \
+private: \
+	/** Private move- and copy-constructors, should never be used */ \
+	NO_API URealTimeImportAsyncNodeCreateSoundWaveFromFile(URealTimeImportAsyncNodeCreateSoundWaveFromFile&&); \
+	NO_API URealTimeImportAsyncNodeCreateSoundWaveFromFile(const URealTimeImportAsyncNodeCreateSoundWaveFromFile&); \
+public: \
+	NO_API virtual ~URealTimeImportAsyncNodeCreateSoundWaveFromFile();
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_160_ENHANCED_CONSTRUCTORS \
+	/** Standard constructor, called after all reflected properties have been initialized */ \
+	NO_API URealTimeImportAsyncNodeCreateSoundWaveFromFile(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
+private: \
+	/** Private move- and copy-constructors, should never be used */ \
+	NO_API URealTimeImportAsyncNodeCreateSoundWaveFromFile(URealTimeImportAsyncNodeCreateSoundWaveFromFile&&); \
+	NO_API URealTimeImportAsyncNodeCreateSoundWaveFromFile(const URealTimeImportAsyncNodeCreateSoundWaveFromFile&); \
+public: \
+	DECLARE_VTABLE_PTR_HELPER_CTOR(NO_API, URealTimeImportAsyncNodeCreateSoundWaveFromFile); \
+	DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(URealTimeImportAsyncNodeCreateSoundWaveFromFile); \
+	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(URealTimeImportAsyncNodeCreateSoundWaveFromFile) \
+	NO_API virtual ~URealTimeImportAsyncNodeCreateSoundWaveFromFile();
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_157_PROLOG
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_160_GENERATED_BODY_LEGACY \
+PRAGMA_DISABLE_DEPRECATION_WARNINGS \
+public: \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_160_SPARSE_DATA \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_160_RPC_WRAPPERS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_160_ACCESSORS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_160_INCLASS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_160_STANDARD_CONSTRUCTORS \
+public: \
+PRAGMA_ENABLE_DEPRECATION_WARNINGS
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_160_GENERATED_BODY \
+PRAGMA_DISABLE_DEPRECATION_WARNINGS \
+public: \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_160_SPARSE_DATA \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_160_RPC_WRAPPERS_NO_PURE_DECLS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_160_ACCESSORS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_160_INCLASS_NO_PURE_DECLS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_160_ENHANCED_CONSTRUCTORS \
+private: \
+PRAGMA_ENABLE_DEPRECATION_WARNINGS
+
+
+template<> REALTIMEIMPORT_API UClass* StaticClass<class URealTimeImportAsyncNodeCreateSoundWaveFromFile>();
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_205_DELEGATE \
+static void FCreateSoundWaveFromBytesCompleteDelegate_DelegateWrapper(const FMulticastScriptDelegate& CreateSoundWaveFromBytesCompleteDelegate, const USoundWaveProcedural* soundWave, const int32 errorCode, const FString& errorMessage);
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_201_SPARSE_DATA
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_201_RPC_WRAPPERS \
+ \
+	DECLARE_FUNCTION(execCreateSoundWaveFromBytesAsyncNode);
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_201_RPC_WRAPPERS_NO_PURE_DECLS \
+ \
+	DECLARE_FUNCTION(execCreateSoundWaveFromBytesAsyncNode);
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_201_ACCESSORS
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_201_INCLASS_NO_PURE_DECLS \
+private: \
+	static void StaticRegisterNativesURealTimeImportAsyncNodeCreateSoundWaveFromBytes(); \
+	friend struct Z_Construct_UClass_URealTimeImportAsyncNodeCreateSoundWaveFromBytes_Statics; \
+public: \
+	DECLARE_CLASS(URealTimeImportAsyncNodeCreateSoundWaveFromBytes, UBlueprintAsyncActionBase, COMPILED_IN_FLAGS(0), CASTCLASS_None, TEXT("/Script/RealTimeImport"), NO_API) \
+	DECLARE_SERIALIZER(URealTimeImportAsyncNodeCreateSoundWaveFromBytes)
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_201_INCLASS \
+private: \
+	static void StaticRegisterNativesURealTimeImportAsyncNodeCreateSoundWaveFromBytes(); \
+	friend struct Z_Construct_UClass_URealTimeImportAsyncNodeCreateSoundWaveFromBytes_Statics; \
+public: \
+	DECLARE_CLASS(URealTimeImportAsyncNodeCreateSoundWaveFromBytes, UBlueprintAsyncActionBase, COMPILED_IN_FLAGS(0), CASTCLASS_None, TEXT("/Script/RealTimeImport"), NO_API) \
+	DECLARE_SERIALIZER(URealTimeImportAsyncNodeCreateSoundWaveFromBytes)
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_201_STANDARD_CONSTRUCTORS \
+	/** Standard constructor, called after all reflected properties have been initialized */ \
+	NO_API URealTimeImportAsyncNodeCreateSoundWaveFromBytes(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
+	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(URealTimeImportAsyncNodeCreateSoundWaveFromBytes) \
+	DECLARE_VTABLE_PTR_HELPER_CTOR(NO_API, URealTimeImportAsyncNodeCreateSoundWaveFromBytes); \
+	DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(URealTimeImportAsyncNodeCreateSoundWaveFromBytes); \
+private: \
+	/** Private move- and copy-constructors, should never be used */ \
+	NO_API URealTimeImportAsyncNodeCreateSoundWaveFromBytes(URealTimeImportAsyncNodeCreateSoundWaveFromBytes&&); \
+	NO_API URealTimeImportAsyncNodeCreateSoundWaveFromBytes(const URealTimeImportAsyncNodeCreateSoundWaveFromBytes&); \
+public: \
+	NO_API virtual ~URealTimeImportAsyncNodeCreateSoundWaveFromBytes();
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_201_ENHANCED_CONSTRUCTORS \
+	/** Standard constructor, called after all reflected properties have been initialized */ \
+	NO_API URealTimeImportAsyncNodeCreateSoundWaveFromBytes(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
+private: \
+	/** Private move- and copy-constructors, should never be used */ \
+	NO_API URealTimeImportAsyncNodeCreateSoundWaveFromBytes(URealTimeImportAsyncNodeCreateSoundWaveFromBytes&&); \
+	NO_API URealTimeImportAsyncNodeCreateSoundWaveFromBytes(const URealTimeImportAsyncNodeCreateSoundWaveFromBytes&); \
+public: \
+	DECLARE_VTABLE_PTR_HELPER_CTOR(NO_API, URealTimeImportAsyncNodeCreateSoundWaveFromBytes); \
+	DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(URealTimeImportAsyncNodeCreateSoundWaveFromBytes); \
+	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(URealTimeImportAsyncNodeCreateSoundWaveFromBytes) \
+	NO_API virtual ~URealTimeImportAsyncNodeCreateSoundWaveFromBytes();
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_198_PROLOG
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_201_GENERATED_BODY_LEGACY \
+PRAGMA_DISABLE_DEPRECATION_WARNINGS \
+public: \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_201_SPARSE_DATA \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_201_RPC_WRAPPERS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_201_ACCESSORS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_201_INCLASS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_201_STANDARD_CONSTRUCTORS \
+public: \
+PRAGMA_ENABLE_DEPRECATION_WARNINGS
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_201_GENERATED_BODY \
+PRAGMA_DISABLE_DEPRECATION_WARNINGS \
+public: \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_201_SPARSE_DATA \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_201_RPC_WRAPPERS_NO_PURE_DECLS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_201_ACCESSORS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_201_INCLASS_NO_PURE_DECLS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_201_ENHANCED_CONSTRUCTORS \
+private: \
+PRAGMA_ENABLE_DEPRECATION_WARNINGS
+
+
+template<> REALTIMEIMPORT_API UClass* StaticClass<class URealTimeImportAsyncNodeCreateSoundWaveFromBytes>();
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_245_DELEGATE \
+static void FLoadImageFromFileCompleteDelegate_DelegateWrapper(const FMulticastScriptDelegate& LoadImageFromFileCompleteDelegate, UTexture2D* texture, const FString& fileName, const int32 errorCode, const FString& errorMessage, const FString& eventID);
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_241_SPARSE_DATA
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_241_RPC_WRAPPERS \
+ \
+	DECLARE_FUNCTION(execLoadImageFileAsyncNode);
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_241_RPC_WRAPPERS_NO_PURE_DECLS \
+ \
+	DECLARE_FUNCTION(execLoadImageFileAsyncNode);
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_241_ACCESSORS
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_241_INCLASS_NO_PURE_DECLS \
+private: \
+	static void StaticRegisterNativesURealTimeImportAsyncNodeLoadImageFile(); \
+	friend struct Z_Construct_UClass_URealTimeImportAsyncNodeLoadImageFile_Statics; \
+public: \
+	DECLARE_CLASS(URealTimeImportAsyncNodeLoadImageFile, UBlueprintAsyncActionBase, COMPILED_IN_FLAGS(0), CASTCLASS_None, TEXT("/Script/RealTimeImport"), NO_API) \
+	DECLARE_SERIALIZER(URealTimeImportAsyncNodeLoadImageFile)
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_241_INCLASS \
+private: \
+	static void StaticRegisterNativesURealTimeImportAsyncNodeLoadImageFile(); \
+	friend struct Z_Construct_UClass_URealTimeImportAsyncNodeLoadImageFile_Statics; \
+public: \
+	DECLARE_CLASS(URealTimeImportAsyncNodeLoadImageFile, UBlueprintAsyncActionBase, COMPILED_IN_FLAGS(0), CASTCLASS_None, TEXT("/Script/RealTimeImport"), NO_API) \
+	DECLARE_SERIALIZER(URealTimeImportAsyncNodeLoadImageFile)
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_241_STANDARD_CONSTRUCTORS \
+	/** Standard constructor, called after all reflected properties have been initialized */ \
+	NO_API URealTimeImportAsyncNodeLoadImageFile(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
+	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(URealTimeImportAsyncNodeLoadImageFile) \
+	DECLARE_VTABLE_PTR_HELPER_CTOR(NO_API, URealTimeImportAsyncNodeLoadImageFile); \
+	DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(URealTimeImportAsyncNodeLoadImageFile); \
+private: \
+	/** Private move- and copy-constructors, should never be used */ \
+	NO_API URealTimeImportAsyncNodeLoadImageFile(URealTimeImportAsyncNodeLoadImageFile&&); \
+	NO_API URealTimeImportAsyncNodeLoadImageFile(const URealTimeImportAsyncNodeLoadImageFile&); \
+public: \
+	NO_API virtual ~URealTimeImportAsyncNodeLoadImageFile();
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_241_ENHANCED_CONSTRUCTORS \
+	/** Standard constructor, called after all reflected properties have been initialized */ \
+	NO_API URealTimeImportAsyncNodeLoadImageFile(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
+private: \
+	/** Private move- and copy-constructors, should never be used */ \
+	NO_API URealTimeImportAsyncNodeLoadImageFile(URealTimeImportAsyncNodeLoadImageFile&&); \
+	NO_API URealTimeImportAsyncNodeLoadImageFile(const URealTimeImportAsyncNodeLoadImageFile&); \
+public: \
+	DECLARE_VTABLE_PTR_HELPER_CTOR(NO_API, URealTimeImportAsyncNodeLoadImageFile); \
+	DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(URealTimeImportAsyncNodeLoadImageFile); \
+	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(URealTimeImportAsyncNodeLoadImageFile) \
+	NO_API virtual ~URealTimeImportAsyncNodeLoadImageFile();
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_238_PROLOG
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_241_GENERATED_BODY_LEGACY \
+PRAGMA_DISABLE_DEPRECATION_WARNINGS \
+public: \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_241_SPARSE_DATA \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_241_RPC_WRAPPERS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_241_ACCESSORS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_241_INCLASS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_241_STANDARD_CONSTRUCTORS \
+public: \
+PRAGMA_ENABLE_DEPRECATION_WARNINGS
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_241_GENERATED_BODY \
+PRAGMA_DISABLE_DEPRECATION_WARNINGS \
+public: \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_241_SPARSE_DATA \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_241_RPC_WRAPPERS_NO_PURE_DECLS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_241_ACCESSORS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_241_INCLASS_NO_PURE_DECLS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_241_ENHANCED_CONSTRUCTORS \
+private: \
+PRAGMA_ENABLE_DEPRECATION_WARNINGS
+
+
+template<> REALTIMEIMPORT_API UClass* StaticClass<class URealTimeImportAsyncNodeLoadImageFile>();
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_286_DELEGATE \
+static void FLoadImageFromBytesCompleteDelegate_DelegateWrapper(const FMulticastScriptDelegate& LoadImageFromBytesCompleteDelegate, const UTexture2D* texture, const int32 errorCode, const FString& errorMessage, const FString& eventID);
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_282_SPARSE_DATA
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_282_RPC_WRAPPERS \
+ \
+	DECLARE_FUNCTION(execLoadImageBytesAsyncNode);
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_282_RPC_WRAPPERS_NO_PURE_DECLS \
+ \
+	DECLARE_FUNCTION(execLoadImageBytesAsyncNode);
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_282_ACCESSORS
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_282_INCLASS_NO_PURE_DECLS \
+private: \
+	static void StaticRegisterNativesURealTimeImportAsyncNodeLoadImageBytes(); \
+	friend struct Z_Construct_UClass_URealTimeImportAsyncNodeLoadImageBytes_Statics; \
+public: \
+	DECLARE_CLASS(URealTimeImportAsyncNodeLoadImageBytes, UBlueprintAsyncActionBase, COMPILED_IN_FLAGS(0), CASTCLASS_None, TEXT("/Script/RealTimeImport"), NO_API) \
+	DECLARE_SERIALIZER(URealTimeImportAsyncNodeLoadImageBytes)
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_282_INCLASS \
+private: \
+	static void StaticRegisterNativesURealTimeImportAsyncNodeLoadImageBytes(); \
+	friend struct Z_Construct_UClass_URealTimeImportAsyncNodeLoadImageBytes_Statics; \
+public: \
+	DECLARE_CLASS(URealTimeImportAsyncNodeLoadImageBytes, UBlueprintAsyncActionBase, COMPILED_IN_FLAGS(0), CASTCLASS_None, TEXT("/Script/RealTimeImport"), NO_API) \
+	DECLARE_SERIALIZER(URealTimeImportAsyncNodeLoadImageBytes)
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_282_STANDARD_CONSTRUCTORS \
+	/** Standard constructor, called after all reflected properties have been initialized */ \
+	NO_API URealTimeImportAsyncNodeLoadImageBytes(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
+	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(URealTimeImportAsyncNodeLoadImageBytes) \
+	DECLARE_VTABLE_PTR_HELPER_CTOR(NO_API, URealTimeImportAsyncNodeLoadImageBytes); \
+	DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(URealTimeImportAsyncNodeLoadImageBytes); \
+private: \
+	/** Private move- and copy-constructors, should never be used */ \
+	NO_API URealTimeImportAsyncNodeLoadImageBytes(URealTimeImportAsyncNodeLoadImageBytes&&); \
+	NO_API URealTimeImportAsyncNodeLoadImageBytes(const URealTimeImportAsyncNodeLoadImageBytes&); \
+public: \
+	NO_API virtual ~URealTimeImportAsyncNodeLoadImageBytes();
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_282_ENHANCED_CONSTRUCTORS \
+	/** Standard constructor, called after all reflected properties have been initialized */ \
+	NO_API URealTimeImportAsyncNodeLoadImageBytes(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
+private: \
+	/** Private move- and copy-constructors, should never be used */ \
+	NO_API URealTimeImportAsyncNodeLoadImageBytes(URealTimeImportAsyncNodeLoadImageBytes&&); \
+	NO_API URealTimeImportAsyncNodeLoadImageBytes(const URealTimeImportAsyncNodeLoadImageBytes&); \
+public: \
+	DECLARE_VTABLE_PTR_HELPER_CTOR(NO_API, URealTimeImportAsyncNodeLoadImageBytes); \
+	DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(URealTimeImportAsyncNodeLoadImageBytes); \
+	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(URealTimeImportAsyncNodeLoadImageBytes) \
+	NO_API virtual ~URealTimeImportAsyncNodeLoadImageBytes();
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_279_PROLOG
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_282_GENERATED_BODY_LEGACY \
+PRAGMA_DISABLE_DEPRECATION_WARNINGS \
+public: \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_282_SPARSE_DATA \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_282_RPC_WRAPPERS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_282_ACCESSORS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_282_INCLASS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_282_STANDARD_CONSTRUCTORS \
+public: \
+PRAGMA_ENABLE_DEPRECATION_WARNINGS
+
+
+#define FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_282_GENERATED_BODY \
+PRAGMA_DISABLE_DEPRECATION_WARNINGS \
+public: \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_282_SPARSE_DATA \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_282_RPC_WRAPPERS_NO_PURE_DECLS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_282_ACCESSORS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_282_INCLASS_NO_PURE_DECLS \
+	FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h_282_ENHANCED_CONSTRUCTORS \
+private: \
+PRAGMA_ENABLE_DEPRECATION_WARNINGS
+
+
+template<> REALTIMEIMPORT_API UClass* StaticClass<class URealTimeImportAsyncNodeLoadImageBytes>();
+
+#undef CURRENT_FILE_ID
+#define CURRENT_FILE_ID FID_ProgrammingWorks_GenAi_Git_GenAi_Housing_Plugins_RealTimeImport_Source_RealTimeImport_Public_RealTimeImportAsyncNodes_h
+
+
+PRAGMA_ENABLE_DEPRECATION_WARNINGS

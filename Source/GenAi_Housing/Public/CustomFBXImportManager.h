@@ -76,11 +76,11 @@ public:
 	UFUNCTION(Server, Reliable)	// 방에 첫번째 사람이 입장했을때 실행되는 함수
 	void ServerCreateFBXActor(const TArray<FRoomInfo>& InRoomInfoArr, class ACustomFBXImportManager* fbxImporter, class AGenAiPlayerController* PlayerController);
 
-	UPROPERTY(BlueprintReadOnly, Category = "Import")
-	TMap<int32, class ACustomFBXMeshActor*> customImportActorMap;
-
 	UPROPERTY(BlueprintReadWrite, Replicated)
 	int32 CustomCurrentImportID;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Import")
+	TMap<int32, class ACustomFBXMeshActor*> customImportActorMap;
 
 	void ReplicatedActorMapWork();
 
@@ -125,8 +125,6 @@ public:
 
 	UPROPERTY()
 	class UProceduralMeshComponent* PMC;
-	//UPROPERTY()
-	//class URealTimeImportAsyncNodeLoadImageFile* LoadImageASyncNode;
 
 	UPROPERTY(BlueprintReadWrite, Replicated)
 	class ACustomFBXMeshActor* SpawnMeshActor;
@@ -136,15 +134,6 @@ public:
 	UPROPERTY()
 	class UMaterialInterface* BaseMat;
 
-	//FTimerHandle LoadObjDelay;
-	/*
-
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void ResetSelectionActor();
-
-	UFUNCTION(BlueprintCallable)
-	UProceduralMeshComponent* RecalculateNormal(class UProceduralMeshComponent* mesh);
-*/
 	UFUNCTION(BlueprintCallable)
 	FString BytesToString(const TArray<uint8>& InBytes);
 	UFUNCTION(BlueprintCallable)

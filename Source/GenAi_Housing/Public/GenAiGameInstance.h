@@ -22,7 +22,6 @@ public:
 	UGenAiGameInstance(const FObjectInitializer& ObjectInitializer);
 
 	virtual void Init();
-	//virtual void Shutdown() override;
 
 	UFUNCTION(BlueprintCallable)
 	void LoadMenuWidget();

@@ -1,0 +1,23 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "c:\\programmingworks\\genai_git\\genai_housing\\plugins\\runtimefbximport\\intermediate\\build\\win64\\unrealeditor\\inc\\runtimefbximport\\uht\\pivotactor.gen.cpp",
+        "ProvidedModule": "",
+        "PCH": "c:\\programmingworks\\genai_git\\genai_housing\\intermediate\\build\\win64\\x64\\genai_housingeditor\\development\\engine\\sharedpch.engine.shadowerrors.inclorderunreal5_1.h.pch",
+        "Includes": [
+            "c:\\programmingworks\\genai_git\\genai_housing\\plugins\\runtimefbximport\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\runtimefbximport\\definitions.runtimefbximport.h",
+            "c:\\programmingworks\\genai_git\\genai_housing\\plugins\\runtimefbximport\\source\\runtimefbximport\\public\\actors\\pivotactor.h",
+            "c:\\program files\\epic games\\ue_5.2\\engine\\source\\runtime\\engine\\classes\\components\\boxcomponent.h",
+            "c:\\program files\\epic games\\ue_5.2\\engine\\source\\runtime\\engine\\classes\\components\\shapecomponent.h",
+            "c:\\program files\\epic games\\ue_5.2\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\shapecomponent.generated.h",
+            "c:\\program files\\epic games\\ue_5.2\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\boxcomponent.generated.h",
+            "c:\\program files\\epic games\\ue_5.2\\engine\\source\\runtime\\engine\\classes\\components\\capsulecomponent.h",
+            "c:\\program files\\epic games\\ue_5.2\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\capsulecomponent.generated.h",
+            "c:\\program files\\epic games\\ue_5.2\\engine\\source\\runtime\\engine\\classes\\components\\spherecomponent.h",
+            "c:\\program files\\epic games\\ue_5.2\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\spherecomponent.generated.h",
+            "c:\\programmingworks\\genai_git\\genai_housing\\plugins\\runtimefbximport\\intermediate\\build\\win64\\unrealeditor\\inc\\runtimefbximport\\uht\\pivotactor.generated.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

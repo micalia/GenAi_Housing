@@ -1,0 +1,15 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "c:\\programmingworks\\genai_git\\genai_housing\\plugins\\runtimefbximport\\intermediate\\build\\win64\\unrealeditor\\inc\\runtimefbximport\\uht\\materialimportsettings.gen.cpp",
+        "ProvidedModule": "",
+        "PCH": "c:\\programmingworks\\genai_git\\genai_housing\\intermediate\\build\\win64\\x64\\genai_housingeditor\\development\\engine\\sharedpch.engine.shadowerrors.inclorderunreal5_1.h.pch",
+        "Includes": [
+            "c:\\programmingworks\\genai_git\\genai_housing\\plugins\\runtimefbximport\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\runtimefbximport\\definitions.runtimefbximport.h",
+            "c:\\programmingworks\\genai_git\\genai_housing\\plugins\\runtimefbximport\\source\\runtimefbximport\\public\\dataassets\\materialimportsettings.h",
+            "c:\\programmingworks\\genai_git\\genai_housing\\plugins\\runtimefbximport\\intermediate\\build\\win64\\unrealeditor\\inc\\runtimefbximport\\uht\\materialimportsettings.generated.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

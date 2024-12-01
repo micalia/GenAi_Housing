@@ -12,7 +12,7 @@ ACustomFBXMeshActor::ACustomFBXMeshActor()
 void ACustomFBXMeshActor::BeginPlay()
 {
 	Super::BeginPlay();
-	//SetActorScale3D(SpawnScale);
+
 }
 
 void ACustomFBXMeshActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

@@ -56,8 +56,6 @@ public:
 
 	void LoadFbxFilesToFbxActor();
 	bool chk;
-	UFUNCTION(BlueprintCallable)
-	void TestQueue();
 	
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void LocalModelingDown(const FString& FileName, FTransform SpawnTrans, class ACustomFBXImportManager* FbxImportManager, class AGenAiPlayerController* PlayerController, int32 CurrentImportID);

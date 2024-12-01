@@ -1,0 +1,12 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UnrealEditor-MySqlConnect-Win64-DebugGame.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"C:\ProgramingWorks\Unreal\GenAi_Housing\Intermediate\Build\Win64\x64\GenAi_HousingEditor\DebugGame\Engine\SharedPCH.Engine.NonOptimized.ShadowErrors.InclOrderUnreal5_1.h.obj"
+"C:\ProgramingWorks\Unreal\GenAi_Housing\Plugins\MySqlConnect\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\MySqlConnect\Module.MySqlConnect.cpp.obj"
+"C:\ProgramingWorks\Unreal\GenAi_Housing\Plugins\MySqlConnect\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\MySqlConnect\Default.rc2.res"
+/OUT:"C:\ProgramingWorks\Unreal\GenAi_Housing\Plugins\MySqlConnect\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\MySqlConnect\UnrealEditor-MySqlConnect-Win64-DebugGame.lib"

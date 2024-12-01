@@ -74,7 +74,6 @@ void AGenAiGameState::ServerUpdateAndInsertToDB_Implementation(const FString& Se
 		}
 		HttpRequestActor->UpdateObjDataToDB(RoomActorArr);
 
-		//TSet<FRoomInfo>& RoomObjIndexArr = Gm->GetRoomObjIndexArr();
 		TArray<ACustomFBXMeshActor*> AddFbxInfoActorArr;
 		for (const auto RoomActor : RoomActorArr)
 		{
@@ -86,6 +85,5 @@ void AGenAiGameState::ServerUpdateAndInsertToDB_Implementation(const FString& Se
 		if (!AddFbxInfoActorArr.IsEmpty()) {
 			HttpRequestActor->InsertObjDataToDB(AddFbxInfoActorArr);
 		}
-
 	}
 }
