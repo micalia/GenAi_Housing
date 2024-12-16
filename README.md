@@ -26,7 +26,6 @@
 
 ## Point 4. TArray를 활용한 TMap Replicate 구현
 [CustomFBXImportManager.cpp](https://github.com/micalia/GenAi_Housing/blob/main/Source/GenAi_Housing/Private/CustomFBXImportManager.cpp#L237)
-![GenAi_MapReplicate](https://github.com/user-attachments/assets/e078e2c4-b7fc-4284-935b-4e677f087f5c)
 
 ------------
 ![Preview](https://github.com/user-attachments/assets/fa2d3dd1-2de2-4cca-bb78-8f093ab61f8f)
